@@ -2,952 +2,697 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StudySync — Smart Learning Companion</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>StudySync</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0a0c10;--bg2:#111318;--bg3:#181b22;--card:#1c2028;--card2:#222630;
-  --border:#2a2f3a;--border2:#353b48;
-  --text:#e8eaf0;--text2:#9aa0b0;--text3:#5a6070;
-  --green:#22c55e;--green2:#16a34a;--green-dim:#0f3022;
-  --blue:#3b82f6;--blue2:#2563eb;--blue-dim:#0d1f3c;
-  --amber:#f59e0b;--amber-dim:#2d1f06;
-  --red:#ef4444;--red-dim:#2d0f0f;
-  --purple:#8b5cf6;--purple-dim:#1e1230;
-  --cyan:#06b6d4;--cyan-dim:#0a2030;
-  --radius:14px;--radius2:10px;--radius3:8px;
-  --font:'DM Sans',sans-serif;
-  --shadow:0 4px 24px rgba(0,0,0,.5);
-}
+:root{--bg:#0a0c10;--bg2:#111318;--bg3:#181b22;--card:#1c2028;--card2:#222630;--border:#2a2f3a;--border2:#353b48;--text:#e8eaf0;--text2:#9aa0b0;--text3:#5a6070;--green:#22c55e;--green2:#16a34a;--gdim:#0f3022;--blue:#3b82f6;--blue2:#2563eb;--bdim:#0d1f3c;--amber:#f59e0b;--adim:#2d1f06;--red:#ef4444;--rdim:#2d0f0f;--purple:#8b5cf6;--pdim:#1e1230;--r:14px;--r2:10px}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden}
-button{cursor:pointer;font-family:var(--font);border:none;outline:none}
-input,textarea{font-family:var(--font);outline:none}
-a{color:inherit;text-decoration:none}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+button,input,textarea{font-family:'DM Sans',sans-serif;outline:none;border:none}
 .hide{display:none!important}
-
-/* ── SCREENS ── */
 .screen{min-height:100vh;display:flex;flex-direction:column;animation:fadeIn .25s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* ── AUTH SCREEN ── */
-#authScreen{background:radial-gradient(ellipse at 20% 20%,#1a2340 0%,var(--bg) 60%);align-items:center;justify-content:center;padding:24px}
+/* AUTH */
+#authScreen{background:radial-gradient(ellipse at 20% 20%,#1a2340,var(--bg) 60%);align-items:center;justify-content:center;padding:24px}
 .auth-logo{display:flex;align-items:center;gap:12px;margin-bottom:36px}
-.auth-logo-icon{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.auth-logo-text{font-family:'Playfair Display',serif;font-size:26px;font-weight:500;color:var(--text)}
-.auth-logo-sub{font-size:12px;color:var(--text2);margin-top:2px}
-.auth-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;width:100%;max-width:400px;box-shadow:var(--shadow)}
-.auth-tabs{display:flex;gap:4px;background:var(--bg3);border-radius:var(--radius2);padding:4px;margin-bottom:28px}
-.auth-tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:500;border-radius:8px;color:var(--text2);cursor:pointer;transition:all .2s}
-.auth-tab.active{background:var(--card);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.form-group{margin-bottom:18px}
-.form-label{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;display:block;text-transform:uppercase;letter-spacing:.06em}
-.form-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius2);padding:12px 16px;font-size:15px;color:var(--text);transition:border .2s}
-.form-input:focus{border-color:var(--blue)}
-.form-input::placeholder{color:var(--text3)}
-.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:var(--radius2);font-size:15px;font-weight:600;color:#fff;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:8px}
-.btn-primary:active{transform:scale(.98);opacity:.9}
-.btn-secondary{width:100%;padding:12px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius2);font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;margin-top:8px}
-.btn-secondary:hover{border-color:var(--blue);color:var(--text)}
-.auth-divider{text-align:center;font-size:12px;color:var(--text3);margin:18px 0;position:relative}
-.auth-divider::before,.auth-divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border)}
-.auth-divider::before{left:0}.auth-divider::after{right:0}
-.pair-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius2);padding:20px;margin-top:16px;text-align:center}
-.pair-code{font-size:32px;font-weight:700;letter-spacing:.3em;color:var(--blue);margin:12px 0;font-family:monospace}
-.err-msg{color:var(--red);font-size:13px;margin-top:10px;text-align:center;min-height:20px}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;width:100%;max-width:400px}
+.tabs{display:flex;gap:4px;background:var(--bg3);border-radius:10px;padding:4px;margin-bottom:28px}
+.tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:500;border-radius:8px;color:var(--text2);cursor:pointer;transition:all .2s}
+.tab.on{background:var(--card);color:var(--text)}
+.lbl{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;display:block;text-transform:uppercase;letter-spacing:.06em}
+input.fi,textarea.fi{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:12px 16px;font-size:15px;color:var(--text);transition:border .2s}
+input.fi:focus,textarea.fi:focus{border-color:var(--blue)}
+input.fi::placeholder,textarea.fi::placeholder{color:var(--text3)}
+.fg{margin-bottom:18px}
+.btn-p{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue),#8b5cf6);border-radius:var(--r2);font-size:15px;font-weight:600;color:#fff;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:8px}
+.btn-p:active{transform:scale(.98);opacity:.9}
+.btn-s{width:100%;padding:12px;background:transparent;border:1px solid var(--border2);border-radius:var(--r2);font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-s:hover{border-color:var(--blue);color:var(--text)}
+.err{color:var(--red);font-size:13px;margin-top:10px;text-align:center;min-height:20px}
+.divider{text-align:center;font-size:12px;color:var(--text3);margin:18px 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:var(--border)}
+.divider::before{left:0}.divider::after{right:0}
+.pair-code{font-size:32px;font-weight:700;letter-spacing:.3em;color:var(--blue);margin:12px 0;font-family:monospace;text-align:center}
 
-/* ── TOP BAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
-.topbar-logo{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600}
-.topbar-icon{width:34px;height:34px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.topbar-actions{display:flex;align-items:center;gap:10px}
-.icon-btn{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;transition:border .2s;position:relative}
-.icon-btn:hover{border-color:var(--border2)}
-.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid var(--bg2)}
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
+.tbl{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600}
+.ti{width:34px;height:34px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.icon-btn{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;position:relative}
 
-/* ── BOTTOM NAV ── */
-.bottomnav{display:flex;background:var(--bg2);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:50}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 0 10px;font-size:11px;color:var(--text3);cursor:pointer;transition:color .2s;gap:4px;position:relative}
-.nav-item.active{color:var(--blue)}
-.nav-item .nav-icon{font-size:22px;line-height:1}
-.nav-badge{position:absolute;top:8px;right:calc(50% - 16px);background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:20px;min-width:16px;text-align:center}
+/* BOTTOM NAV */
+.bnav{display:flex;background:var(--bg2);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:50}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:11px 0 9px;font-size:11px;color:var(--text3);cursor:pointer;gap:4px;transition:color .2s}
+.ni.on{color:var(--blue)}
+.ni-icon{font-size:21px;line-height:1}
+.nbadge{position:absolute;top:-4px;right:-8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;border:1.5px solid var(--bg2)}
 
-/* ── HOME SCREEN ── */
-#homeScreen .content{padding:20px 20px 100px}
-.partner-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;position:relative;overflow:hidden}
-.partner-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--purple))}
-.partner-top{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-.avatar{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;position:relative;flex-shrink:0}
-.online-ring{position:absolute;bottom:1px;right:1px;width:14px;height:14px;border-radius:50%;border:2.5px solid var(--card);background:var(--text3)}
-.online-ring.online{background:var(--green)}
-.online-ring.busy{background:var(--red)}
-.online-ring.away{background:var(--amber)}
-.partner-info h3{font-size:18px;font-weight:600;margin-bottom:4px}
-.partner-info .status-label{font-size:13px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-block}
-.status-free{background:var(--green-dim);color:var(--green)}
-.status-busy{background:var(--red-dim);color:var(--red)}
-.status-wait{background:var(--amber-dim);color:var(--amber)}
-.status-urgent{background:#3d1010;color:#f87171}
-.status-offline{background:var(--bg3);color:var(--text3)}
-.last-active{font-size:12px;color:var(--text3);margin-top:10px;display:flex;align-items:center;gap:6px}
-.last-active::before{content:'🕐';font-size:12px}
-.section-title{font-size:13px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:14px}
-.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-.status-btn{padding:18px 12px;border-radius:var(--radius);border:1.5px solid var(--border);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all .2s;font-size:13px;font-weight:600;color:var(--text2)}
-.status-btn .btn-emoji{font-size:28px;line-height:1}
-.status-btn:active{transform:scale(.96)}
-.status-btn.free{border-color:var(--green2);background:var(--green-dim);color:var(--green)}
-.status-btn.busy{border-color:#b91c1c;background:var(--red-dim);color:var(--red)}
-.status-btn.wait{border-color:#b45309;background:var(--amber-dim);color:var(--amber)}
-.status-btn.urgent{border-color:#9f1239;background:#2d0a14;color:#fb7185}
-.status-btn.offline{border-color:var(--border2);background:var(--bg3);color:var(--text3)}
-.status-btn.active-btn{box-shadow:0 0 0 2px currentColor}
-.ping-fab{width:100%;padding:18px;background:linear-gradient(135deg,var(--green2),#059669);border-radius:var(--radius);font-size:17px;font-weight:700;color:#fff;text-align:center;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(34,197,94,.3);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:10px}
-.ping-fab:active{transform:scale(.98);opacity:.9}
-.ping-fab .fab-icon{font-size:22px}
+/* HOME */
+#homeScreen .content{padding:18px 18px 90px}
+.partner-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:18px;position:relative;overflow:hidden}
+.partner-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),#8b5cf6)}
+.ptop{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;position:relative;flex-shrink:0}
+.ring{position:absolute;bottom:1px;right:1px;width:13px;height:13px;border-radius:50%;border:2.5px solid var(--card);background:var(--text3)}
+.ring.online{background:var(--green)}
+.ring.busy{background:var(--red)}
+.ring.away{background:var(--amber)}
+.slbl{font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-block}
+.s-free{background:var(--gdim);color:var(--green)}.s-busy{background:var(--rdim);color:var(--red)}
+.s-wait{background:var(--adim);color:var(--amber)}.s-urgent{background:#3d1010;color:#f87171}
+.s-offline{background:var(--bg3);color:var(--text3)}.s-online{background:var(--gdim);color:var(--green)}
+.sec{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sbtn{padding:16px 12px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:all .2s;font-size:12px;font-weight:600;color:var(--text2)}
+.sbtn .se{font-size:26px;line-height:1}
+.sbtn:active{transform:scale(.96)}
+.sbtn.free{border-color:var(--green2);background:var(--gdim);color:var(--green)}
+.sbtn.busy{border-color:#b91c1c;background:var(--rdim);color:var(--red)}
+.sbtn.wait{border-color:#b45309;background:var(--adim);color:var(--amber)}
+.sbtn.urgent{border-color:#9f1239;background:#2d0a14;color:#fb7185}
+.sbtn.offline-btn{border-color:var(--border2);background:var(--bg3);color:var(--text3)}
+.sbtn.active-s{box-shadow:0 0 0 2px currentColor}
+.ping-btn{width:100%;padding:17px;background:linear-gradient(135deg,var(--green2),#059669);border-radius:var(--r);font-size:16px;font-weight:700;color:#fff;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(34,197,94,.25);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:10px}
+.ping-btn:active{transform:scale(.98);opacity:.9}
 
-/* ── CHAT SCREEN ── */
-#chatScreen{display:flex;flex-direction:column}
-#chatScreen .topbar{position:sticky;top:0}
-.chat-messages{flex:1;padding:20px;padding-bottom:90px;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:12px}
-.msg-row{display:flex;gap:10px;align-items:flex-end}
-.msg-row.mine{flex-direction:row-reverse}
-.msg-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.msg-bubble{max-width:72%;padding:11px 15px;border-radius:18px;font-size:14px;line-height:1.5;position:relative;word-break:break-word}
-.msg-row:not(.mine) .msg-bubble{background:var(--card2);border-bottom-left-radius:4px}
-.msg-row.mine .msg-bubble{background:linear-gradient(135deg,var(--blue2),var(--purple));color:#fff;border-bottom-right-radius:4px}
-.msg-time{font-size:10px;color:var(--text3);margin-top:4px;padding:0 4px}
-.msg-row.mine .msg-time{text-align:right}
-.typing-indicator{display:flex;gap:5px;align-items:center;padding:12px 15px;background:var(--card2);border-radius:18px;border-bottom-left-radius:4px;width:fit-content}
-.typing-dot{width:7px;height:7px;background:var(--text3);border-radius:50%;animation:typingBounce 1.2s ease infinite}
-.typing-dot:nth-child(2){animation-delay:.2s}
-.typing-dot:nth-child(3){animation-delay:.4s}
-@keyframes typingBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-8px)}}
-.chat-input-area{position:fixed;bottom:60px;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;align-items:flex-end;z-index:40}
-.chat-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:22px;padding:10px 16px;font-size:15px;color:var(--text);max-height:120px;resize:none;line-height:1.4;transition:border .2s}
-.chat-input:focus{border-color:var(--blue)}
-.send-btn{width:42px;height:42px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;transition:transform .1s}
-.send-btn:active{transform:scale(.92)}
+/* CHAT */
+#chatScreen{display:flex;flex-direction:column;min-height:100vh}
+.msgs{flex:1;padding:18px;padding-bottom:80px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.mrow{display:flex;gap:8px;align-items:flex-end}
+.mrow.mine{flex-direction:row-reverse}
+.mavatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,var(--blue));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.mbubble{max-width:72%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5;word-break:break-word}
+.mrow:not(.mine) .mbubble{background:var(--card2);border-bottom-left-radius:4px}
+.mrow.mine .mbubble{background:linear-gradient(135deg,var(--blue2),#8b5cf6);color:#fff;border-bottom-right-radius:4px}
+.mtime{font-size:10px;color:var(--text3);margin-top:3px;padding:0 3px}
+.mrow.mine .mtime{text-align:right}
+.typing-row{display:flex;gap:8px;align-items:flex-end;padding:0 18px 8px}
+.tdots{display:flex;gap:4px;align-items:center;padding:10px 13px;background:var(--card2);border-radius:16px;border-bottom-left-radius:4px}
+.td{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:tb 1.2s ease infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+.chat-ia{position:fixed;bottom:60px;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;align-items:flex-end;z-index:40}
+textarea.ci{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:9px 14px;font-size:14px;color:var(--text);max-height:110px;resize:none;line-height:1.4;transition:border .2s}
+textarea.ci:focus{border-color:var(--blue)}
+.send-btn{width:40px;height:40px;background:linear-gradient(135deg,var(--blue),#8b5cf6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;transition:transform .1s}
+.send-btn:active{transform:scale(.9)}
 
-/* ── SETTINGS ── */
-#settingsScreen .content{padding:20px 20px 100px}
-.settings-section{margin-bottom:28px}
-.settings-section-title{font-size:12px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding:0 4px}
-.settings-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border)}
-.settings-row:last-child{border-bottom:none}
-.settings-row-left{display:flex;align-items:center;gap:14px}
-.settings-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.s-blue{background:var(--blue-dim)}
-.s-green{background:var(--green-dim)}
-.s-purple{background:var(--purple-dim)}
-.s-amber{background:var(--amber-dim)}
-.s-red{background:var(--red-dim)}
-.s-cyan{background:var(--cyan-dim)}
-.settings-label{font-size:15px;font-weight:500}
-.settings-sublabel{font-size:12px;color:var(--text3);margin-top:2px}
-.toggle{width:46px;height:26px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:20px;position:relative;cursor:pointer;transition:background .2s}
+/* SETTINGS */
+#settingsScreen .content{padding:18px 18px 90px}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:4px}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.srow:last-child{border-bottom:none}
+.srl{display:flex;align-items:center;gap:12px}
+.sic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ib{background:var(--bdim)}.ig{background:var(--gdim)}.ip{background:var(--pdim)}.ia{background:var(--adim)}.ir{background:var(--rdim)}
+.toggle{width:44px;height:24px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:20px;position:relative;cursor:pointer;transition:background .2s}
 .toggle.on{background:var(--blue);border-color:var(--blue)}
-.toggle::after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:2px;left:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.toggle::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform .2s}
 .toggle.on::after{transform:translateX(20px)}
-.settings-chevron{color:var(--text3);font-size:16px}
-.profile-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px;margin-bottom:20px}
-.profile-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;flex-shrink:0}
-.profile-name{font-size:18px;font-weight:600;margin-bottom:4px}
-.profile-email{font-size:13px;color:var(--text2)}
-.danger-btn{width:100%;padding:14px;background:var(--red-dim);border:1px solid #7f1d1d;border-radius:var(--radius2);font-size:15px;font-weight:600;color:var(--red);cursor:pointer;transition:all .2s;margin-top:8px}
-.danger-btn:hover{background:#3d0f0f}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.pavatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex-shrink:0}
+.danger-btn{width:100%;padding:13px;background:var(--rdim);border:1px solid #7f1d1d;border-radius:var(--r2);font-size:14px;font-weight:600;color:var(--red);cursor:pointer;margin-top:8px}
 
-/* ── ALERT OVERLAY ── */
-.alert-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;animation:alertIn .3s cubic-bezier(.34,1.56,.64,1)}
-@keyframes alertIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
-.alert-box{background:var(--card);border:2px solid var(--green);border-radius:20px;padding:32px 28px;width:100%;max-width:340px;text-align:center;box-shadow:0 0 60px rgba(34,197,94,.3)}
-.alert-emoji{font-size:56px;margin-bottom:16px;display:block;animation:pulse 1s ease infinite}
+/* ALERT */
+.aoverlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;animation:ai .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ai{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.abox{background:var(--card);border:2px solid var(--green);border-radius:20px;padding:30px 26px;width:100%;max-width:320px;text-align:center}
+.aemoji{font-size:52px;margin-bottom:14px;display:block;animation:pulse 1s ease infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.alert-title{font-size:22px;font-weight:700;margin-bottom:8px;color:var(--green)}
-.alert-body{font-size:15px;color:var(--text2);margin-bottom:24px;line-height:1.5}
-.alert-dismiss{padding:14px 32px;background:linear-gradient(135deg,var(--green2),#059669);border-radius:12px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;width:100%}
+.atitle{font-size:20px;font-weight:700;margin-bottom:6px;color:var(--green)}
+.abody{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.5}
+.adismiss{padding:13px;background:linear-gradient(135deg,var(--green2),#059669);border-radius:12px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;width:100%}
 
-/* ── TOAST ── */
-.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--card2);border:1px solid var(--border2);border-radius:30px;padding:10px 20px;font-size:13px;font-weight:500;color:var(--text);z-index:998;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none}
+/* PAIR SCREEN */
+#pairScreen{align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at 70% 80%,#1a1040,var(--bg) 60%)}
+.pcardw{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 26px;width:100%;max-width:420px}
+
+/* EDU */
+#eduOverlay{background:linear-gradient(135deg,#0f172a,#1e1b4b);padding:26px 22px;min-height:100vh}
+.ecard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:18px;margin-bottom:14px}
+.eprog{height:5px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:12px;overflow:hidden}
+.eprogf{height:100%;background:linear-gradient(90deg,var(--blue),#8b5cf6);border-radius:3px}
+
+/* TOAST */
+.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--card2);border:1px solid var(--border2);border-radius:30px;padding:9px 18px;font-size:13px;font-weight:500;color:var(--text);z-index:998;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ── HIDDEN ENTRY ── */
-.secret-tap{position:relative}
-.secret-tap-area{position:absolute;bottom:0;right:0;width:40px;height:40px;opacity:0;cursor:pointer}
-
-/* ── EDUCATION OVERLAY (disguise) ── */
-#eduOverlay{background:linear-gradient(135deg,#0f172a,#1e1b4b);padding:28px 24px;min-height:100vh}
-.edu-header{display:flex;align-items:center;gap:12px;margin-bottom:28px}
-.edu-title{font-size:20px;font-weight:600}
-.edu-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:20px;margin-bottom:16px}
-.edu-card-title{font-size:16px;font-weight:600;margin-bottom:8px}
-.edu-card-sub{font-size:13px;color:var(--text2);line-height:1.6}
-.edu-progress{height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:14px;overflow:hidden}
-.edu-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px}
-.edu-close-btn{margin-top:24px;padding:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius2);font-size:14px;font-weight:500;color:var(--text2);width:100%;cursor:pointer}
-
-/* ── PAIR SCREEN ── */
-#pairScreen{align-items:center;justify-content:center;padding:28px;background:radial-gradient(ellipse at 70% 80%,#1a1040 0%,var(--bg) 60%)}
-.pair-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;width:100%;max-width:420px;box-shadow:var(--shadow)}
-.pair-header{text-align:center;margin-bottom:28px}
-.pair-header h2{font-size:22px;font-weight:700;margin-bottom:8px}
-.pair-header p{font-size:14px;color:var(--text2);line-height:1.6}
-.pair-or{display:flex;align-items:center;gap:14px;margin:20px 0;color:var(--text3);font-size:12px}
-.pair-or::before,.pair-or::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* ── NOTIFICATION BADGE count ── */
-.chat-unread{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 5px;border-radius:10px;min-width:16px;text-align:center;border:1.5px solid var(--bg2)}
-
-/* ── RESPONSIVE ── */
-@media(min-width:600px){
-  #authScreen,.pair-card{max-width:420px;margin:auto}
-  .status-grid{grid-template-columns:repeat(4,1fr)}
-}
+@media(min-width:600px){.sgrid{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════ AUTH SCREEN ═══════════════════ -->
+<!-- AUTH -->
 <div id="authScreen" class="screen">
   <div class="auth-logo">
-    <div class="auth-logo-icon">📚</div>
+    <div class="logo-icon">📚</div>
     <div>
-      <div class="auth-logo-text">StudySync</div>
-      <div class="auth-logo-sub">Smart Learning Companion</div>
+      <div style="font-size:22px;font-weight:600">StudySync</div>
+      <div style="font-size:11px;color:var(--text2)">Smart Learning Companion</div>
     </div>
   </div>
   <div class="auth-card">
-    <div class="auth-tabs">
-      <div class="auth-tab active" onclick="switchAuthTab('login')">Sign In</div>
-      <div class="auth-tab" onclick="switchAuthTab('register')">Create Account</div>
+    <div class="tabs">
+      <div class="tab on" onclick="authTab('login')">Sign In</div>
+      <div class="tab" onclick="authTab('reg')">Create Account</div>
     </div>
     <div id="loginForm">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="loginEmail" placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" type="password" id="loginPwd" placeholder="••••••••">
-      </div>
-      <button class="btn-primary" onclick="doLogin()">Sign In to StudySync</button>
-      <div id="loginErr" class="err-msg"></div>
+      <div class="fg"><label class="lbl">Email</label><input class="fi" type="email" id="lEmail" placeholder="your@email.com"></div>
+      <div class="fg"><label class="lbl">Password</label><input class="fi" type="password" id="lPwd" placeholder="••••••••"></div>
+      <button class="btn-p" onclick="doLogin()">Sign In to StudySync</button>
+      <div id="lErr" class="err"></div>
     </div>
-    <div id="registerForm" class="hide">
-      <div class="form-group">
-        <label class="form-label">Display Name</label>
-        <input class="form-input" type="text" id="regName" placeholder="Your name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" type="email" id="regEmail" placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" type="password" id="regPwd" placeholder="Min 6 characters">
-      </div>
-      <button class="btn-primary" onclick="doRegister()">Create Account</button>
-      <div id="regErr" class="err-msg"></div>
+    <div id="regForm" class="hide">
+      <div class="fg"><label class="lbl">Display Name</label><input class="fi" type="text" id="rName" placeholder="Your name"></div>
+      <div class="fg"><label class="lbl">Email</label><input class="fi" type="email" id="rEmail" placeholder="your@email.com"></div>
+      <div class="fg"><label class="lbl">Password</label><input class="fi" type="password" id="rPwd" placeholder="Min 6 characters"></div>
+      <button class="btn-p" onclick="doRegister()">Create Account</button>
+      <div id="rErr" class="err"></div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════ PAIR SCREEN ═══════════════════ -->
+<!-- PAIR -->
 <div id="pairScreen" class="screen hide">
-  <div class="pair-card">
-    <div class="pair-header">
-      <div style="font-size:40px;margin-bottom:12px">🔗</div>
-      <h2>Connect with Partner</h2>
-      <p>Share your invite code or enter your partner's code to pair your accounts.</p>
+  <div class="pcardw">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:36px;margin-bottom:10px">🔗</div>
+      <h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Connect with Partner</h2>
+      <p style="font-size:13px;color:var(--text2);line-height:1.6">Share your invite code or enter your partner's code to pair.</p>
     </div>
-    <p class="section-title" style="margin-bottom:6px">Your invite code</p>
-    <div class="pair-box">
-      <div style="font-size:13px;color:var(--text2);margin-bottom:6px">Share this code with your partner</div>
-      <div class="pair-code" id="myInviteCode">------</div>
-      <button class="btn-secondary" onclick="copyCode()" style="margin-top:0">📋 Copy Code</button>
+    <div class="fg" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:18px;text-align:center;margin-bottom:4px">
+      <div style="font-size:12px;color:var(--text2);margin-bottom:4px">Your invite code</div>
+      <div class="pair-code" id="myCode">------</div>
+      <button class="btn-s" onclick="copyCode()" style="margin-top:4px;width:auto;padding:8px 18px">📋 Copy</button>
     </div>
-    <div class="pair-or">OR</div>
-    <div class="form-group">
-      <label class="form-label">Enter Partner's Code</label>
-      <input class="form-input" type="text" id="partnerCode" placeholder="6-character code" maxlength="6" style="text-transform:uppercase;letter-spacing:.2em;font-size:18px;text-align:center">
-    </div>
-    <button class="btn-primary" onclick="doPair()">🔗 Connect Partner</button>
-    <div id="pairErr" class="err-msg"></div>
+    <div class="divider">OR</div>
+    <div class="fg"><label class="lbl">Enter Partner's Code</label><input class="fi" type="text" id="pCode" placeholder="6-character code" maxlength="6" style="text-transform:uppercase;letter-spacing:.2em;font-size:18px;text-align:center"></div>
+    <button class="btn-p" onclick="doPair()">🔗 Connect Partner</button>
+    <div id="pErr" class="err"></div>
+    <button class="btn-s" onclick="logout()" style="margin-top:12px">← Sign Out</button>
   </div>
 </div>
 
-<!-- ═══════════════════ MAIN APP ═══════════════════ -->
+<!-- MAIN APP -->
 <div id="mainApp" class="hide" style="min-height:100vh">
 
-  <!-- HOME SCREEN -->
+  <!-- HOME -->
   <div id="homeScreen" class="screen hide">
     <div class="topbar">
-      <div class="topbar-logo">
-        <div class="topbar-icon secret-tap" onclick="secretTapCount()" id="secretLogoBtn">📚</div>
-        <span>StudySync</span>
-      </div>
-      <div class="topbar-actions">
-        <div class="icon-btn" onclick="showEduOverlay()">🎓</div>
-        <div class="icon-btn" id="notifBtnHome">🔔<span class="notif-dot hide" id="homeNotifDot"></span></div>
+      <div class="tbl"><div class="ti" onclick="logoTap()" style="cursor:pointer">📚</div>StudySync</div>
+      <div style="display:flex;gap:8px">
+        <div class="icon-btn" onclick="showEdu()">🎓</div>
+        <div class="icon-btn" id="notifBtn">🔔</div>
       </div>
     </div>
     <div class="content">
-      <!-- Partner card -->
-      <div class="partner-card" id="partnerCard">
-        <div class="partner-top">
-          <div class="avatar" id="partnerAvatar">
-            <span id="partnerInitials">?</span>
-            <div class="online-ring offline" id="onlineRing"></div>
-          </div>
-          <div class="partner-info">
-            <h3 id="partnerNameDisplay">Waiting for partner...</h3>
-            <span class="status-label status-offline" id="partnerStatusLabel">Offline</span>
+      <div class="partner-card">
+        <div class="ptop">
+          <div class="avatar"><span id="pInit">?</span><div class="ring" id="pRing"></div></div>
+          <div>
+            <div style="font-size:17px;font-weight:600;margin-bottom:4px" id="pName">Waiting for partner…</div>
+            <span class="slbl s-offline" id="pStat">Offline</span>
           </div>
         </div>
-        <div class="last-active" id="lastActiveDisplay">Last active: —</div>
+        <div style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px" id="pLast">🕐 Last active: —</div>
       </div>
-
-      <!-- My status -->
-      <p class="section-title">My Status</p>
-      <div class="status-grid">
-        <button class="status-btn free" id="btnFree" onclick="setMyStatus('free')">
-          <span class="btn-emoji">🟢</span>I'M FREE
-        </button>
-        <button class="status-btn busy" id="btnBusy" onclick="setMyStatus('busy')">
-          <span class="btn-emoji">🔴</span>BUSY
-        </button>
-        <button class="status-btn wait" id="btnWait" onclick="setMyStatus('wait')">
-          <span class="btn-emoji">⏳</span>WAIT 5 MIN
-        </button>
-        <button class="status-btn urgent" id="btnUrgent" onclick="setMyStatus('urgent')">
-          <span class="btn-emoji">🚨</span>URGENT
-        </button>
+      <p class="sec">My Status</p>
+      <div class="sgrid">
+        <button class="sbtn free" id="bFree" onclick="setStatus('free')"><span class="se">🟢</span>FREE</button>
+        <button class="sbtn busy" id="bBusy" onclick="setStatus('busy')"><span class="se">🔴</span>BUSY</button>
+        <button class="sbtn wait" id="bWait" onclick="setStatus('wait')"><span class="se">⏳</span>WAIT 5</button>
+        <button class="sbtn urgent" id="bUrgent" onclick="setStatus('urgent')"><span class="se">🚨</span>URGENT</button>
       </div>
-      <button class="status-btn offline" id="btnOffline" onclick="setMyStatus('offline')" style="width:100%;flex-direction:row;justify-content:center;gap:10px;margin-bottom:24px">
-        <span class="btn-emoji">⚫</span>SET OFFLINE
-      </button>
-
-      <!-- Ping button -->
-      <p class="section-title">Quick Ping</p>
-      <button class="ping-fab" onclick="sendPing()">
-        <span class="fab-icon">📡</span> SEND PING TO PARTNER
-      </button>
-      <div style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:20px">Tap to instantly notify your partner</div>
-
-      <!-- Recent pings -->
-      <p class="section-title">Recent Activity</p>
-      <div id="recentActivity" style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
-        <div style="padding:20px;text-align:center;color:var(--text3);font-size:14px">No recent activity</div>
+      <button class="sbtn offline-btn" id="bOffline" onclick="setStatus('offline')" style="width:100%;flex-direction:row;justify-content:center;gap:10px;margin-bottom:18px"><span class="se">⚫</span>SET OFFLINE</button>
+      <p class="sec">Quick Ping</p>
+      <button class="ping-btn" onclick="sendPing()">📡 SEND PING TO PARTNER</button>
+      <div style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:18px">Tap to instantly notify your partner</div>
+      <p class="sec">Recent Activity</p>
+      <div id="activityBox" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
+        <div id="actEmpty" style="padding:18px;text-align:center;color:var(--text3);font-size:13px">No recent activity</div>
       </div>
     </div>
   </div>
 
-  <!-- CHAT SCREEN -->
-  <div id="chatScreen" class="screen hide" style="min-height:100vh;display:none;flex-direction:column">
+  <!-- CHAT -->
+  <div id="chatScreen" class="screen hide" style="display:none">
     <div class="topbar">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="avatar" style="width:38px;height:38px;font-size:15px" id="chatAvatar"><span id="chatAvatarInitials">?</span><div class="online-ring offline" id="chatOnlineRing"></div></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="avatar" style="width:36px;height:36px;font-size:14px"><span id="cInit">?</span><div class="ring" id="cRing"></div></div>
         <div>
-          <div style="font-size:15px;font-weight:600" id="chatPartnerName">Partner</div>
-          <div style="font-size:12px;color:var(--text3)" id="chatStatusLine">Offline</div>
+          <div style="font-size:14px;font-weight:600" id="cName">Partner</div>
+          <div style="font-size:12px;color:var(--text3)" id="cStat">Offline</div>
         </div>
       </div>
-      <div class="topbar-actions">
-        <div class="icon-btn" id="autoDeleteToggleBtn" onclick="toggleAutoDelete()" title="Auto-delete after 24h">⏰</div>
-      </div>
+      <div class="icon-btn" onclick="toggleAutoDelete()" id="adBtn" title="Auto-delete 24h">⏰</div>
     </div>
-    <div class="chat-messages" id="chatMessages">
-      <div style="text-align:center;color:var(--text3);font-size:13px;padding:16px">Messages are end-to-end private. Auto-delete is <span id="autoDeleteStatus">off</span>.</div>
+    <div class="msgs" id="msgBox">
+      <div style="text-align:center;color:var(--text3);font-size:12px;padding:14px">Messages are private. Auto-delete: <span id="adStatus">off</span></div>
     </div>
-    <div id="typingRow" class="hide" style="padding:4px 20px 0">
-      <div style="display:flex;gap:10px;align-items:flex-end">
-        <div class="msg-avatar" id="typingAvatar">?</div>
-        <div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
-      </div>
+    <div id="typRow" class="typing-row hide">
+      <div class="mavatar" id="typInit">?</div>
+      <div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>
     </div>
-    <div class="chat-input-area">
-      <textarea class="chat-input" id="chatInput" placeholder="Type a message…" rows="1" oninput="onTyping()" onkeydown="chatKeydown(event)"></textarea>
-      <div class="send-btn" onclick="sendMessage()">➤</div>
+    <div class="chat-ia">
+      <textarea class="ci" id="chatIn" placeholder="Type a message…" rows="1" oninput="onType()" onkeydown="ckd(event)"></textarea>
+      <div class="send-btn" onclick="sendMsg()">➤</div>
     </div>
   </div>
 
-  <!-- SETTINGS SCREEN -->
+  <!-- SETTINGS -->
   <div id="settingsScreen" class="screen hide">
     <div class="topbar">
-      <div class="topbar-logo"><span>⚙️</span><span>Settings</span></div>
-      <div class="topbar-actions">
-        <div class="icon-btn" onclick="logout()">🚪</div>
-      </div>
+      <div class="tbl">⚙️ Settings</div>
+      <div class="icon-btn" onclick="logout()">🚪</div>
     </div>
     <div class="content">
-      <div class="profile-card">
-        <div class="profile-avatar" id="myAvatarSettings">U</div>
+      <div class="pcard">
+        <div class="pavatar" id="myAv">U</div>
         <div>
-          <div class="profile-name" id="myNameSettings">User</div>
-          <div class="profile-email" id="myEmailSettings">user@email.com</div>
-          <div style="font-size:12px;color:var(--text3);margin-top:4px">Paired ✓</div>
+          <div style="font-size:16px;font-weight:600" id="myNm">User</div>
+          <div style="font-size:12px;color:var(--text2)" id="myEm">user@email.com</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:3px">Paired ✓</div>
         </div>
       </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title">Notifications</div>
-        <div class="settings-card">
-          <div class="settings-row">
-            <div class="settings-row-left">
-              <div class="settings-icon s-blue">📳</div>
-              <div><div class="settings-label">Vibration</div><div class="settings-sublabel">Vibrate on incoming ping</div></div>
-            </div>
-            <div class="toggle on" id="toggleVibration" onclick="toggleSetting('vibration')"></div>
-          </div>
-          <div class="settings-row">
-            <div class="settings-row-left">
-              <div class="settings-icon s-green">🔊</div>
-              <div><div class="settings-label">Alert Sound</div><div class="settings-sublabel">Play sound on ping</div></div>
-            </div>
-            <div class="toggle on" id="toggleSound" onclick="toggleSetting('sound')"></div>
-          </div>
-          <div class="settings-row">
-            <div class="settings-row-left">
-              <div class="settings-icon s-purple">🥷</div>
-              <div><div class="settings-label">Stealth Mode</div><div class="settings-sublabel">Disguise notification text</div></div>
-            </div>
-            <div class="toggle" id="toggleStealth" onclick="toggleSetting('stealth')"></div>
-          </div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Notifications</div>
+      <div class="scard" style="margin-bottom:16px">
+        <div class="srow"><div class="srl"><div class="sic ib">📳</div><div><div style="font-size:14px;font-weight:500">Vibration</div><div style="font-size:11px;color:var(--text3)">Vibrate on ping</div></div></div><div class="toggle on" id="tVib" onclick="togS('vib')"></div></div>
+        <div class="srow"><div class="srl"><div class="sic ig">🔊</div><div><div style="font-size:14px;font-weight:500">Sound</div><div style="font-size:11px;color:var(--text3)">Alert sound on ping</div></div></div><div class="toggle on" id="tSnd" onclick="togS('snd')"></div></div>
+        <div class="srow"><div class="srl"><div class="sic ip">🥷</div><div><div style="font-size:14px;font-weight:500">Stealth Mode</div><div style="font-size:11px;color:var(--text3)">Disguise notifications</div></div></div><div class="toggle" id="tSte" onclick="togS('ste')"></div></div>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Stealth Text</div>
+      <div class="scard" style="margin-bottom:16px">
+        <div class="srow" style="flex-direction:column;align-items:flex-start;gap:10px">
+          <div style="font-size:13px;color:var(--text2)">Custom fake notification title</div>
+          <input class="fi" id="steText" value="Reminder updated." placeholder="Fake title" style="width:100%">
+          <button class="btn-s" onclick="saveSte()" style="width:auto;padding:7px 16px;margin-top:0">Save</button>
         </div>
       </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title">Stealth Notification Text</div>
-        <div class="settings-card">
-          <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:12px">
-            <div style="font-size:13px;color:var(--text2)">Custom fake notification title (stealth mode)</div>
-            <input class="form-input" id="stealthTitle" value="Reminder updated." placeholder="Fake notification title" style="width:100%">
-            <button class="btn-secondary" onclick="saveStealthTitle()" style="margin-top:0;width:auto;padding:8px 20px">Save</button>
-          </div>
-        </div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Chat</div>
+      <div class="scard" style="margin-bottom:16px">
+        <div class="srow"><div class="srl"><div class="sic ia">🗑️</div><div><div style="font-size:14px;font-weight:500">Auto-Delete</div><div style="font-size:11px;color:var(--text3)">Delete messages after 24h</div></div></div><div class="toggle" id="tAD" onclick="togS('ad')"></div></div>
       </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title">Chat</div>
-        <div class="settings-card">
-          <div class="settings-row">
-            <div class="settings-row-left">
-              <div class="settings-icon s-amber">🗑️</div>
-              <div><div class="settings-label">Auto-Delete Messages</div><div class="settings-sublabel">Delete messages after 24h</div></div>
-            </div>
-            <div class="toggle" id="toggleAutoDelSettings" onclick="toggleSetting('autoDelete')"></div>
-          </div>
-        </div>
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Account</div>
+      <div class="scard">
+        <div class="srow" onclick="unpair()" style="cursor:pointer"><div class="srl"><div class="sic ir">🔓</div><div><div style="font-size:14px;font-weight:500">Unpair Account</div><div style="font-size:11px;color:var(--text3)">Disconnect from partner</div></div></div><span style="color:var(--text3);font-size:18px">›</span></div>
       </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title">Appearance</div>
-        <div class="settings-card">
-          <div class="settings-row">
-            <div class="settings-row-left">
-              <div class="settings-icon s-cyan">🌙</div>
-              <div><div class="settings-label">Dark Mode</div><div class="settings-sublabel">Always on in this version</div></div>
-            </div>
-            <div class="toggle on" style="opacity:.5;pointer-events:none"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <div class="settings-section-title">Account</div>
-        <div class="settings-card">
-          <div class="settings-row" onclick="unpairAccount()" style="cursor:pointer">
-            <div class="settings-row-left">
-              <div class="settings-icon s-red">🔓</div>
-              <div><div class="settings-label">Unpair Account</div><div class="settings-sublabel">Disconnect from partner</div></div>
-            </div>
-            <span class="settings-chevron">›</span>
-          </div>
-        </div>
-        <button class="danger-btn" onclick="logout()">Sign Out</button>
-      </div>
+      <button class="danger-btn" onclick="logout()">Sign Out</button>
     </div>
   </div>
 
   <!-- BOTTOM NAV -->
-  <div class="bottomnav" id="bottomNav">
-    <div class="nav-item active" id="navHome" onclick="switchTab('home')">
-      <span class="nav-icon">🏠</span>Home
-    </div>
-    <div class="nav-item" id="navChat" onclick="switchTab('chat')" style="position:relative">
-      <span class="nav-icon">💬</span>Messages
-      <span class="nav-badge hide" id="chatBadge">0</span>
-    </div>
-    <div class="nav-item" id="navSettings" onclick="switchTab('settings')">
-      <span class="nav-icon">⚙️</span>Settings
-    </div>
+  <div class="bnav">
+    <div class="ni on" id="nHome" onclick="goTab('home')"><span class="ni-icon">🏠</span>Home</div>
+    <div class="ni" id="nChat" onclick="goTab('chat')" style="position:relative"><span class="ni-icon">💬</span>Messages<span class="nbadge hide" id="cBadge">0</span></div>
+    <div class="ni" id="nSets" onclick="goTab('settings')"><span class="ni-icon">⚙️</span>Settings</div>
   </div>
 </div>
 
-<!-- ALERT OVERLAY -->
-<div class="alert-overlay hide" id="alertOverlay">
-  <div class="alert-box" id="alertBox">
-    <span class="alert-emoji" id="alertEmoji">📡</span>
-    <div class="alert-title" id="alertTitle">Partner is Free!</div>
-    <div class="alert-body" id="alertBody">Your partner just sent you a ping!</div>
-    <button class="alert-dismiss" onclick="dismissAlert()">Got it! ✓</button>
+<!-- ALERT -->
+<div class="aoverlay hide" id="alertOv">
+  <div class="abox">
+    <span class="aemoji" id="aEmoji">📡</span>
+    <div class="atitle" id="aTitle">Partner Pinged!</div>
+    <div class="abody" id="aBody">Your partner just sent you a ping!</div>
+    <button class="adismiss" onclick="G('alertOv').classList.add('hide')">Got it! ✓</button>
   </div>
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast"></div>
+<div class="toast" id="toastEl"></div>
 
-<!-- EDUCATION OVERLAY -->
+<!-- EDU OVERLAY -->
 <div id="eduOverlay" class="hide">
-  <div class="edu-header">
-    <div style="font-size:30px">📚</div>
-    <div>
-      <div class="edu-title">Study Progress</div>
-      <div style="font-size:13px;color:var(--text2)">Track your learning journey</div>
-    </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <div style="font-size:28px">📚</div>
+    <div><div style="font-size:18px;font-weight:600">Study Progress</div><div style="font-size:12px;color:var(--text2)">Track your learning journey</div></div>
   </div>
-  <div class="edu-card">
-    <div class="edu-card-title">📖 Mathematics — Chapter 7</div>
-    <div class="edu-card-sub">Quadratic equations and their applications. Progress: 68% complete. Next lesson: Factoring polynomials.</div>
-    <div class="edu-progress"><div class="edu-progress-fill" style="width:68%"></div></div>
-  </div>
-  <div class="edu-card">
-    <div class="edu-card-title">🧬 Biology — Unit 3</div>
-    <div class="edu-card-sub">Cell division and genetics. Progress: 44% complete. Next: Meiosis phases and chromosome behavior.</div>
-    <div class="edu-progress"><div class="edu-progress-fill" style="width:44%"></div></div>
-  </div>
-  <div class="edu-card">
-    <div class="edu-card-title">📝 English Literature</div>
-    <div class="edu-card-sub">Shakespearean analysis — Hamlet. Progress: 82% complete. Next: Act IV symbolism essay.</div>
-    <div class="edu-progress"><div class="edu-progress-fill" style="width:82%"></div></div>
-  </div>
-  <div class="edu-card">
-    <div class="edu-card-title">🔬 Physics — Mechanics</div>
-    <div class="edu-card-sub">Newton's laws and projectile motion. Progress: 31% complete. Review kinematics before next session.</div>
-    <div class="edu-progress"><div class="edu-progress-fill" style="width:31%"></div></div>
-  </div>
-  <button class="edu-close-btn" onclick="hideEduOverlay()">← Back to Dashboard</button>
+  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">📖 Mathematics — Chapter 7</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Quadratic equations and applications. Next: Factoring polynomials.</div><div class="eprog"><div class="eprogf" style="width:68%"></div></div></div>
+  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">🧬 Biology — Unit 3</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Cell division and genetics. Next: Meiosis phases.</div><div class="eprog"><div class="eprogf" style="width:44%"></div></div></div>
+  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">📝 English Literature</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Shakespearean analysis — Hamlet. Next: Act IV symbolism.</div><div class="eprog"><div class="eprogf" style="width:82%"></div></div></div>
+  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">🔬 Physics — Mechanics</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Newton's laws and projectile motion. Review kinematics.</div><div class="eprog"><div class="eprogf" style="width:31%"></div></div></div>
+  <button onclick="hideEdu()" style="margin-top:20px;padding:13px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--r2);font-size:13px;font-weight:500;color:var(--text2);width:100%;cursor:pointer">← Back to Dashboard</button>
 </div>
 
-<!-- ════════════════════════════ FIREBASE + APP LOGIC ════════════════════════════ -->
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import{getFirestore,doc,setDoc,getDoc,onSnapshot,collection,addDoc,query,orderBy,limit,serverTimestamp,updateDoc,deleteDoc,where,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getFirestore,doc,setDoc,getDoc,onSnapshot,collection,addDoc,query,orderBy,limit,serverTimestamp,updateDoc,deleteDoc,where,getDocs,Timestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// ── FIREBASE CONFIG ──
-// Replace with your own Firebase project config from console.firebase.google.com
-const firebaseConfig = {
-  apiKey: "AIzaSyCjHkVkZb2RUjPG-dFi_Q1hYVDhY8OtKw8",
-  authDomain: "educational-notification.firebaseapp.com",
-  projectId: "educational-notification",
-  storageBucket: "educational-notification.firebasestorage.app",
-  messagingSenderId: "811687039959",
-  appId: "1:811687039959:web:5227b6a5f234bf632c7192",
-  measurementId: "G-5B174QPK2J"
-};
-
-const app=initializeApp(firebaseConfig);
+const FC={apiKey:"AIzaSyCjHkVkZb2RUjPG-dFi_Q1hYVDhY8OtKw8",authDomain:"educational-notification.firebaseapp.com",projectId:"educational-notification",storageBucket:"educational-notification.firebasestorage.app",messagingSenderId:"811687039959",appId:"1:811687039959:web:5227b6a5f234bf632c7192"};
+const app=initializeApp(FC);
 const auth=getAuth(app);
 const db=getFirestore(app);
 
-// ── GLOBALS ──
-let myUID="",myEmail="",myName="",partnerUID="",partnerName="",partnerStatus="offline";
-let settings={vibration:true,sound:true,stealth:false,autoDelete:false,stealthTitle:"Reminder updated."};
-let secretTaps=0,secretTimer=null;
-let chatUnread=0;
-let pairListener=null,partnerListener=null,msgListener=null;
-let typingTimer=null,isTyping=false;
-let msgAutoDeleteEnabled=false;
+// ── STATE ──
+let uid="",email="",uname="",pid="",pname="",pStatus="offline";
+let cfg={vib:true,snd:true,ste:false,ad:false,steText:"Reminder updated."};
+let unread=0,secretN=0,secretT=null;
+let unsubs={partner:null,msgs:null,pings:null,typing:null};
+let typTimer=null,isTyping=false,lastMsgCount=0;
+let pairId=()=>[uid,pid].sort().join("_");
 
-// ── AUTH STATE ──
+// ── EXPOSE TO GLOBAL (onclick handlers) ──
+const expose=(fns)=>Object.assign(window,fns);
+
+// ── HELPERS ──
+window.G=id=>document.getElementById(id);
+const val=id=>G(id)?.value?.trim()||"";
+const init=n=>n?n.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2):"?";
+const cap=s=>s?s[0].toUpperCase()+s.slice(1):"";
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const rc=()=>Math.random().toString(36).slice(2,8).toUpperCase();
+function ago(d){const s=Math.floor((Date.now()-d)/1e3);if(s<60)return"Just now";if(s<3600)return~~(s/60)+"m ago";if(s<86400)return~~(s/3600)+"h ago";return~~(s/86400)+"d ago";}
+function ferr(c){return({
+  "auth/user-not-found":"No account with this email.",
+  "auth/wrong-password":"Incorrect password.",
+  "auth/email-already-in-use":"Email already in use.",
+  "auth/weak-password":"Password must be 6+ characters.",
+  "auth/invalid-email":"Invalid email.",
+  "auth/invalid-credential":"Email or password incorrect.",
+})[c]||"Something went wrong. Try again.";}
+function toast(m,d=2500){const t=G("toastEl");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),d);}
+function showScr(id){["authScreen","pairScreen","mainApp","eduOverlay"].forEach(s=>G(s).classList.add("hide"));G(id).classList.remove("hide");}
+function autoTA(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,110)+"px";}
+
+// ── AUTH FLOW ──
 onAuthStateChanged(auth,async user=>{
   if(user){
-    myUID=user.uid;myEmail=user.email;myName=user.displayName||user.email;
-    const snap=await getDoc(doc(db,"users",myUID));
-    if(snap.exists()){
-      const d=snap.data();
-      myName=d.name||myName;
-      partnerUID=d.partnerUID||"";
-      if(d.settings)Object.assign(settings,d.settings);
-    }
-    if(partnerUID)enterApp();
-    else showPairScreen();
+    uid=user.uid;email=user.email;uname=user.displayName||email.split("@")[0];
+    const snap=await getDoc(doc(db,"users",uid));
+    if(snap.exists()){const d=snap.data();uname=d.name||uname;pid=d.partnerUID||"";if(d.cfg)Object.assign(cfg,d.cfg);}
+    // Always update online status
+    await updateDoc(doc(db,"users",uid),{status:"online",lastActive:serverTimestamp()}).catch(()=>{});
+    if(pid)enterApp();else showPair();
   }else{
-    showScreen("authScreen");
+    uid="";pid="";killListeners();showScr("authScreen");
   }
 });
 
-// ── AUTH FUNCS ──
-window.switchAuthTab=t=>{
-  document.querySelectorAll(".auth-tab").forEach((el,i)=>el.classList.toggle("active",i===(t==="login"?0:1)));
-  document.getElementById("loginForm").classList.toggle("hide",t!=="login");
-  document.getElementById("registerForm").classList.toggle("hide",t!=="register");
-};
-window.doLogin=async()=>{
-  const e=v("loginEmail"),p=v("loginPwd"),err=ge("loginErr");
-  err.textContent="";
-  try{await signInWithEmailAndPassword(auth,e,p);}
-  catch(x){err.textContent=friendlyErr(x.code);}
-};
-window.doRegister=async()=>{
-  const n=v("regName"),e=v("regEmail"),p=v("regPwd"),err=ge("regErr");
-  err.textContent="";
-  if(!n){err.textContent="Please enter a display name.";return;}
-  try{
-    const cred=await createUserWithEmailAndPassword(auth,e,p);
-    await updateProfile(cred.user,{displayName:n});
-    const code=randCode();
-    await setDoc(doc(db,"users",cred.user.uid),{name:n,email:e,inviteCode:code,partnerUID:"",status:"offline",lastActive:serverTimestamp(),settings});
-    await setDoc(doc(db,"inviteCodes",code),{uid:cred.user.uid});
-  }catch(x){err.textContent=friendlyErr(x.code);}
-};
+// ── PRESENCE: heartbeat every 30s + on visibility change ──
+setInterval(async()=>{if(uid)await updateDoc(doc(db,"users",uid),{lastActive:serverTimestamp()}).catch(()=>{});},30000);
+document.addEventListener("visibilitychange",async()=>{
+  if(!uid)return;
+  if(document.hidden){await updateDoc(doc(db,"users",uid),{status:"away",lastActive:serverTimestamp()}).catch(()=>{});}
+  else{await updateDoc(doc(db,"users",uid),{status:"online",lastActive:serverTimestamp()}).catch(()=>{});}
+});
+window.addEventListener("beforeunload",async()=>{if(uid)await updateDoc(doc(db,"users",uid),{status:"offline",lastActive:serverTimestamp()}).catch(()=>{});});
 
-// ── PAIR SCREEN ──
-function showPairScreen(){
-  showScreen("pairScreen");
-  loadMyCode();
-}
-async function loadMyCode(){
-  const snap=await getDoc(doc(db,"users",myUID));
-  if(snap.exists()){
-    const code=snap.data().inviteCode;
-    ge("myInviteCode").textContent=code||"------";
+expose({
+  authTab(t){
+    document.querySelectorAll(".tab").forEach((el,i)=>el.classList.toggle("on",i===(t==="login"?0:1)));
+    G("loginForm").classList.toggle("hide",t!=="login");
+    G("regForm").classList.toggle("hide",t!=="reg");
+  },
+  async doLogin(){
+    const e=val("lEmail"),p=val("lPwd"),er=G("lErr");er.textContent="";
+    if(!e||!p){er.textContent="Fill all fields.";return;}
+    try{await signInWithEmailAndPassword(auth,e,p);}catch(x){er.textContent=ferr(x.code);}
+  },
+  async doRegister(){
+    const n=val("rName"),e=val("rEmail"),p=val("rPwd"),er=G("rErr");er.textContent="";
+    if(!n||!e||!p){er.textContent="Fill all fields.";return;}
+    try{
+      const cr=await createUserWithEmailAndPassword(auth,e,p);
+      await updateProfile(cr.user,{displayName:n});
+      const code=rc();
+      await setDoc(doc(db,"users",cr.user.uid),{name:n,email:e,inviteCode:code,partnerUID:"",status:"online",lastActive:serverTimestamp(),cfg,typing:false});
+      await setDoc(doc(db,"inviteCodes",code),{uid:cr.user.uid});
+    }catch(x){G("rErr").textContent=ferr(x.code);}
   }
+});
+
+// ── PAIR ──
+function showPair(){
+  showScr("pairScreen");
+  getDoc(doc(db,"users",uid)).then(s=>{if(s.exists())G("myCode").textContent=s.data().inviteCode||"------";});
 }
-window.copyCode=()=>{
-  const code=ge("myInviteCode").textContent;
-  navigator.clipboard.writeText(code).then(()=>toast("Code copied!"));
-};
-window.doPair=async()=>{
-  const code=v("partnerCode").toUpperCase().trim();
-  if(code.length!==6){ge("pairErr").textContent="Enter 6-character code.";return;}
-  ge("pairErr").textContent="";
-  try{
-    const snap=await getDoc(doc(db,"inviteCodes",code));
-    if(!snap.exists()){ge("pairErr").textContent="Code not found.";return;}
-    const pid=snap.data().uid;
-    if(pid===myUID){ge("pairErr").textContent="You cannot pair with yourself!";return;}
-    const pSnap=await getDoc(doc(db,"users",pid));
-    if(!pSnap.exists()){ge("pairErr").textContent="Partner account not found.";return;}
-    partnerUID=pid;
-    partnerName=pSnap.data().name;
-    await updateDoc(doc(db,"users",myUID),{partnerUID:pid});
-    await updateDoc(doc(db,"users",pid),{partnerUID:myUID});
-    enterApp();
-  }catch(x){ge("pairErr").textContent="Error: "+x.message;}
-};
+expose({
+  copyCode(){const c=G("myCode").textContent;navigator.clipboard?.writeText(c).then(()=>toast("Code copied!")).catch(()=>toast(c));},
+  async doPair(){
+    const code=val("pCode").toUpperCase();
+    if(code.length!==6){G("pErr").textContent="Enter 6-character code.";return;}
+    G("pErr").textContent="";
+    try{
+      const snap=await getDoc(doc(db,"inviteCodes",code));
+      if(!snap.exists()){G("pErr").textContent="Code not found.";return;}
+      const _pid=snap.data().uid;
+      if(_pid===uid){G("pErr").textContent="Cannot pair with yourself!";return;}
+      const ps=await getDoc(doc(db,"users",_pid));
+      if(!ps.exists()){G("pErr").textContent="Partner not found.";return;}
+      pid=_pid;pname=ps.data().name||"Partner";
+      await updateDoc(doc(db,"users",uid),{partnerUID:_pid});
+      await updateDoc(doc(db,"users",_pid),{partnerUID:uid});
+      enterApp();
+    }catch(x){G("pErr").textContent="Error: "+x.message;}
+  }
+});
 
 // ── ENTER APP ──
 async function enterApp(){
-  if(!partnerUID){showPairScreen();return;}
-  const pSnap=await getDoc(doc(db,"users",partnerUID));
-  if(pSnap.exists())partnerName=pSnap.data().name;
-  showScreen("mainApp");
-  switchTab("home");
-  updateSettingsUI();
-  startListeners();
-  updateMyProfile();
-  await updateDoc(doc(db,"users",myUID),{status:"online",lastActive:serverTimestamp()});
+  if(!pid){showPair();return;}
+  const ps=await getDoc(doc(db,"users",pid));
+  if(ps.exists())pname=ps.data().name||"Partner";
+  // Ensure user doc has all needed fields
+  await updateDoc(doc(db,"users",uid),{status:"online",lastActive:serverTimestamp(),typing:false}).catch(()=>{});
+  showScr("mainApp");goTab("home");updateCfgUI();updateMyProfile();startListeners();
 }
 
 // ── LISTENERS ──
+function killListeners(){Object.values(unsubs).forEach(u=>u&&u());Object.keys(unsubs).forEach(k=>unsubs[k]=null);}
+
 function startListeners(){
-  if(partnerListener)partnerListener();
-  partnerListener=onSnapshot(doc(db,"users",partnerUID),snap=>{
+  killListeners();
+
+  // Partner presence + status
+  unsubs.partner=onSnapshot(doc(db,"users",pid),snap=>{
     if(snap.exists())renderPartner(snap.data());
   });
-  listenMessages();
-  listenPings();
-}
 
-function renderPartner(d){
-  partnerName=d.name||"Partner";
-  partnerStatus=d.status||"offline";
-  ge("partnerNameDisplay").textContent=partnerName;
-  ge("partnerInitials").textContent=initials(partnerName);
-  ge("chatPartnerName").textContent=partnerName;
-  ge("chatAvatarInitials").textContent=initials(partnerName);
-  const statusMap={free:["status-free","🟢 Free"],busy:["status-busy","🔴 Busy"],wait:["status-wait","⏳ Wait 5 min"],urgent:["status-urgent","🚨 Urgent"],online:["status-free","🟢 Online"],offline:["status-offline","⚫ Offline"]};
-  const[cls,label]=statusMap[partnerStatus]||["status-offline","⚫ Offline"];
-  const sl=ge("partnerStatusLabel");
-  sl.className="status-label "+cls;sl.textContent=label;
-  const ring=ge("onlineRing"),ring2=ge("chatOnlineRing");
-  const ringClass=partnerStatus==="offline"?"offline":partnerStatus==="busy"?"busy":"online";
-  ring.className="online-ring "+ringClass;
-  ring2.className="online-ring "+ringClass;
-  const chatLine=ge("chatStatusLine");
-  chatLine.textContent=partnerStatus==="offline"?"Offline":partnerStatus==="free"?"Free now":"●  "+capitalize(partnerStatus);
-  if(d.lastActive?.toDate){
-    ge("lastActiveDisplay").textContent="Last active: "+timeAgo(d.lastActive.toDate());
-  }
-}
-
-function listenMessages(){
-  if(msgListener)msgListener();
-  const pairId=[myUID,partnerUID].sort().join("_");
-  const q=query(collection(db,"messages",pairId,"msgs"),orderBy("ts","asc"),limit(100));
-  msgListener=onSnapshot(q,snap=>{
-    const msgs=[];
-    snap.forEach(d=>msgs.push({id:d.id,...d.data()}));
-    renderMessages(msgs);
-    if(msgAutoDeleteEnabled)pruneOldMessages(pairId,snap);
+  // Messages
+  const q=query(collection(db,"messages",pairId(),"msgs"),orderBy("ts","asc"),limit(150));
+  unsubs.msgs=onSnapshot(q,snap=>{
+    const msgs=[];snap.forEach(d=>msgs.push({id:d.id,...d.data()}));
+    renderMsgs(msgs);
+    if(cfg.ad)pruneOld(snap);
   });
-}
 
-function renderMessages(msgs){
-  const box=ge("chatMessages");
-  const wasAtBottom=box.scrollHeight-box.scrollTop-box.clientHeight<60;
-  const existing=box.querySelectorAll(".msg-row").length;
-  if(msgs.length>existing){
-    box.innerHTML='<div style="text-align:center;color:var(--text3);font-size:13px;padding:16px">Messages are private. Auto-delete: <span id="autoDeleteStatus">'+(settings.autoDelete?"on":"off")+'</span>.</div>';
-    msgs.forEach(m=>{
-      const mine=m.sender===myUID;
-      const row=document.createElement("div");
-      row.className="msg-row"+(mine?" mine":"");
-      row.innerHTML=`<div class="msg-avatar">${initials(mine?myName:partnerName)}</div><div style="display:flex;flex-direction:column;align-items:${mine?"flex-end":"flex-start"}"><div class="msg-bubble">${esc(m.text)}</div><div class="msg-time">${m.ts?.toDate?timeAgo(m.ts.toDate()):"now"}</div></div>`;
-      box.appendChild(row);
-      if(!mine&&chatBadgeActive())chatUnread++;
-    });
-    updateChatBadge();
-    if(wasAtBottom||msgs.length<3)box.scrollTop=box.scrollHeight;
-  }
-}
-
-function chatBadgeActive(){return ge("navChat").classList.contains("active")===false;}
-
-function listenPings(){
-  const q=query(collection(db,"pings"),where("to","==",myUID),where("seen","==",false),limit(10));
-  onSnapshot(q,snap=>{
-    snap.docChanges().forEach(async change=>{
-      if(change.type==="added"){
-        const d=change.doc.data();
-        showIncomingAlert(d);
-        await updateDoc(doc(db,"pings",change.doc.id),{seen:true});
+  // Pings — only unseen pings TO me
+  const pq=query(collection(db,"pings"),where("to","==",uid),where("seen","==",false));
+  unsubs.pings=onSnapshot(pq,snap=>{
+    snap.docChanges().forEach(async ch=>{
+      if(ch.type==="added"){
+        const d=ch.doc.data();showAlert(d);
+        await updateDoc(doc(db,"pings",ch.doc.id),{seen:true});
       }
     });
   });
-}
 
-async function pruneOldMessages(pairId,snap){
-  const cutoff=Date.now()-864e5;
-  snap.forEach(async d=>{
-    if(d.data().ts?.toMillis&&d.data().ts.toMillis()<cutoff){
-      await deleteDoc(doc(db,"messages",pairId,"msgs",d.id));
-    }
+  // Partner typing
+  unsubs.typing=onSnapshot(doc(db,"users",pid),snap=>{
+    if(!snap.exists())return;
+    const d=snap.data();
+    const tr=G("typRow");
+    if(d.typing){G("typInit").textContent=init(pname);tr.classList.remove("hide");}
+    else tr.classList.add("hide");
+    // Also update partner render
+    renderPartner(d);
   });
 }
 
+function renderPartner(d){
+  pname=d.name||"Partner";pStatus=d.status||"offline";
+  G("pInit").textContent=init(pname);G("cInit").textContent=init(pname);
+  G("pName").textContent=pname;G("cName").textContent=pname;
+  const sm={free:["s-free","🟢 Free"],busy:["s-busy","🔴 Busy"],wait:["s-wait","⏳ Wait 5"],urgent:["s-urgent","🚨 Urgent"],online:["s-online","🟢 Online"],away:["s-wait","💤 Away"],offline:["s-offline","⚫ Offline"]};
+  const[cls,lbl]=sm[pStatus]||["s-offline","⚫ Offline"];
+  const sl=G("pStat");sl.className="slbl "+cls;sl.textContent=lbl;
+  const rc=pStatus==="offline"?"":"online",rc2=pStatus==="busy"?"busy":pStatus==="offline"?"":"online";
+  G("pRing").className="ring "+(pStatus==="offline"?"":pStatus==="busy"?"busy":pStatus==="urgent"?"busy":"online");
+  G("cRing").className=G("pRing").className;
+  G("cStat").textContent=pStatus==="offline"?"Offline":pStatus==="away"?"Away":pStatus==="free"?"Free now":"● "+cap(pStatus);
+  if(d.lastActive?.toDate)G("pLast").textContent="🕐 Last active: "+ago(d.lastActive.toDate());
+}
+
+function renderMsgs(msgs){
+  const box=G("msgBox");
+  const atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;
+  if(msgs.length===lastMsgCount)return;
+
+  // Only re-render new messages (append mode)
+  if(msgs.length>lastMsgCount&&lastMsgCount>0){
+    const newMsgs=msgs.slice(lastMsgCount);
+    newMsgs.forEach(m=>appendMsg(m,box));
+    if(!G("nChat").classList.contains("on")){unread+=newMsgs.filter(m=>m.sender!==uid).length;updBadge();}
+  }else{
+    // Full re-render
+    box.innerHTML=`<div style="text-align:center;color:var(--text3);font-size:12px;padding:14px">Messages are private. Auto-delete: <span id="adStatus">${cfg.ad?"on":"off"}</span></div>`;
+    msgs.forEach(m=>appendMsg(m,box));
+    if(!G("nChat").classList.contains("on")){unread=msgs.filter(m=>m.sender!==uid).length;updBadge();}
+  }
+  lastMsgCount=msgs.length;
+  if(atBottom||msgs.length<=3)box.scrollTop=box.scrollHeight;
+}
+
+function appendMsg(m,box){
+  const mine=m.sender===uid;
+  const row=document.createElement("div");
+  row.className="mrow"+(mine?" mine":"");
+  row.dataset.id=m.id;
+  row.innerHTML=`<div class="mavatar">${init(mine?uname:pname)}</div><div style="display:flex;flex-direction:column;align-items:${mine?"flex-end":"flex-start"}"><div class="mbubble">${esc(m.text)}</div><div class="mtime">${m.ts?.toDate?ago(m.ts.toDate()):"now"}</div></div>`;
+  box.appendChild(row);
+}
+
+async function pruneOld(snap){
+  const cut=Date.now()-864e5;
+  snap.forEach(async d=>{if(d.data().ts?.toMillis&&d.data().ts.toMillis()<cut)await deleteDoc(doc(db,"messages",pairId(),"msgs",d.id));});
+}
+
 // ── STATUS ──
-window.setMyStatus=async s=>{
-  document.querySelectorAll(".status-btn").forEach(b=>b.classList.remove("active-btn"));
-  const btnMap={free:"btnFree",busy:"btnBusy",wait:"btnWait",urgent:"btnUrgent",offline:"btnOffline"};
-  if(btnMap[s])ge(btnMap[s]).classList.add("active-btn");
-  await updateDoc(doc(db,"users",myUID),{status:s,lastActive:serverTimestamp()});
-  toast("Status: "+capitalize(s));
-  if(s==="free")sendPing();
-};
+expose({
+  async setStatus(s){
+    document.querySelectorAll(".sbtn").forEach(b=>b.classList.remove("active-s"));
+    const m={free:"bFree",busy:"bBusy",wait:"bWait",urgent:"bUrgent",offline:"bOffline"};
+    if(m[s])G(m[s]).classList.add("active-s");
+    await updateDoc(doc(db,"users",uid),{status:s,lastActive:serverTimestamp()});
+    toast("Status: "+cap(s));
+  }
+});
 
 // ── PING ──
-window.sendPing=async()=>{
-  if(!partnerUID){toast("No partner connected.");return;}
-  const title=settings.stealth?settings.stealthTitle:"📡 Partner is Free!";
-  const body=settings.stealth?"Reminder updated.":myName+" is free right now!";
-  await addDoc(collection(db,"pings"),{from:myUID,to:partnerUID,title,body,seen:false,ts:serverTimestamp()});
-  addActivity("Ping sent to "+partnerName);
-  toast("Ping sent! 📡");
-  vibrateMe();
-};
+expose({
+  async sendPing(){
+    if(!pid){toast("No partner connected.");return;}
+    const title=cfg.ste?cfg.steText:"📡 Partner Pinged!";
+    const body=cfg.ste?"Reminder updated.":uname+" is free right now!";
+    await addDoc(collection(db,"pings"),{from:uid,to:pid,title,body,seen:false,ts:serverTimestamp()});
+    addActivity("📡 Ping sent to "+pname);
+    toast("Ping sent! 📡");
+    if(navigator.vibrate)navigator.vibrate([200,100,200]);
+  }
+});
 
-function showIncomingAlert(d){
-  const title=d.title||"📡 Partner is Free!";
-  const body=d.body||"Your partner just pinged you!";
-  ge("alertTitle").textContent=title;
-  ge("alertBody").textContent=body;
-  ge("alertEmoji").textContent="📡";
-  ge("alertOverlay").classList.remove("hide");
-  if(settings.sound)playAlertSound();
-  if(settings.vibration&&navigator.vibrate)navigator.vibrate([300,100,300,100,500]);
-  addActivity("Ping received from "+partnerName);
+function showAlert(d){
+  G("aTitle").textContent=d.title||"📡 Partner Pinged!";
+  G("aBody").textContent=d.body||"Your partner just pinged you!";
+  G("alertOv").classList.remove("hide");
+  if(cfg.snd)playSound();
+  if(cfg.vib&&navigator.vibrate)navigator.vibrate([300,100,300,100,500]);
+  addActivity("📡 Ping received from "+pname);
 }
-window.dismissAlert=()=>ge("alertOverlay").classList.add("hide");
 
 // ── CHAT ──
-window.sendMessage=async()=>{
-  const input=ge("chatInput");
-  const text=input.value.trim();
-  if(!text||!partnerUID)return;
-  input.value="";autoResizeTA(input);
-  const pairId=[myUID,partnerUID].sort().join("_");
-  await addDoc(collection(db,"messages",pairId,"msgs"),{sender:myUID,text,ts:serverTimestamp()});
-  clearTyping();
-};
-window.chatKeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();}};
-window.onTyping=()=>{
-  const input=ge("chatInput");autoResizeTA(input);
-  if(!isTyping){isTyping=true;updateTyping(true);}
-  clearTimeout(typingTimer);
-  typingTimer=setTimeout(clearTyping,2000);
-};
-function clearTyping(){isTyping=false;updateTyping(false);}
-async function updateTyping(val){
-  try{await updateDoc(doc(db,"users",myUID),{typing:val});}catch(e){}
+expose({
+  async sendMsg(){
+    const inp=G("chatIn");const text=inp.value.trim();
+    if(!text||!pid)return;
+    inp.value="";autoTA(inp);
+    await addDoc(collection(db,"messages",pairId(),"msgs"),{sender:uid,text,ts:serverTimestamp()});
+    clearTyp();
+    await updateDoc(doc(db,"users",uid),{typing:false});
+  },
+  ckd(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();window.sendMsg();}},
+  async onType(){
+    const inp=G("chatIn");autoTA(inp);
+    if(!isTyping){isTyping=true;await updateDoc(doc(db,"users",uid),{typing:true}).catch(()=>{});}
+    clearTimeout(typTimer);
+    typTimer=setTimeout(clearTyp,2500);
+  }
+});
+async function clearTyp(){
+  isTyping=false;
+  clearTimeout(typTimer);
+  await updateDoc(doc(db,"users",uid),{typing:false}).catch(()=>{});
 }
 
 // ── SETTINGS ──
-window.toggleSetting=s=>{
-  settings[s]=!settings[s];
-  const toggleMap={vibration:"toggleVibration",sound:"toggleSound",stealth:"toggleStealth",autoDelete:"toggleAutoDelSettings"};
-  if(toggleMap[s])ge(toggleMap[s]).classList.toggle("on",settings[s]);
-  saveSettings();
-  if(s==="autoDelete"){
-    msgAutoDeleteEnabled=settings.autoDelete;
-    ge("autoDeleteStatus")&&(ge("autoDeleteStatus").textContent=settings.autoDelete?"on":"off");
-  }
-  toast(capitalize(s)+(settings[s]?" enabled":" disabled"));
-};
-window.toggleAutoDelete=()=>{
-  settings.autoDelete=!settings.autoDelete;
-  saveSettings();
-  toast("Auto-delete "+(settings.autoDelete?"on":"off"));
-};
-window.saveStealthTitle=()=>{
-  settings.stealthTitle=v("stealthTitle")||"Reminder updated.";
-  saveSettings();toast("Stealth title saved!");
-};
-async function saveSettings(){
-  await updateDoc(doc(db,"users",myUID),{settings});
+expose({
+  togS(k){
+    cfg[k]=!cfg[k];
+    const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD"};
+    if(m[k])G(m[k]).classList.toggle("on",cfg[k]);
+    saveCfg();
+    const adEl=G("adStatus");if(adEl)adEl.textContent=cfg.ad?"on":"off";
+    toast(k==="vib"?"Vibration":(k==="snd"?"Sound":(k==="ste"?"Stealth":(k==="ad"?"Auto-delete":"Setting")))+(cfg[k]?" on":" off"));
+  },
+  toggleAutoDelete(){cfg.ad=!cfg.ad;G("tAD")?.classList.toggle("on",cfg.ad);saveCfg();const a=G("adStatus");if(a)a.textContent=cfg.ad?"on":"off";toast("Auto-delete "+(cfg.ad?"on":"off"));},
+  saveSte(){cfg.steText=val("steText")||"Reminder updated.";saveCfg();toast("Saved!");},
+});
+async function saveCfg(){await updateDoc(doc(db,"users",uid),{cfg}).catch(()=>{});}
+function updateCfgUI(){
+  const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD"};
+  Object.keys(m).forEach(k=>{if(G(m[k]))G(m[k]).classList.toggle("on",!!cfg[k]);});
+  if(G("steText"))G("steText").value=cfg.steText||"Reminder updated.";
+  const a=G("adStatus");if(a)a.textContent=cfg.ad?"on":"off";
 }
-function updateSettingsUI(){
-  const t={vibration:"toggleVibration",sound:"toggleSound",stealth:"toggleStealth",autoDelete:"toggleAutoDelSettings"};
-  Object.keys(t).forEach(k=>{if(ge(t[k]))ge(t[k]).classList.toggle("on",!!settings[k]);});
-  if(ge("stealthTitle"))ge("stealthTitle").value=settings.stealthTitle||"Reminder updated.";
-  msgAutoDeleteEnabled=settings.autoDelete;
-}
-function updateMyProfile(){
-  ge("myAvatarSettings").textContent=initials(myName);
-  ge("myNameSettings").textContent=myName;
-  ge("myEmailSettings").textContent=myEmail;
-}
+function updateMyProfile(){G("myAv").textContent=init(uname);G("myNm").textContent=uname;G("myEm").textContent=email;}
 
 // ── LOGOUT / UNPAIR ──
-window.logout=async()=>{
-  if(!confirm("Sign out?"))return;
-  await updateDoc(doc(db,"users",myUID),{status:"offline",lastActive:serverTimestamp()});
-  if(partnerListener)partnerListener();
-  if(msgListener)msgListener();
-  await signOut(auth);
-  showScreen("authScreen");
-};
-window.unpairAccount=async()=>{
-  if(!confirm("Unpair from partner?"))return;
-  await updateDoc(doc(db,"users",myUID),{partnerUID:""});
-  if(partnerUID)await updateDoc(doc(db,"users",partnerUID),{partnerUID:""});
-  partnerUID="";
-  showPairScreen();
-};
-
-// ── SECRET TAPS (logo tapped 5 times) ──
-window.secretTapCount=()=>{
-  secretTaps++;
-  clearTimeout(secretTimer);
-  if(secretTaps>=5){
-    secretTaps=0;
-    revealSecretMode();
-  }else{
-    secretTimer=setTimeout(()=>secretTaps=0,2000);
+expose({
+  async logout(){
+    if(!confirm("Sign out?"))return;
+    if(uid)await updateDoc(doc(db,"users",uid),{status:"offline",lastActive:serverTimestamp(),typing:false}).catch(()=>{});
+    killListeners();uid="";pid="";lastMsgCount=0;unread=0;
+    await signOut(auth);
+  },
+  async unpair(){
+    if(!confirm("Unpair from partner?"))return;
+    if(pid)await updateDoc(doc(db,"users",pid),{partnerUID:""}).catch(()=>{});
+    await updateDoc(doc(db,"users",uid),{partnerUID:""});
+    pid="";killListeners();lastMsgCount=0;showPair();
   }
-};
-function revealSecretMode(){
-  toast("🔓 Secret mode active");
-  switchTab("chat");
-}
-
-// ── EDU OVERLAY ──
-window.showEduOverlay=()=>{ge("eduOverlay").classList.remove("hide");ge("mainApp").classList.add("hide");};
-window.hideEduOverlay=()=>{ge("eduOverlay").classList.add("hide");ge("mainApp").classList.remove("hide");};
-
-// ── ACTIVITY LOG ──
-function addActivity(text){
-  const box=ge("recentActivity");
-  const existing=box.querySelector("div[data-placeholder]");
-  if(existing)existing.remove();
-  const el=document.createElement("div");
-  el.style.cssText="padding:12px 18px;border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:12px";
-  el.innerHTML=`<span>${esc(text)}</span><span style="color:var(--text3);font-size:11px">${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span>`;
-  box.insertBefore(el,box.firstChild);
-  const items=box.querySelectorAll("div:not([data-placeholder])");
-  if(items.length>5)items[items.length-1].remove();
-}
+});
 
 // ── TABS ──
-window.switchTab=tab=>{
-  ge("homeScreen").classList.toggle("hide",tab!=="home");
-  const chatEl=ge("chatScreen");
-  chatEl.style.display=tab==="chat"?"flex":"none";
-  ge("settingsScreen").classList.toggle("hide",tab!=="settings");
-  ["navHome","navChat","navSettings"].forEach((id,i)=>ge(id).classList.toggle("active",["home","chat","settings"][i]===tab));
-  if(tab==="chat"){chatUnread=0;updateChatBadge();ge("chatMessages").scrollTop=ge("chatMessages").scrollHeight;}
-};
-function updateChatBadge(){
-  const badge=ge("chatBadge");
-  if(chatUnread>0){badge.classList.remove("hide");badge.textContent=chatUnread;}
-  else badge.classList.add("hide");
+expose({
+  goTab(tab){
+    G("homeScreen").classList.toggle("hide",tab!=="home");
+    const cs=G("chatScreen");cs.style.display=tab==="chat"?"flex":"none";cs.classList.toggle("hide",tab!=="chat");
+    G("settingsScreen").classList.toggle("hide",tab!=="settings");
+    ["nHome","nChat","nSets"].forEach((id,i)=>G(id).classList.toggle("on",["home","chat","settings"][i]===tab));
+    if(tab==="chat"){unread=0;updBadge();const b=G("msgBox");setTimeout(()=>b.scrollTop=b.scrollHeight,50);}
+  }
+});
+function updBadge(){const b=G("cBadge");if(unread>0){b.classList.remove("hide");b.textContent=unread;}else b.classList.add("hide");}
+
+// ── SECRET LOGO ──
+let secretTimer2=null;
+expose({
+  logoTap(){
+    secretN++;clearTimeout(secretTimer2);
+    if(secretN>=5){secretN=0;toast("🔓 Secret mode");goTab("chat");}
+    else secretTimer2=setTimeout(()=>secretN=0,2000);
+  }
+});
+
+// ── EDU ──
+expose({showEdu(){G("eduOverlay").classList.remove("hide");G("mainApp").classList.add("hide");},hideEdu(){G("eduOverlay").classList.add("hide");G("mainApp").classList.remove("hide");}});
+
+// ── ACTIVITY ──
+function addActivity(text){
+  const box=G("activityBox");const empty=G("actEmpty");if(empty)empty.remove();
+  const el=document.createElement("div");
+  el.style.cssText="padding:11px 16px;border-bottom:1px solid var(--border);font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:10px";
+  el.innerHTML=`<span>${esc(text)}</span><span style="color:var(--text3);font-size:11px">${new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</span>`;
+  box.insertBefore(el,box.firstChild);
+  const items=box.querySelectorAll("div");if(items.length>6)items[items.length-1].remove();
 }
 
 // ── SOUND ──
-function playAlertSound(){
+function playSound(){
   try{
     const ctx=new(window.AudioContext||window.webkitAudioContext)();
-    const play=(freq,start,dur)=>{
+    [[880,0,.15],[1100,.2,.15],[1320,.4,.3]].forEach(([f,s,d])=>{
       const o=ctx.createOscillator(),g=ctx.createGain();
-      o.connect(g);g.connect(ctx.destination);
-      o.frequency.value=freq;o.type="sine";
-      g.gain.setValueAtTime(0,ctx.currentTime+start);
-      g.gain.linearRampToValueAtTime(.4,ctx.currentTime+start+.02);
-      g.gain.linearRampToValueAtTime(0,ctx.currentTime+start+dur);
-      o.start(ctx.currentTime+start);o.stop(ctx.currentTime+start+dur+.05);
-    };
-    play(880,0,.15);play(1100,.2,.15);play(1320,.4,.3);
+      o.connect(g);g.connect(ctx.destination);o.frequency.value=f;o.type="sine";
+      g.gain.setValueAtTime(0,ctx.currentTime+s);g.gain.linearRampToValueAtTime(.4,ctx.currentTime+s+.02);g.gain.linearRampToValueAtTime(0,ctx.currentTime+s+d);
+      o.start(ctx.currentTime+s);o.stop(ctx.currentTime+s+d+.05);
+    });
   }catch(e){}
 }
-function vibrateMe(){if(navigator.vibrate)navigator.vibrate([200,100,200]);}
-
-// ── HELPERS ──
-function showScreen(id){
-  ["authScreen","pairScreen","mainApp","eduOverlay"].forEach(s=>ge(s).classList.add("hide"));
-  ge(id).classList.remove("hide");
-}
-const ge=id=>document.getElementById(id);
-const v=id=>ge(id)?.value?.trim()||"";
-const initials=n=>n?n.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2):"?";
-const capitalize=s=>s?s[0].toUpperCase()+s.slice(1):"";
-const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const randCode=()=>Math.random().toString(36).slice(2,8).toUpperCase();
-function timeAgo(d){
-  const s=Math.floor((Date.now()-d)/1000);
-  if(s<60)return"Just now";if(s<3600)return Math.floor(s/60)+"m ago";
-  if(s<86400)return Math.floor(s/3600)+"h ago";return Math.floor(s/86400)+"d ago";
-}
-function friendlyErr(code){
-  const m={
-    "auth/user-not-found":"No account found with this email.",
-    "auth/wrong-password":"Incorrect password.",
-    "auth/email-already-in-use":"Email already in use. Sign in instead.",
-    "auth/weak-password":"Password must be at least 6 characters.",
-    "auth/invalid-email":"Invalid email address.",
-    "auth/invalid-credential":"Email or password is incorrect.",
-  };
-  return m[code]||"Something went wrong. Try again.";
-}
-function toast(msg,dur=2500){
-  const t=ge("toast");t.textContent=msg;t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),dur);
-}
-function autoResizeTA(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,120)+"px";}
 </script>
 </body>
 </html>
