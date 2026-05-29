@@ -347,10 +347,15 @@ import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-ap
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getFirestore,doc,setDoc,getDoc,onSnapshot,collection,addDoc,query,orderBy,limit,serverTimestamp,updateDoc,deleteDoc,where,getDocs,Timestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const FC={apiKey:"AIzaSyCjHkVkZb2RUjPG-dFi_Q1hYVDhY8OtKw8",authDomain:"educational-notification.firebaseapp.com",projectId:"educational-notification",storageBucket:"educational-notification.firebasestorage.app",messagingSenderId:"811687039959",appId:"1:811687039959:web:5227b6a5f234bf632c7192"};
-const app=initializeApp(FC);
-const auth=getAuth(app);
-const db=getFirestore(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyC0usOnYDlA8X9GH_JDUZIqKkdwKIkoAko",
+  authDomain: "sumudevils.firebaseapp.com",
+  projectId: "sumudevils",
+  storageBucket: "sumudevils.firebasestorage.app",
+  messagingSenderId: "1090519412620",
+  appId: "1:1090519412620:web:221ec7ddd27b65cd1130a9",
+  measurementId: "G-76DYJ2YE9J"
+};
 
 // ── STATE ──
 let uid="",email="",uname="",pid="",pname="",pStatus="offline";
