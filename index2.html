@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#030508">
 <title>StudySync — Smart Learning Companion</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Clash+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:#030508;--bg2:#06090f;--bg3:#0a0e18;--bg4:#0d1220;
@@ -34,23 +34,17 @@ button,input,textarea,select{font-family:'Space Grotesk',sans-serif;outline:none
 .hide{display:none!important}
 .screen{min-height:100vh;display:flex;flex-direction:column}
 
-/* Animated mesh background */
 body::before{content:'';position:fixed;inset:0;background:
   radial-gradient(ellipse 80% 60% at 20% 10%,rgba(77,159,255,.06),transparent),
   radial-gradient(ellipse 60% 80% at 80% 90%,rgba(168,85,247,.07),transparent),
   radial-gradient(ellipse 50% 50% at 50% 50%,rgba(0,245,212,.03),transparent);
   pointer-events:none;z-index:0;animation:bgShift 15s ease-in-out infinite alternate}
 @keyframes bgShift{0%{opacity:.7}100%{opacity:1}}
-
-/* Noise texture */
 body::after{content:'';position:fixed;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
   pointer-events:none;z-index:0}
-
-/* Animated grid lines */
 .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(77,159,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(77,159,255,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;mask-image:radial-gradient(ellipse at center,rgba(0,0,0,.4),transparent 80%)}
 
-/* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes popIn{from{opacity:0;transform:scale(.85) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
@@ -65,17 +59,16 @@ body::after{content:'';position:fixed;inset:0;
 @keyframes slideInLeft{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
 @keyframes slideInRight{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.85}}
-@keyframes neonFlicker{0%,92%,100%{opacity:1}93%,97%{opacity:.7}}
 @keyframes gradShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes statusBop{0%{transform:scale(1)}30%{transform:scale(1.15)}60%{transform:scale(.95)}100%{transform:scale(1)}}
 @keyframes ripple{0%{transform:scale(0);opacity:.6}100%{transform:scale(4);opacity:0}}
 @keyframes scoreCount{0%{transform:translateY(8px);opacity:0}100%{transform:translateY(0);opacity:1}}
 @keyframes twinkle{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes neonFlicker{0%,92%,100%{opacity:1}93%,97%{opacity:.7}}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes aiBlink{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes barGrow{from{width:0}to{width:var(--w,0%)}}
 
-/* ══════════════════════════════
-   LOADING SCREEN
-══════════════════════════════ */
+/* LOADING */
 #loadingScreen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:24px;transition:opacity .6s ease}
 #loadingScreen.fade{opacity:0;pointer-events:none}
 .load-logo{width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--violet2),var(--neon));display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 0 60px rgba(0,245,212,.3),0 0 120px rgba(168,85,247,.2);animation:glowPulse 2s ease infinite}
@@ -84,9 +77,7 @@ body::after{content:'';position:fixed;inset:0;
 .load-bar{width:200px;height:3px;background:var(--card3);border-radius:4px;overflow:hidden}
 .load-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--neon));border-radius:4px;width:0%;transition:width .4s ease;box-shadow:0 0 12px rgba(0,245,212,.5)}
 
-/* ══════════════════════════════
-   AUTH SCREEN
-══════════════════════════════ */
+/* AUTH */
 #authScreen{background:var(--bg);align-items:center;justify-content:center;padding:24px;min-height:100vh;position:relative;overflow:hidden}
 .auth-wrap{position:relative;z-index:2;width:100%;max-width:420px}
 .auth-logo{display:flex;align-items:center;gap:18px;margin-bottom:40px;justify-content:center}
@@ -122,17 +113,13 @@ input.fi.no-icon{padding-left:16px}
 .reg-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--violet),var(--neon));border-radius:3px;transition:width .4s ease;box-shadow:0 0 8px rgba(0,245,212,.4)}
 .reg-lbl{font-size:11px;color:var(--text2);text-align:center;margin-top:8px;display:none;letter-spacing:.04em;min-height:16px;font-weight:600}
 
-/* ══════════════════════════════
-   PAIR SCREEN
-══════════════════════════════ */
+/* PAIR */
 #pairScreen{background:var(--bg);align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
 .pcard-wrap{background:rgba(13,18,32,.9);backdrop-filter:blur(40px);border:1px solid var(--border2);border-radius:28px;padding:36px 28px;width:100%;max-width:420px;box-shadow:var(--shadow);position:relative;z-index:2;animation:popIn .5s cubic-bezier(.34,1.56,.64,1) both}
 .pcard-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,245,212,.6),transparent)}
 .pair-code{font-size:38px;font-weight:700;letter-spacing:.45em;color:var(--neon);font-family:'JetBrains Mono',monospace;margin:12px 0;text-shadow:0 0 30px rgba(0,245,212,.5)}
 
-/* ══════════════════════════════
-   TOPBAR
-══════════════════════════════ */
+/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:rgba(6,9,15,.92);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
 .topbar-logo{display:flex;align-items:center;gap:12px;font-family:'Sora',sans-serif;font-size:18px;font-weight:800;letter-spacing:-.3px}
 .topbar-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--violet2),var(--neon));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 4px 16px rgba(0,245,212,.25)}
@@ -141,9 +128,7 @@ input.fi.no-icon{padding-left:16px}
 .icon-btn:active{transform:scale(.88)}
 .icon-btn .ib-badge{position:absolute;top:-5px;right:-5px;background:var(--rose);color:#fff;font-size:9px;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg2);font-family:'JetBrains Mono',monospace}
 
-/* ══════════════════════════════
-   BOTTOM NAV
-══════════════════════════════ */
+/* BOTTOM NAV */
 .bnav{display:flex;background:rgba(6,9,15,.97);backdrop-filter:blur(30px);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:50;padding-bottom:env(safe-area-inset-bottom)}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:12px 0 9px;font-size:10px;font-weight:700;color:var(--text3);cursor:pointer;gap:5px;transition:color .25s;letter-spacing:.07em;text-transform:uppercase;position:relative}
 .ni.on{color:var(--neon)}
@@ -152,16 +137,14 @@ input.fi.no-icon{padding-left:16px}
 .ni.on .ni-icon{transform:scale(1.2) translateY(-2px)}
 .nbadge{position:absolute;top:5px;right:calc(50% - 26px);background:var(--rose);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;border:2px solid var(--bg2);font-family:'JetBrains Mono',monospace;animation:pulse 1.5s ease infinite}
 
-/* ══════════════════════════════
-   HOME — DASHBOARD
-══════════════════════════════ */
-#homeScreen .content{padding:14px 14px 100px;position:relative;z-index:1}
-
-/* Section labels */
+/* SECTION LABEL */
 .section-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.16em;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
 
-/* ── HERO PARTNER CARD ── */
+/* HOME */
+#homeScreen .content{padding:14px 14px 100px;position:relative;z-index:1}
+
+/* HERO PARTNER CARD */
 .hero-card{background:linear-gradient(145deg,var(--card),var(--card2));border:1px solid var(--border2);border-radius:24px;padding:0;margin-bottom:16px;position:relative;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.4);animation:fadeUp .4s cubic-bezier(.16,1,.3,1) both}
 .hero-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--violet),var(--neon),var(--blue),var(--violet));background-size:300% 100%;animation:gradShift 4s ease infinite}
 .hero-card-top{padding:20px 20px 0;display:flex;align-items:center;gap:16px}
@@ -184,20 +167,16 @@ input.fi.no-icon{padding-left:16px}
 .sp-away{background:rgba(251,191,36,.1);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
 .sp-studying{background:rgba(77,159,255,.1);color:var(--blue);border:1px solid rgba(77,159,255,.2)}
 .sp-dnd{background:rgba(168,85,247,.1);color:var(--violet);border:1px solid rgba(168,85,247,.2)}
-
-/* Partner activity bar */
 .hero-activity-bar{padding:16px 20px;display:flex;gap:10px}
 .hab-item{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center}
 .hab-val{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--neon)}
 .hab-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;font-weight:600}
-
-/* Partner presence footer */
 .hero-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px}
 .presence-dots{display:flex;gap:4px;align-items:center}
 .pdot{width:7px;height:7px;border-radius:50%;background:var(--text4)}
 .pdot.lit{background:var(--neon);animation:glowPulse 2s ease infinite;box-shadow:0 0 8px rgba(0,245,212,.5)}
 
-/* ── QUICK STATS STRIP ── */
+/* STATS */
 .stats-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
 .sc{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px 12px;text-align:center;position:relative;overflow:hidden;transition:all .25s;cursor:default}
 .sc:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
@@ -206,7 +185,7 @@ input.fi.no-icon{padding-left:16px}
 .sc-num{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--neon);line-height:1;animation:scoreCount .3s ease both}
 .sc-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;font-weight:700}
 
-/* ── STREAK CARD ── */
+/* STREAK */
 .streak-card{background:linear-gradient(135deg,rgba(251,191,36,.08),rgba(244,63,94,.06));border:1px solid rgba(251,191,36,.15);border-radius:20px;padding:18px;margin-bottom:16px;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden}
 .streak-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(251,191,36,.5),transparent)}
 .streak-flame{font-size:38px;animation:floatY 2s ease-in-out infinite;flex-shrink:0}
@@ -219,7 +198,7 @@ input.fi.no-icon{padding-left:16px}
 .sday.today{background:rgba(251,191,36,.3);color:var(--amber);border:1px solid var(--amber);box-shadow:0 0 12px rgba(251,191,36,.3)}
 .sday-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
 
-/* ── POMODORO TIMER ── */
+/* TIMER */
 .timer-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden}
 .timer-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--rose),var(--violet))}
 .timer-modes{display:flex;gap:6px;margin-bottom:16px}
@@ -229,7 +208,7 @@ input.fi.no-icon{padding-left:16px}
 .timer-circle-wrap{position:relative;width:130px;height:130px;flex-shrink:0}
 .tc-svg{width:100%;height:100%;transform:rotate(-90deg)}
 .tc-track{fill:none;stroke:var(--bg3);stroke-width:8}
-.tc-prog{fill:none;stroke:url(#tGrad);stroke-width:8;stroke-linecap:round;stroke-dasharray:345;stroke-dashoffset:0;transition:stroke-dashoffset .5s ease}
+.tc-prog{fill:none;stroke:url(#tGrad);stroke-width:8;stroke-linecap:round;stroke-dasharray:345.4;stroke-dashoffset:0;transition:stroke-dashoffset .8s ease}
 .timer-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .tc-time{font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--amber);line-height:1}
 .tc-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-top:3px;font-weight:700}
@@ -245,7 +224,7 @@ input.fi.no-icon{padding-left:16px}
 .tbtn.pause{background:linear-gradient(135deg,rgba(244,63,94,.8),var(--rose));color:#fff;border:none;box-shadow:0 6px 20px rgba(244,63,94,.3)}
 .tbtn:active{transform:scale(.9)}
 
-/* ── SHARED STUDY ZONE ── */
+/* SYNC ZONE */
 .sync-card{background:linear-gradient(145deg,rgba(77,159,255,.07),rgba(0,245,212,.04));border:1px solid rgba(77,159,255,.15);border-radius:20px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden}
 .sync-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(77,159,255,.5),transparent)}
 .sync-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -258,7 +237,7 @@ input.fi.no-icon{padding-left:16px}
 .sb-bar{height:3px;background:var(--border);border-radius:4px;overflow:hidden;margin-top:4px}
 .sb-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--neon));border-radius:4px;transition:width 1.5s ease}
 
-/* ── MOOD BOARD ── */
+/* MOOD */
 .mood-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:16px}
 .mood-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
 .mood-btn{aspect-ratio:1;border-radius:14px;border:1.5px solid var(--border);background:var(--bg3);cursor:pointer;transition:all .3s cubic-bezier(.34,1.56,.64,1);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:22px;position:relative;overflow:hidden}
@@ -268,7 +247,7 @@ input.fi.no-icon{padding-left:16px}
 .mood-btn:active{transform:scale(.88)}
 .mood-sentence{text-align:center;font-size:12px;color:var(--text2);font-weight:500;min-height:20px}
 
-/* ── STATUS GRID ── */
+/* STATUS GRID */
 .status-mega-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .sbtn{padding:14px 12px;border-radius:16px;border:1.5px solid var(--border);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:all .25s;font-size:10px;font-weight:700;color:var(--text2);letter-spacing:.08em;text-transform:uppercase;position:relative;overflow:hidden}
 .sbtn .si{font-size:22px;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
@@ -286,19 +265,15 @@ input.fi.no-icon{padding-left:16px}
 .sbtn.s-study{border-color:rgba(77,159,255,.2);background:rgba(77,159,255,.05);color:var(--blue)}
 .sbtn.s-study.active-s{box-shadow:0 0 0 2px var(--blue),0 8px 24px rgba(77,159,255,.2)}
 .sbtn.active-s .si{transform:scale(1.25) rotate(-6deg)}
-
-/* Extra status row */
 .status-extra-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
 .sbtn.s-offline{border-color:var(--border2);background:var(--bg3);color:var(--text3)}
 .sbtn.s-offline.active-s{box-shadow:0 0 0 2px var(--text3)}
-
-/* Custom status */
 .custom-status-wrap{display:flex;gap:8px;margin-bottom:16px;padding:4px;background:var(--card);border:1px solid var(--border);border-radius:16px}
 .custom-status-input{flex:1;background:transparent;border:none;padding:11px 14px;font-size:13px;color:var(--text)}
 .custom-status-input::placeholder{color:var(--text4)}
 .csbtn{padding:10px 18px;background:linear-gradient(135deg,var(--violet2),var(--violet));border-radius:12px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0;border:none;white-space:nowrap}
 
-/* ── PING ZONE ── */
+/* PING ZONE */
 .ping-zone{background:linear-gradient(145deg,rgba(0,245,212,.06),rgba(16,185,129,.04));border:1px solid rgba(0,245,212,.14);border-radius:22px;padding:20px;margin-bottom:16px}
 .ping-main-btn{width:100%;padding:18px;background:linear-gradient(135deg,rgba(0,196,170,.9),var(--neon));border-radius:16px;font-size:15px;font-weight:800;color:#001a16;cursor:pointer;transition:all .3s;box-shadow:0 8px 30px rgba(0,245,212,.25),inset 0 1px 0 rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;gap:12px;letter-spacing:.05em;text-transform:uppercase;position:relative;overflow:hidden;border:none}
 .ping-main-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.15),transparent)}
@@ -309,7 +284,7 @@ input.fi.no-icon{padding-left:16px}
 .qpbtn{padding:10px 8px;border-radius:12px;border:1px solid var(--border2);background:var(--bg3);font-size:11px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;text-align:center;line-height:1.5}
 .qpbtn:active{transform:scale(.9);border-color:var(--neon);color:var(--neon)}
 
-/* ── ACTIVITY FEED ── */
+/* ACTIVITY FEED */
 .activity-feed{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:6px}
 .af-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .af-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;animation:slideInLeft .25s ease both;transition:background .15s}
@@ -319,47 +294,42 @@ input.fi.no-icon{padding-left:16px}
 .af-text{font-size:12px;color:var(--text2);font-weight:500;flex:1}
 .af-time{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
 
-/* Notif banner */
 #notifBanner{background:linear-gradient(135deg,rgba(0,245,212,.06),rgba(77,159,255,.04));border:1px solid rgba(0,245,212,.15);border-radius:16px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;animation:fadeUp .3s ease both}
 
-/* ══════════════════════════════
-   CHAT SCREEN
-══════════════════════════════ */
-#chatScreen{display:flex;flex-direction:column;height:100vh;position:relative}
+/* CHAT */
+#chatScreen{display:flex;flex-direction:column;height:100vh;position:relative;overflow:hidden}
 .msgs{flex:1;padding:14px 14px 0;overflow-y:auto;display:flex;flex-direction:column;gap:8px;scroll-behavior:smooth;overscroll-behavior:contain;position:relative}
 .msgs::-webkit-scrollbar{width:3px}
 .msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-
 .chat-date-sep{text-align:center;font-size:10px;color:var(--text3);padding:10px 0;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
 .chat-date-sep::before,.chat-date-sep::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* Message rows */
-.mrow{display:flex;gap:8px;align-items:flex-end;animation:fadeUp .2s ease both}
+/* Scroll to bottom button */
+#scrollToBottom{position:absolute;bottom:160px;right:16px;width:38px;height:38px;background:var(--card2);border:1.5px solid var(--neon);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;z-index:10;opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 4px 16px rgba(0,245,212,.3)}
+#scrollToBottom.visible{opacity:1;pointer-events:all;transform:translateY(0)}
+.sbot-badge{position:absolute;top:-6px;right:-4px;background:var(--rose);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;border:2px solid var(--bg2)}
+
+/* Messages */
+.mrow{display:flex;gap:8px;align-items:flex-end;animation:msgIn .2s ease both}
 .mrow.mine{flex-direction:row-reverse}
 .mavatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--violet),var(--neon));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;font-family:'JetBrains Mono',monospace}
 .mrow.mine .mavatar{background:linear-gradient(135deg,var(--neon2),var(--neon))}
 .mbubble-wrap{display:flex;flex-direction:column;align-items:flex-start;max-width:75%}
 .mrow.mine .mbubble-wrap{align-items:flex-end}
-.mbubble{padding:10px 15px;border-radius:20px;font-size:14px;line-height:1.65;word-break:break-word;position:relative}
+.mbubble{padding:10px 15px;border-radius:20px;font-size:14px;line-height:1.65;word-break:break-word;position:relative;cursor:pointer;user-select:none}
 .mrow:not(.mine) .mbubble{background:var(--card2);border:1px solid var(--border);border-bottom-left-radius:5px;color:var(--text)}
 .mrow.mine .mbubble{background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;border-bottom-right-radius:5px;box-shadow:0 4px 20px rgba(168,85,247,.3)}
-/* Bubble themes */
-.bubble-cyan .mrow.mine .mbubble{background:linear-gradient(135deg,var(--neon2),var(--neon))!important;color:#001a14!important;box-shadow:0 4px 20px rgba(0,245,212,.3)!important}
-.bubble-emerald .mrow.mine .mbubble{background:linear-gradient(135deg,#059669,var(--emerald))!important;color:#001a10!important;box-shadow:0 4px 20px rgba(16,185,129,.3)!important}
-.bubble-rose .mrow.mine .mbubble{background:linear-gradient(135deg,var(--rose2),var(--rose))!important;color:#fff!important;box-shadow:0 4px 20px rgba(244,63,94,.3)!important}
-.bubble-amber .mrow.mine .mbubble{background:linear-gradient(135deg,#b45309,var(--amber))!important;color:#1a0d00!important;box-shadow:0 4px 20px rgba(251,191,36,.3)!important}
-.bubble-sky .mrow.mine .mbubble{background:linear-gradient(135deg,var(--blue2),var(--blue))!important;color:#fff!important;box-shadow:0 4px 20px rgba(77,159,255,.3)!important}
-
-/* Tick system */
 .msg-meta{display:flex;align-items:center;gap:5px;margin-top:3px;padding:0 2px}
 .mrow.mine .msg-meta{justify-content:flex-end}
 .mtime{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace}
-.mtick{font-size:12px;display:flex;gap:1px;align-items:center;transition:color .3s}
-.mtick.sent{color:var(--text3)} /* ✓ one grey tick */
-.mtick.delivered{color:var(--text2)} /* ✓✓ two grey ticks */
-.mtick.read{color:var(--neon)} /* ✓✓ two blue/neon ticks */
+.mtick{font-size:12px;line-height:1;color:var(--text3);transition:color .4s}
+.mtick.delivered{color:var(--text2)}
+.mtick.read{color:var(--neon)}
 
-/* Long press context menu */
+/* Long press highlight */
+.mbubble.pressing{transform:scale(.97);opacity:.8}
+
+/* Context menu */
 .msg-ctx-menu{position:fixed;background:var(--card2);border:1px solid var(--border2);border-radius:16px;padding:8px;z-index:9900;box-shadow:var(--shadow);animation:popIn .2s cubic-bezier(.34,1.56,.64,1) both;min-width:180px}
 .ctx-item{padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
 .ctx-item:hover{background:var(--card3);color:var(--text)}
@@ -371,30 +341,25 @@ input.fi.no-icon{padding-left:16px}
 .reaction-chip:hover{background:var(--card3);border-color:var(--border2)}
 .reaction-chip.mine{border-color:var(--neon);background:var(--ndim)}
 .reaction-count{font-size:11px;color:var(--text2);font-weight:700;font-family:'JetBrains Mono',monospace}
-
-/* Reaction picker */
-.reaction-bar{position:absolute;background:var(--card2);border:1px solid var(--border2);border-radius:30px;padding:6px 10px;display:flex;gap:6px;z-index:9800;box-shadow:var(--shadow);animation:popIn .2s cubic-bezier(.34,1.56,.64,1) both}
+.reaction-bar{position:fixed;background:var(--card2);border:1px solid var(--border2);border-radius:30px;padding:6px 10px;display:flex;gap:6px;z-index:9800;box-shadow:var(--shadow);animation:popIn .2s cubic-bezier(.34,1.56,.64,1) both}
 .rbar-emoji{font-size:22px;cursor:pointer;border-radius:8px;padding:4px 6px;transition:all .2s}
 .rbar-emoji:hover{background:var(--card3);transform:scale(1.25)}
 .rbar-emoji:active{transform:scale(.9)}
 
-/* Replied message preview */
+/* Reply preview */
 .reply-preview{background:var(--bg3);border-left:3px solid var(--neon);border-radius:0 8px 8px 0;padding:8px 12px;margin-bottom:6px;font-size:12px;color:var(--text2);position:relative}
 .reply-sender{font-size:11px;color:var(--neon);font-weight:700;margin-bottom:2px}
 
-/* Chat input area */
+/* Chat input */
 .chat-toolbar{background:rgba(6,9,15,.97);backdrop-filter:blur(30px);border-top:1px solid var(--border);padding:8px 12px 4px}
 .quick-replies{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
 .quick-replies::-webkit-scrollbar{display:none}
 .qr{flex-shrink:0;padding:7px 14px;background:var(--card2);border:1.5px solid var(--border2);border-radius:22px;font-size:12px;font-weight:700;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
 .qr:active{transform:scale(.9);background:var(--ndim);border-color:var(--neon);color:var(--neon)}
-
-/* Reply banner */
 #replyBanner{display:none;background:var(--card2);border-top:1px solid var(--border);padding:10px 16px;flex-direction:row;align-items:center;gap:10px}
 .reply-banner-text{flex:1;font-size:12px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .reply-close-btn{font-size:18px;cursor:pointer;color:var(--text3);padding:4px;border-radius:6px;transition:all .15s}
 .reply-close-btn:hover{color:var(--rose);background:var(--rdim)}
-
 .chat-ia{background:rgba(6,9,15,.97);backdrop-filter:blur(30px);padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;border-top:1px solid var(--border)}
 textarea.ci{flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:22px;padding:11px 16px;font-size:14px;color:var(--text);max-height:120px;resize:none;line-height:1.5;transition:all .25s}
 textarea.ci:focus{border-color:var(--neon);box-shadow:0 0 0 4px rgba(0,245,212,.08)}
@@ -406,14 +371,14 @@ textarea.ci::placeholder{color:var(--text4)}
 .media-btn:active{transform:scale(.85)}
 .media-btn:hover{border-color:var(--neon);background:var(--ndim)}
 
-/* Typing indicator */
+/* Typing */
 .typing-row{display:flex;gap:9px;align-items:flex-end;padding:4px 14px 8px;animation:fadeUp .2s ease}
 .tdots{display:flex;gap:4px;align-items:center;padding:10px 14px;background:var(--card2);border:1px solid var(--border);border-radius:18px;border-bottom-left-radius:5px}
 .td{width:5px;height:5px;background:var(--text3);border-radius:50%;animation:tdot 1.4s ease infinite}
 .td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
 
 /* Emoji picker */
-#emojiPicker{display:none;position:absolute;bottom:82px;left:12px;background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:14px;z-index:100;box-shadow:var(--shadow);width:280px;animation:popIn .25s cubic-bezier(.34,1.56,.64,1) both}
+#emojiPicker{display:none;position:absolute;bottom:100px;left:12px;background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:14px;z-index:100;box-shadow:var(--shadow);width:280px;animation:popIn .25s cubic-bezier(.34,1.56,.64,1) both}
 .ep-tabs{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;scrollbar-width:none}
 .ep-tab{padding:5px 10px;border-radius:8px;font-size:14px;cursor:pointer;border:1.5px solid transparent;transition:all .2s;flex-shrink:0}
 .ep-tab.on{border-color:var(--neon);background:var(--ndim)}
@@ -422,7 +387,7 @@ textarea.ci::placeholder{color:var(--text4)}
 .ep-emoji:hover{background:var(--card2);transform:scale(1.2)}
 .ep-emoji:active{transform:scale(.85)}
 
-/* Chat customize panel */
+/* Chat customize */
 #chatCustomPanel{background:var(--card);border-bottom:1px solid var(--border);padding:14px 16px;display:none;flex-direction:column;gap:14px}
 .ccp-section{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px}
 .swatch-row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:3px}
@@ -432,23 +397,22 @@ textarea.ci::placeholder{color:var(--text4)}
 .bswatch{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:all .25s;flex-shrink:0}
 .bswatch.on{border-color:#fff;transform:scale(1.2)}
 
-/* Chat bg themes */
-.chat-bg-default #chatMsgs-root,.chat-bg-void #chatMsgs-root{background:var(--bg)}
-.chat-bg-cosmos #chatMsgs-root{background:linear-gradient(170deg,#08041a 0%,#0c0d22 100%)}
-.chat-bg-ocean #chatMsgs-root{background:linear-gradient(170deg,#020d18 0%,#060f20 100%)}
-.chat-bg-forest #chatMsgs-root{background:linear-gradient(170deg,#030e08 0%,#060e0c 100%)}
-.chat-bg-ember #chatMsgs-root{background:linear-gradient(170deg,#140602 0%,#0e0610 100%)}
-.chat-bg-glass #chatMsgs-root{background:linear-gradient(170deg,#06090f 0%,#0b0e18 100%)}
-
-/* Connected indicator */
+/* Tab status bar */
 #tabStatusBar{background:rgba(16,185,129,.08);border-bottom:1px solid rgba(16,185,129,.15);padding:7px 18px;font-size:11px;color:var(--emerald);display:flex;align-items:center;gap:8px;font-weight:600;transition:all .3s}
 #tabStatusBar.away-bar{background:rgba(251,191,36,.06);border-color:rgba(251,191,36,.15);color:var(--amber)}
 #tabStatusBar.offline-bar{background:rgba(244,63,94,.06);border-color:rgba(244,63,94,.15);color:var(--rose)}
 .tsbar-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 1.5s ease infinite}
 
-/* ══════════════════════════════
-   SETTINGS SCREEN
-══════════════════════════════ */
+/* Message search */
+#msgSearchBar{background:rgba(6,9,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:10px 14px;display:none;gap:10px;align-items:center}
+.msg-search-inp{flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:9px 14px;font-size:13px;color:var(--text)}
+.msg-search-inp:focus{border-color:var(--neon);outline:none}
+.msg-search-close{font-size:18px;color:var(--text3);cursor:pointer;padding:4px;border-radius:6px;transition:all .15s}
+.msg-search-close:hover{color:var(--rose)}
+.msg-search-count{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.mrow.search-highlight .mbubble{outline:2px solid var(--amber);outline-offset:2px}
+
+/* SETTINGS */
 #settingsScreen .content{padding:14px 14px 100px;position:relative;z-index:1}
 .profile-hero{background:linear-gradient(145deg,var(--card),var(--card2));border:1px solid var(--border2);border-radius:24px;padding:24px;display:flex;align-items:center;gap:18px;margin-bottom:20px;position:relative;overflow:hidden}
 .profile-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.5),rgba(0,245,212,.5),transparent)}
@@ -457,7 +421,6 @@ textarea.ci::placeholder{color:var(--text4)}
 .online-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--emerald);animation:glowPulse 2s ease infinite;flex-shrink:0}
 .edit-btn{padding:9px 18px;background:var(--vdim);border:1px solid rgba(168,85,247,.25);border-radius:12px;font-size:11px;font-weight:700;color:var(--violet);cursor:pointer;white-space:nowrap;transition:all .2s}
 .edit-btn:hover{background:rgba(168,85,247,.15);border-color:var(--violet)}
-
 .section-group{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:10px}
 .sg-header{padding:12px 18px;border-bottom:1px solid var(--border);font-size:10px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:.14em;display:flex;align-items:center;gap:8px}
 .srow{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);transition:background .15s;cursor:default}
@@ -472,19 +435,38 @@ textarea.ci::placeholder{color:var(--text4)}
 .toggle.on{background:var(--neon);border-color:var(--neon);box-shadow:0 0 16px rgba(0,245,212,.35)}
 .toggle::after{content:'';position:absolute;width:19px;height:19px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .toggle.on::after{transform:translateX(21px)}
-
 .sound-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 18px}
 .sopt{padding:12px 8px;border-radius:13px;border:1.5px solid var(--border);background:var(--bg3);text-align:center;cursor:pointer;transition:all .25s;font-size:11px;font-weight:700;color:var(--text2)}
 .sopt .so-icon{font-size:18px;display:block;margin-bottom:5px}
 .sopt.active{border-color:var(--neon);background:var(--ndim);color:var(--neon);box-shadow:0 0 0 1px rgba(0,245,212,.2)}
 .sopt:active{transform:scale(.9)}
-
 .danger-btn{width:100%;padding:14px;background:var(--rdim);border:1.5px solid rgba(244,63,94,.2);border-radius:14px;font-size:13px;font-weight:700;color:var(--rose);cursor:pointer;margin-top:10px;transition:all .2s;letter-spacing:.04em;text-transform:uppercase}
 .danger-btn:active{transform:scale(.97)}
 
-/* ══════════════════════════════
-   PING ALERT OVERLAY
-══════════════════════════════ */
+/* AI ASSISTANT SCREEN */
+#aiScreen{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.ai-msgs{flex:1;padding:14px;overflow-y:auto;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.ai-msgs::-webkit-scrollbar{width:3px}
+.ai-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.ai-bubble-wrap{display:flex;gap:10px;align-items:flex-start;animation:msgIn .25s ease both}
+.ai-bubble-wrap.user{flex-direction:row-reverse}
+.ai-avatar{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--violet2),var(--neon));display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 16px rgba(0,245,212,.2)}
+.ai-bubble{padding:12px 16px;border-radius:20px;font-size:13px;line-height:1.75;max-width:84%;word-break:break-word}
+.ai-bubble-wrap:not(.user) .ai-bubble{background:var(--card2);border:1px solid var(--border);border-top-left-radius:5px;color:var(--text)}
+.ai-bubble-wrap.user .ai-bubble{background:linear-gradient(135deg,var(--violet2),var(--violet));color:#fff;border-top-right-radius:5px;box-shadow:0 4px 20px rgba(168,85,247,.3)}
+.ai-typing{display:flex;gap:5px;align-items:center;padding:12px 16px;background:var(--card2);border:1px solid var(--border);border-radius:20px;border-top-left-radius:5px;width:60px}
+.ai-typing-dot{width:5px;height:5px;border-radius:50%;background:var(--neon);animation:aiBlink 1.4s ease infinite}
+.ai-typing-dot:nth-child(2){animation-delay:.2s}
+.ai-typing-dot:nth-child(3){animation-delay:.4s}
+.ai-welcome{background:linear-gradient(145deg,var(--card),var(--card2));border:1px solid var(--border2);border-radius:24px;padding:24px;margin-bottom:4px;text-align:center;position:relative;overflow:hidden}
+.ai-welcome::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(0,245,212,.6),rgba(168,85,247,.5),transparent)}
+.ai-chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.ai-chip{padding:8px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:22px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap}
+.ai-chip:active{transform:scale(.93);border-color:var(--neon);color:var(--neon);background:var(--ndim)}
+.ai-ia{background:rgba(6,9,15,.97);backdrop-filter:blur(30px);padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;border-top:1px solid var(--border)}
+.ai-char-count{font-size:10px;color:var(--text3);text-align:right;margin-top:2px;font-family:'JetBrains Mono',monospace}
+
+/* PING ALERT */
 .aoverlay{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(20px);z-index:9990;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s ease}
 .abox{background:var(--card);border:1px solid rgba(0,245,212,.2);border-radius:32px;padding:36px 28px;width:100%;max-width:330px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.7),var(--glow-n);animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1) both;position:relative;overflow:hidden}
 .abox::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;background:linear-gradient(90deg,transparent,rgba(0,245,212,.7),rgba(168,85,247,.5),transparent)}
@@ -504,38 +486,28 @@ textarea.ci::placeholder{color:var(--text4)}
 .adismiss{padding:15px;background:linear-gradient(135deg,var(--neon2),var(--neon));border-radius:14px;font-size:14px;font-weight:800;color:#001a16;cursor:pointer;width:100%;transition:all .2s;position:relative;z-index:1;letter-spacing:.04em;text-transform:uppercase;border:none}
 .adismiss:active{transform:scale(.96)}
 
-/* ══════════════════════════════
-   TOAST
-══════════════════════════════ */
+/* TOAST */
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-24px);background:rgba(20,26,42,.97);backdrop-filter:blur(20px);border:1px solid var(--border2);border-radius:30px;padding:10px 22px;font-size:12px;font-weight:700;color:var(--text);z-index:9989;opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;pointer-events:none;box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05);letter-spacing:.03em}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* ══════════════════════════════
-   STUDY PROGRESS OVERLAY
-══════════════════════════════ */
+/* STUDY PROGRESS */
 #eduOverlay{position:fixed;inset:0;background:var(--bg);z-index:60;overflow-y:auto;animation:scaleIn .3s ease}
 .edu-topbar{position:sticky;top:0;background:rgba(3,5,8,.97);backdrop-filter:blur(20px);padding:14px 18px;border-bottom:1px solid var(--border);z-index:10;display:flex;align-items:center;gap:14px}
 .ecard{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;margin:0 14px 10px;transition:all .25s;animation:fadeUp .3s ease both;position:relative;overflow:hidden;cursor:pointer}
 .ecard:hover{border-color:var(--border2);transform:translateY(-2px)}
 .ecard::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--violet),var(--neon))}
 .eprog{height:5px;background:var(--border);border-radius:4px;margin-top:14px;overflow:hidden}
-.eprogf{height:100%;background:linear-gradient(90deg,var(--violet),var(--neon));border-radius:4px;transition:width 1.2s cubic-bezier(.16,1,.3,1)}
+.eprogf{height:100%;background:linear-gradient(90deg,var(--violet),var(--neon));border-radius:4px;transition:width 1.2s cubic-bezier(.16,1,.3,1);width:0%}
 .eprog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:6px;font-family:'JetBrains Mono',monospace}
 
-/* ══════════════════════════════
-   TIMER CUSTOM MODAL
-══════════════════════════════ */
+/* TIMER MODAL */
 #timerModal .abox{border-color:rgba(251,191,36,.2)}
 #timerModal .atitle{color:var(--amber)}
 
-/* ══════════════════════════════
-   LOADING SPINNER
-══════════════════════════════ */
+/* SPINNER */
 .spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px}
 
-/* ══════════════════════════════
-   STAR FIELD
-══════════════════════════════ */
+/* STARS */
 .stars{position:fixed;inset:0;pointer-events:none;z-index:0}
 .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle 3s ease-in-out infinite}
 
@@ -550,6 +522,7 @@ textarea.ci::placeholder{color:var(--text4)}
 <div class="grid-bg"></div>
 <div class="stars" id="starsEl"></div>
 
+<!-- LOADING -->
 <div id="loadingScreen">
   <div class="load-logo">📚</div>
   <div class="load-name">StudySync</div>
@@ -557,7 +530,7 @@ textarea.ci::placeholder{color:var(--text4)}
   <div class="load-bar"><div class="load-fill" id="loadFill"></div></div>
 </div>
 
-<!-- ══════ AUTH ══════ -->
+<!-- AUTH -->
 <div id="authScreen" class="screen hide">
   <div class="auth-wrap">
     <div class="auth-logo">
@@ -588,7 +561,7 @@ textarea.ci::placeholder{color:var(--text4)}
   </div>
 </div>
 
-<!-- ══════ PAIR ══════ -->
+<!-- PAIR -->
 <div id="pairScreen" class="screen hide">
   <div class="pcard-wrap">
     <div style="text-align:center;margin-bottom:28px">
@@ -613,10 +586,10 @@ textarea.ci::placeholder{color:var(--text4)}
   </div>
 </div>
 
-<!-- ══════ MAIN APP ══════ -->
+<!-- MAIN APP -->
 <div id="mainApp" class="hide">
 
-  <!-- ── HOME ── -->
+  <!-- HOME -->
   <div id="homeScreen" class="screen">
     <div class="topbar">
       <div class="topbar-logo">
@@ -624,7 +597,7 @@ textarea.ci::placeholder{color:var(--text4)}
         StudySync
       </div>
       <div style="display:flex;gap:8px">
-        <div class="icon-btn" onclick="showEdu()" title="Study Progress" style="font-size:15px">📊</div>
+        <div class="icon-btn" onclick="showEdu()" title="Study Progress">📊</div>
         <div class="icon-btn" id="notifBtn" onclick="requestNotifPerm()" title="Notifications">🔔</div>
       </div>
     </div>
@@ -634,7 +607,6 @@ textarea.ci::placeholder{color:var(--text4)}
         <button onclick="requestNotifPerm()" style="padding:9px 18px;background:linear-gradient(135deg,var(--neon2),var(--neon));border-radius:10px;font-size:11px;font-weight:700;color:#001a16;cursor:pointer;white-space:nowrap;border:none;flex-shrink:0">Allow</button>
       </div>
 
-      <!-- Partner hero -->
       <p class="section-label">👥 Partner Status</p>
       <div class="hero-card">
         <div class="hero-card-top">
@@ -662,14 +634,12 @@ textarea.ci::placeholder{color:var(--text4)}
         </div>
       </div>
 
-      <!-- Stats strip -->
       <div class="stats-strip">
         <div class="sc"><div class="sc-icon">📡</div><div class="sc-num" id="statPings">0</div><div class="sc-lbl">Pings</div></div>
         <div class="sc"><div class="sc-icon">⏱</div><div class="sc-num" id="statMins">0</div><div class="sc-lbl">Mins</div></div>
         <div class="sc"><div class="sc-icon">🔥</div><div class="sc-num" id="statStreak">1</div><div class="sc-lbl">Streak</div></div>
       </div>
 
-      <!-- Streak card -->
       <div class="streak-card">
         <div class="streak-flame">🔥</div>
         <div class="streak-info">
@@ -682,7 +652,6 @@ textarea.ci::placeholder{color:var(--text4)}
         </div>
       </div>
 
-      <!-- Sync zone -->
       <p class="section-label">⚡ Sync Zone</p>
       <div class="sync-card">
         <div class="sync-header">
@@ -703,13 +672,12 @@ textarea.ci::placeholder{color:var(--text4)}
         </div>
       </div>
 
-      <!-- Pomodoro Timer -->
       <p class="section-label">⏱ Focus Timer</p>
       <div class="timer-card">
         <div class="timer-modes">
           <div class="tmode on" id="tm-focus" onclick="setTimerMode('focus')">📚 Focus</div>
-          <div class="tmode" id="tm-short" onclick="setTimerMode('short')">☕ Short Break</div>
-          <div class="tmode" id="tm-long" onclick="setTimerMode('long')">🌙 Long Break</div>
+          <div class="tmode" id="tm-short" onclick="setTimerMode('short')">☕ Short</div>
+          <div class="tmode" id="tm-long" onclick="setTimerMode('long')">🌙 Long</div>
         </div>
         <div class="timer-display-wrap">
           <div class="timer-circle-wrap">
@@ -741,7 +709,6 @@ textarea.ci::placeholder{color:var(--text4)}
         </div>
       </div>
 
-      <!-- Mood board -->
       <p class="section-label">😊 Today's Mood</p>
       <div class="mood-card">
         <div class="mood-grid">
@@ -759,7 +726,6 @@ textarea.ci::placeholder{color:var(--text4)}
         <div class="mood-sentence" id="moodLabel">Tap to set today's mood</div>
       </div>
 
-      <!-- Status -->
       <p class="section-label">🔴 My Status</p>
       <div class="status-mega-grid">
         <button class="sbtn s-free" id="bFree" onclick="setStatus('free')"><span class="si">🟢</span>Free</button>
@@ -773,13 +739,11 @@ textarea.ci::placeholder{color:var(--text4)}
         <button class="sbtn s-offline" id="bOffline" onclick="setStatus('offline')"><span class="si">⚫</span>Offline</button>
       </div>
 
-      <!-- Custom status -->
       <div class="custom-status-wrap">
         <input class="custom-status-input" id="customStatusInput" placeholder="✏️ What are you working on?">
         <button class="csbtn" onclick="setCustomStatus()">Set</button>
       </div>
 
-      <!-- Ping zone -->
       <p class="section-label">📡 Ping Partner</p>
       <div class="ping-zone">
         <button class="ping-main-btn" onclick="sendPing()" id="pingMainBtn">
@@ -787,29 +751,28 @@ textarea.ci::placeholder{color:var(--text4)}
           <span>Ping Partner</span>
         </button>
         <div class="quick-pings">
-          <button class="qpbtn" onclick="sendQuickPing('🔥 On fire today!')">🔥 On fire</button>
-          <button class="qpbtn" onclick="sendQuickPing('📚 Start studying?')">📚 Study?</button>
-          <button class="qpbtn" onclick="sendQuickPing('☕ Coffee break!')">☕ Break</button>
-          <button class="qpbtn" onclick="sendQuickPing('❓ Need help!')">❓ Help</button>
-          <button class="qpbtn" onclick="sendQuickPing('✅ Done! Great session!')">✅ Done</button>
-          <button class="qpbtn" onclick="sendQuickPing('😴 Getting tired...')">😴 Tired</button>
+          <button class="qpbtn" onclick="sendQuickMsg('🔥 On fire today!')">🔥 On fire</button>
+          <button class="qpbtn" onclick="sendQuickMsg('📚 Start studying?')">📚 Study?</button>
+          <button class="qpbtn" onclick="sendQuickMsg('☕ Coffee break!')">☕ Break</button>
+          <button class="qpbtn" onclick="sendQuickMsg('❓ Need help!')">❓ Help</button>
+          <button class="qpbtn" onclick="sendQuickMsg('✅ Done! Great session!')">✅ Done</button>
+          <button class="qpbtn" onclick="sendQuickMsg('😴 Getting tired...')">😴 Tired</button>
         </div>
       </div>
 
-      <!-- Activity feed -->
       <p class="section-label">📋 Activity Feed</p>
       <div class="activity-feed" id="activityBox">
         <div class="af-header">
           <span style="font-size:11px;font-weight:700;color:var(--text2)">Recent Activity</span>
-          <span id="afLive" style="font-size:10px;color:var(--emerald);font-weight:700;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:var(--emerald);animation:glowPulse 1.5s ease infinite;display:inline-block"></span>Live</span>
+          <span style="font-size:10px;color:var(--emerald);font-weight:700;display:flex;align-items:center;gap:5px"><span style="width:5px;height:5px;border-radius:50%;background:var(--emerald);animation:glowPulse 1.5s ease infinite;display:inline-block"></span>Live</span>
         </div>
         <div id="actEmpty" style="padding:28px;text-align:center;color:var(--text3);font-size:12px;font-weight:600">No activity yet — start studying! 🚀</div>
       </div>
     </div>
   </div>
 
-  <!-- ── CHAT ── -->
-  <div id="chatScreen" class="screen hide" id="chatBgEl">
+  <!-- CHAT -->
+  <div id="chatScreen" class="screen hide">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:12px">
         <div class="hero-avatar" style="width:40px;height:40px;font-size:13px">
@@ -822,16 +785,23 @@ textarea.ci::placeholder{color:var(--text4)}
         </div>
       </div>
       <div style="display:flex;gap:7px">
+        <div class="icon-btn" onclick="toggleMsgSearch()" title="Search">🔍</div>
         <div class="icon-btn" onclick="toggleChatCustomize()" title="Theme">🎨</div>
         <div class="icon-btn" onclick="toggleAutoDelete()" id="adBtn" title="Auto-delete">⏰</div>
-        <div class="icon-btn" onclick="clearChat()" title="Clear chat" style="font-size:14px">🗑️</div>
+        <div class="icon-btn" onclick="clearChat()" title="Clear" style="font-size:14px">🗑️</div>
       </div>
     </div>
 
-    <!-- Tab status bar -->
     <div id="tabStatusBar">
       <div class="tsbar-dot"></div>
       <span id="tabStatusText">Partner is online</span>
+    </div>
+
+    <!-- Message search bar -->
+    <div id="msgSearchBar" style="display:none;gap:10px;align-items:center;background:rgba(6,9,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:10px 14px;flex-direction:row">
+      <input class="msg-search-inp" id="msgSearchInp" placeholder="Search messages…" oninput="searchMsgs()" style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:9px 14px;font-size:13px;color:var(--text)">
+      <span id="msgSearchCount" style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;white-space:nowrap"></span>
+      <span onclick="closeMsgSearch()" style="font-size:18px;color:var(--text3);cursor:pointer;padding:4px">✕</span>
     </div>
 
     <!-- Chat customize panel -->
@@ -839,35 +809,37 @@ textarea.ci::placeholder{color:var(--text4)}
       <div>
         <div class="ccp-section">Chat Background</div>
         <div class="swatch-row">
-          <div class="tswatch on" data-theme="default" onclick="setChatBg('default')" style="background:#030508" title="Default"></div>
-          <div class="tswatch" data-theme="cosmos" onclick="setChatBg('cosmos')" style="background:linear-gradient(135deg,#08041a,#0c0d22)" title="Cosmos"></div>
-          <div class="tswatch" data-theme="ocean" onclick="setChatBg('ocean')" style="background:linear-gradient(135deg,#020d18,#060f20)" title="Ocean"></div>
-          <div class="tswatch" data-theme="forest" onclick="setChatBg('forest')" style="background:linear-gradient(135deg,#030e08,#060e0c)" title="Forest"></div>
-          <div class="tswatch" data-theme="ember" onclick="setChatBg('ember')" style="background:linear-gradient(135deg,#140602,#0e0610)" title="Ember"></div>
-          <div class="tswatch" data-theme="glass" onclick="setChatBg('glass')" style="background:linear-gradient(135deg,#06090f,#0b0e18)" title="Glass"></div>
+          <div class="tswatch on" data-theme="default" onclick="setChatBg('default')" style="background:#030508"></div>
+          <div class="tswatch" data-theme="cosmos" onclick="setChatBg('cosmos')" style="background:linear-gradient(135deg,#08041a,#0c0d22)"></div>
+          <div class="tswatch" data-theme="ocean" onclick="setChatBg('ocean')" style="background:linear-gradient(135deg,#020d18,#060f20)"></div>
+          <div class="tswatch" data-theme="forest" onclick="setChatBg('forest')" style="background:linear-gradient(135deg,#030e08,#060e0c)"></div>
+          <div class="tswatch" data-theme="ember" onclick="setChatBg('ember')" style="background:linear-gradient(135deg,#140602,#0e0610)"></div>
+          <div class="tswatch" data-theme="glass" onclick="setChatBg('glass')" style="background:linear-gradient(135deg,#06090f,#0b0e18)"></div>
         </div>
       </div>
       <div>
         <div class="ccp-section">Bubble Color</div>
         <div class="swatch-row">
-          <div class="bswatch on" data-bubble="violet" onclick="setChatBubble('violet')" style="background:linear-gradient(135deg,var(--violet2),var(--violet))"></div>
-          <div class="bswatch" data-bubble="cyan" onclick="setChatBubble('cyan')" style="background:linear-gradient(135deg,var(--neon2),var(--neon))"></div>
-          <div class="bswatch" data-bubble="emerald" onclick="setChatBubble('emerald')" style="background:linear-gradient(135deg,#059669,var(--emerald))"></div>
-          <div class="bswatch" data-bubble="rose" onclick="setChatBubble('rose')" style="background:linear-gradient(135deg,var(--rose2),var(--rose))"></div>
-          <div class="bswatch" data-bubble="amber" onclick="setChatBubble('amber')" style="background:linear-gradient(135deg,#b45309,var(--amber))"></div>
-          <div class="bswatch" data-bubble="sky" onclick="setChatBubble('sky')" style="background:linear-gradient(135deg,var(--blue2),var(--blue))"></div>
+          <div class="bswatch on" data-bubble="violet" onclick="setChatBubble('violet')" style="background:linear-gradient(135deg,#7c3aed,#a855f7)"></div>
+          <div class="bswatch" data-bubble="cyan" onclick="setChatBubble('cyan')" style="background:linear-gradient(135deg,#00c4aa,#00f5d4)"></div>
+          <div class="bswatch" data-bubble="emerald" onclick="setChatBubble('emerald')" style="background:linear-gradient(135deg,#059669,#10b981)"></div>
+          <div class="bswatch" data-bubble="rose" onclick="setChatBubble('rose')" style="background:linear-gradient(135deg,#be123c,#f43f5e)"></div>
+          <div class="bswatch" data-bubble="amber" onclick="setChatBubble('amber')" style="background:linear-gradient(135deg,#b45309,#fbbf24)"></div>
+          <div class="bswatch" data-bubble="sky" onclick="setChatBubble('sky')" style="background:linear-gradient(135deg,#2277dd,#4d9fff)"></div>
         </div>
       </div>
     </div>
 
-    <div class="msgs" id="msgBox"></div>
+    <div class="msgs" id="msgBox" onscroll="onMsgScroll()"></div>
+
+    <!-- Scroll to bottom -->
+    <div id="scrollToBottom" onclick="scrollToBot()">⬇️<span class="sbot-badge hide" id="sbotBadge">0</span></div>
 
     <div id="typRow" class="typing-row hide">
       <div class="mavatar" id="typInit">?</div>
       <div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div>
     </div>
 
-    <!-- Reply banner -->
     <div id="replyBanner">
       <div style="font-size:16px">↩️</div>
       <div class="reply-banner-text" id="replyBannerText">Replying to…</div>
@@ -910,20 +882,53 @@ textarea.ci::placeholder{color:var(--text4)}
     </div>
   </div>
 
-  <!-- ── SETTINGS ── -->
+  <!-- AI ASSISTANT -->
+  <div id="aiScreen" class="screen hide">
+    <div class="topbar">
+      <div class="topbar-logo">
+        <div class="topbar-icon">🤖</div>
+        AI Study Buddy
+      </div>
+      <div style="display:flex;gap:8px">
+        <div class="icon-btn" onclick="clearAiChat()" title="Clear">🗑️</div>
+      </div>
+    </div>
+    <div class="ai-msgs" id="aiMsgs">
+      <div class="ai-welcome">
+        <div style="font-size:48px;margin-bottom:12px;animation:floatY 3s ease-in-out infinite">🤖</div>
+        <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px">AI Study Buddy</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7">I can help you understand concepts, explain topics, quiz you, or just think through problems together.</div>
+        <div class="ai-chips">
+          <div class="ai-chip" onclick="aiQuickAsk('Explain photosynthesis in simple terms')">🌿 Photosynthesis</div>
+          <div class="ai-chip" onclick="aiQuickAsk('Help me understand quadratic equations')">📐 Quadratics</div>
+          <div class="ai-chip" onclick="aiQuickAsk('Quiz me on World War 2 basics')">📜 History Quiz</div>
+          <div class="ai-chip" onclick="aiQuickAsk('Give me tips to study better')">💡 Study Tips</div>
+          <div class="ai-chip" onclick="aiQuickAsk('What is Newton\'s first law?')">🔬 Physics</div>
+          <div class="ai-chip" onclick="aiQuickAsk('Help me write a short essay outline')">✍️ Essay Help</div>
+        </div>
+      </div>
+    </div>
+    <div class="ai-ia">
+      <textarea class="ci" id="aiIn" placeholder="Ask anything about your studies…" rows="1" oninput="autoTA(this)" onkeydown="aiKd(event)" style="border-radius:18px"></textarea>
+      <div class="send-btn" onclick="sendAiMsg()" style="background:linear-gradient(135deg,#00c4aa,#00f5d4)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="#001a14" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
   <div id="settingsScreen" class="screen hide">
     <div class="topbar">
       <div class="topbar-logo"><span>⚙️</span>Settings</div>
       <div class="icon-btn" onclick="logout()" title="Sign Out">🚪</div>
     </div>
     <div class="content">
-      <!-- Profile -->
       <div class="profile-hero">
         <div class="profile-avatar" id="myAv">U</div>
         <div style="flex:1;min-width:0">
           <div style="font-size:18px;font-weight:800;letter-spacing:-.3px" id="myNm">User</div>
           <div style="font-size:12px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="myEm">user@email.com</div>
-          <div class="online-badge">Paired & Synced</div>
+          <div class="online-badge">Paired &amp; Synced</div>
         </div>
         <button class="edit-btn" onclick="editProfile()">Edit</button>
       </div>
@@ -941,7 +946,7 @@ textarea.ci::placeholder{color:var(--text4)}
         <div class="srow">
           <div class="srl"><div class="sic ig">🔊</div><div><div class="srow-title">Sound Alerts</div><div class="srow-sub">Play sound on ping</div></div></div>
           <div style="display:flex;align-items:center;gap:10px">
-            <button onclick="testSoundVib()" style="padding:6px 14px;background:var(--ndim);border:1px solid rgba(0,245,212,.2);border-radius:9px;font-size:11px;font-weight:700;color:var(--neon);cursor:pointer;border-width:1px">TEST</button>
+            <button onclick="testSoundVib()" style="padding:6px 14px;background:var(--ndim);border:1px solid rgba(0,245,212,.2);border-radius:9px;font-size:11px;font-weight:700;color:var(--neon);cursor:pointer">TEST</button>
             <div class="toggle on" id="tSnd" onclick="togS('snd')"></div>
           </div>
         </div>
@@ -997,15 +1002,15 @@ textarea.ci::placeholder{color:var(--text4)}
         <div class="srow" style="flex-direction:column;align-items:flex-start;gap:14px">
           <div style="display:flex;gap:12px;width:100%;align-items:center">
             <div style="flex:1"><div class="srow-title">Focus Duration (min)</div><div class="srow-sub">Default: 25</div></div>
-            <input type="number" id="focusDur" value="25" min="1" max="90" style="width:64px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px;color:var(--text);font-size:15px;font-weight:700;text-align:center;font-family:'Sora',sans-serif">
+            <input type="number" id="focusDur" value="25" min="1" max="90" style="width:64px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px;color:var(--text);font-size:15px;font-weight:700;text-align:center">
           </div>
           <div style="display:flex;gap:12px;width:100%;align-items:center">
             <div style="flex:1"><div class="srow-title">Short Break (min)</div><div class="srow-sub">Default: 5</div></div>
-            <input type="number" id="breakDur" value="5" min="1" max="30" style="width:64px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px;color:var(--text);font-size:15px;font-weight:700;text-align:center;font-family:'Sora',sans-serif">
+            <input type="number" id="breakDur" value="5" min="1" max="30" style="width:64px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px;color:var(--text);font-size:15px;font-weight:700;text-align:center">
           </div>
           <div style="display:flex;gap:12px;width:100%;align-items:center">
             <div style="flex:1"><div class="srow-title">Long Break (min)</div><div class="srow-sub">Default: 15</div></div>
-            <input type="number" id="longBreakDur" value="15" min="5" max="60" style="width:64px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px;color:var(--text);font-size:15px;font-weight:700;text-align:center;font-family:'Sora',sans-serif">
+            <input type="number" id="longBreakDur" value="15" min="5" max="60" style="width:64px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px;color:var(--text);font-size:15px;font-weight:700;text-align:center">
           </div>
           <button class="btn-primary" onclick="saveTimerSettings()" style="font-size:13px;padding:12px">Apply Timer Settings</button>
         </div>
@@ -1026,15 +1031,16 @@ textarea.ci::placeholder{color:var(--text4)}
     </div>
   </div>
 
-  <!-- Bottom Nav -->
+  <!-- BOTTOM NAV -->
   <div class="bnav">
     <div class="ni on" id="nHome" onclick="goTab('home')"><span class="ni-icon">🏠</span>Home</div>
     <div class="ni" id="nChat" onclick="goTab('chat')" style="position:relative"><span class="ni-icon">💬</span>Chat<span class="nbadge hide" id="cBadge">0</span></div>
+    <div class="ni" id="nAi" onclick="goTab('ai')"><span class="ni-icon">🤖</span>AI Buddy</div>
     <div class="ni" id="nSets" onclick="goTab('settings')"><span class="ni-icon">⚙️</span>Settings</div>
   </div>
 </div>
 
-<!-- ══════ PING ALERT ══════ -->
+<!-- PING ALERT -->
 <div class="aoverlay hide" id="alertOv">
   <div class="abox">
     <div class="abox-bg"></div>
@@ -1051,12 +1057,12 @@ textarea.ci::placeholder{color:var(--text4)}
   </div>
 </div>
 
-<!-- Timer custom modal -->
+<!-- Timer modal -->
 <div class="aoverlay hide" id="timerModal">
   <div class="abox" style="border-color:rgba(251,191,36,.2)">
     <div style="font-size:36px;margin-bottom:12px">⏱</div>
     <div class="atitle" style="color:var(--amber)">Custom Timer</div>
-    <div class="abody" style="margin-bottom:18px">Set your own focus & break durations</div>
+    <div class="abody" style="margin-bottom:18px">Set your own focus &amp; break durations</div>
     <div class="fg" style="text-align:left;margin-bottom:12px">
       <label class="lbl">Focus Time (minutes)</label>
       <input class="fi no-icon" type="number" id="modalFocus" value="25" min="1" max="180" style="background:var(--bg3)">
@@ -1073,12 +1079,12 @@ textarea.ci::placeholder{color:var(--text4)}
 <!-- Toast -->
 <div class="toast" id="toastEl"></div>
 
-<!-- Context menu (msg long press) -->
+<!-- Context menu -->
 <div id="ctxMenu" class="msg-ctx-menu hide">
   <div class="ctx-item" onclick="ctxReact()">😊 React</div>
   <div class="ctx-item" onclick="ctxReply()">↩️ Reply</div>
   <div class="ctx-item" onclick="ctxCopy()">📋 Copy</div>
-  <div class="ctx-item danger" onclick="ctxDelete()">🗑️ Delete</div>
+  <div class="ctx-item danger" id="ctxDeleteItem" onclick="ctxDelete()">🗑️ Delete</div>
 </div>
 
 <!-- Reaction bar -->
@@ -1091,7 +1097,7 @@ textarea.ci::placeholder{color:var(--text4)}
   <span class="rbar-emoji" onclick="addReaction('🔥')">🔥</span>
 </div>
 
-<!-- Study Progress Overlay -->
+<!-- Study Progress -->
 <div id="eduOverlay" class="hide">
   <div class="edu-topbar">
     <div class="topbar-icon">📊</div>
@@ -1099,12 +1105,12 @@ textarea.ci::placeholder{color:var(--text4)}
     <div class="icon-btn" onclick="hideEdu()">✕</div>
   </div>
   <div style="padding:14px 0 100px">
-    <div class="ecard" style="animation-delay:0s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">📐 Mathematics — Ch.7</div><span class="status-pill sp-free">68%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Quadratic equations. Next: Factoring polynomials.</div><div class="eprog"><div class="eprogf" style="width:0%" data-w="68"></div></div><div class="eprog-row"><span>Progress</span><span>68 / 100</span></div></div>
-    <div class="ecard" style="animation-delay:.06s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">🧬 Biology — Unit 3</div><span class="status-pill sp-wait">44%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Cell division and genetics. Next: Meiosis phases.</div><div class="eprog"><div class="eprogf" style="width:0%" data-w="44"></div></div><div class="eprog-row"><span>Progress</span><span>44 / 100</span></div></div>
-    <div class="ecard" style="animation-delay:.12s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">📝 English Literature</div><span class="status-pill sp-free">82%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Hamlet analysis. Next: Act IV symbolism.</div><div class="eprog"><div class="eprogf" style="width:0%" data-w="82"></div></div><div class="eprog-row"><span>Progress</span><span>82 / 100</span></div></div>
-    <div class="ecard" style="animation-delay:.18s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">🔬 Physics — Mechanics</div><span class="status-pill sp-busy">31%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Newton's laws. Review kinematics equations.</div><div class="eprog"><div class="eprogf" style="width:0%" data-w="31"></div></div><div class="eprog-row"><span>Progress</span><span>31 / 100</span></div></div>
-    <div class="ecard" style="animation-delay:.24s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">🌍 Geography — Climate</div><span class="status-pill sp-wait">57%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Climate zones and ecosystems. Next: Ocean currents.</div><div class="eprog"><div class="eprogf" style="width:0%" data-w="57"></div></div><div class="eprog-row"><span>Progress</span><span>57 / 100</span></div></div>
-    <div class="ecard" style="animation-delay:.3s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">💻 Computer Science</div><span class="status-pill sp-free">90%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Data structures complete. Final: Algorithms review.</div><div class="eprog"><div class="eprogf" style="width:0%" data-w="90"></div></div><div class="eprog-row"><span>Progress</span><span>90 / 100</span></div></div>
+    <div class="ecard" style="animation-delay:0s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">📐 Mathematics — Ch.7</div><span class="status-pill sp-free">68%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Quadratic equations. Next: Factoring polynomials.</div><div class="eprog"><div class="eprogf" data-w="68"></div></div><div class="eprog-row"><span>Progress</span><span>68 / 100</span></div></div>
+    <div class="ecard" style="animation-delay:.06s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">🧬 Biology — Unit 3</div><span class="status-pill sp-wait">44%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Cell division and genetics. Next: Meiosis phases.</div><div class="eprog"><div class="eprogf" data-w="44"></div></div><div class="eprog-row"><span>Progress</span><span>44 / 100</span></div></div>
+    <div class="ecard" style="animation-delay:.12s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">📝 English Literature</div><span class="status-pill sp-free">82%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Hamlet analysis. Next: Act IV symbolism.</div><div class="eprog"><div class="eprogf" data-w="82"></div></div><div class="eprog-row"><span>Progress</span><span>82 / 100</span></div></div>
+    <div class="ecard" style="animation-delay:.18s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">🔬 Physics — Mechanics</div><span class="status-pill sp-busy">31%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Newton's laws. Review kinematics equations.</div><div class="eprog"><div class="eprogf" data-w="31"></div></div><div class="eprog-row"><span>Progress</span><span>31 / 100</span></div></div>
+    <div class="ecard" style="animation-delay:.24s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">🌍 Geography — Climate</div><span class="status-pill sp-wait">57%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Climate zones and ecosystems. Next: Ocean currents.</div><div class="eprog"><div class="eprogf" data-w="57"></div></div><div class="eprog-row"><span>Progress</span><span>57 / 100</span></div></div>
+    <div class="ecard" style="animation-delay:.3s"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:15px;font-weight:800">💻 Computer Science</div><span class="status-pill sp-free">90%</span></div><div style="font-size:13px;color:var(--text2);line-height:1.65">Data structures complete. Final: Algorithms review.</div><div class="eprog"><div class="eprogf" data-w="90"></div></div><div class="eprog-row"><span>Progress</span><span>90 / 100</span></div></div>
   </div>
 </div>
 
@@ -1113,56 +1119,112 @@ import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-ap
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getFirestore,doc,setDoc,getDoc,onSnapshot,collection,addDoc,query,orderBy,limit,serverTimestamp,updateDoc,deleteDoc,where,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const fbCfg={apiKey:"AIzaSyC0usOnYDlA8X9GH_JDUZIqKkdwKIkoAko",authDomain:"sumudevils.firebaseapp.com",projectId:"sumudevils",storageBucket:"sumudevils.firebasestorage.app",messagingSenderId:"1090519412620",appId:"1:1090519412620:web:221ec7ddd27b65cd1130a9"};
-const fbApp=initializeApp(fbCfg);const auth=getAuth(fbApp);const db=getFirestore(fbApp);
+// ── HELPERS (defined FIRST so they're available everywhere) ──
+window.G = id => document.getElementById(id);
+const val = id => G(id)?.value?.trim() || "";
+const init = n => n ? n.trim().split(/\s+/).map(w => w[0]).join("").toUpperCase().slice(0,2) : "?";
+const cap = s => s ? s[0].toUpperCase() + s.slice(1) : "";
+const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>");
+function rc() { return Math.random().toString(36).slice(2,8).toUpperCase(); }
+function ago(d) {
+  const s = Math.floor((Date.now() - (d instanceof Date ? d : new Date(d))) / 1e3);
+  if(s < 5) return "just now";
+  if(s < 60) return s + "s ago";
+  if(s < 3600) return ~~(s/60) + "m ago";
+  if(s < 86400) return ~~(s/3600) + "h ago";
+  return ~~(s/86400) + "d ago";
+}
+function ferr(c) {
+  const m = {"auth/user-not-found":"No account found.","auth/wrong-password":"Incorrect password.","auth/email-already-in-use":"Email already registered.","auth/weak-password":"Min 6 chars.","auth/invalid-email":"Invalid email.","auth/invalid-credential":"Email or password incorrect.","auth/too-many-requests":"Too many attempts.","auth/network-request-failed":"Network error."};
+  return m[c] || "Error (" + c + ").";
+}
+window.toast = function(m, d=2800) {
+  const t = G("toastEl"); t.textContent = m; t.classList.add("show");
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), d);
+};
+function showScr(id) {
+  ["authScreen","pairScreen","mainApp"].forEach(s => { const el=G(s); if(el) el.classList.add("hide"); });
+  const el = G(id); if(el) el.classList.remove("hide");
+}
+function hideLoader() {
+  clearInterval(loadInt); const f = G("loadFill"); if(f) f.style.width = "100%";
+  setTimeout(() => { const l=G("loadingScreen"); l.classList.add("fade"); setTimeout(() => l.style.display="none", 600); }, 300);
+}
+window.autoTA = function(el) { el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight, 120) + "px"; };
+function setLoading(btnId, loading, def) { const btn=G(btnId); if(!btn) return; btn.disabled=loading; btn.innerHTML=loading?'<span class="spin"></span>Please wait…':def; }
+function showRP(pct, label) { const bar=G("regProgressBar"),fill=G("regProgressFill"),lbl=G("regProgressLabel"); if(bar){bar.style.display="block"; if(lbl)lbl.style.display="block"; if(fill)fill.style.width=pct+"%"; if(lbl)lbl.textContent=label;} }
+function hideRP() { const bar=G("regProgressBar"),lbl=G("regProgressLabel"); if(bar)bar.style.display="none"; if(lbl)lbl.style.display="none"; }
 
-let uid="",email="",uname="",pid="",pname="",pStatus="offline",pTabOpen=false;
-let cfg={vib:true,snd:true,ste:false,ad:false,steText:"Reminder updated.",soundType:"chime",react:true,read:true,reply:true,chatBg:"default",chatBubble:"violet",focusMin:25,breakMin:5,longBreakMin:15};
-let unread=0,secretN=0,secretTimer=null;
-let unsubs={partner:null,msgs:null,pings:null,myRead:null};
-let typTimer=null,isTyping=false;
-let renderedMsgIds=new Set();
-let currentTab="home";
-let stats={pings:0,mins:0,msgs:0,streak:1};
-let timerInterval=null,timerSecs=25*60,timerRunning=false,timerMode="focus";
-let timerTotalSecs=25*60,timerRound=1,timerTotalRounds=4;
-let emojiOpen=false,epTabIdx=0;
-let ctxMsgId=null,ctxMsgText="",ctxMine=false;
-let replyToId=null,replyToText="",replyToSender="";
-let msgReactions={};
-let presenceInterval=null;
+// ── FIREBASE ──
+const fbCfg={apiKey:"AIzaSyC0usOnYDlA8X9GH_JDUZIqKkdwKIkoAko",authDomain:"sumudevils.firebaseapp.com",projectId:"sumudevils",storageBucket:"sumudevils.firebasestorage.app",messagingSenderId:"1090519412620",appId:"1:1090519412620:web:221ec7ddd27b65cd1130a9"};
+const fbApp = initializeApp(fbCfg);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
+
+// ── STATE ──
+let uid="", email="", uname="", pid="", pname="", pStatus="offline", pTabOpen=false;
+let cfg = {vib:true,snd:true,ste:false,ad:false,steText:"Reminder updated.",soundType:"chime",react:true,read:true,reply:true,chatBg:"default",chatBubble:"violet",focusMin:25,breakMin:5,longBreakMin:15};
+let unread=0, secretN=0, secretTimer=null;
+let unsubs = {partner:null,msgs:null,pings:null};
+let typTimer=null, isTyping=false;
+let renderedMsgIds = new Set();
+let allMessages = []; // keep local copy for search
+let currentTab = "home";
+let stats = {pings:0,mins:0,msgs:0,streak:1};
+let timerInterval=null, timerSecs=25*60, timerRunning=false, timerMode="focus";
+let timerTotalSecs=25*60, timerRound=1, timerTotalRounds=4;
+let timerSyncDebounce=null;
+let emojiOpen=false, epTabIdx=0;
+let ctxMsgId=null, ctxMsgText="", ctxMine=false;
+let replyToId=null, replyToText="", replyToSender="";
+let aiHistory = []; // AI conversation history
+let aiLoading = false;
+let tsRefreshInterval=null; // for live timestamp refresh
 
 // ── STARS ──
-(function(){const c=G("starsEl");if(!c)return;for(let i=0;i<50;i++){const s=document.createElement("div");s.className="star";const size=Math.random()*2+1;const delay=Math.random()*5,dur=Math.random()*4+3;s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${delay}s;animation-duration:${dur}s`;c.appendChild(s);}})();
+(function(){
+  const c = G("starsEl"); if(!c) return;
+  for(let i=0; i<50; i++) {
+    const s = document.createElement("div"); s.className="star";
+    const size = Math.random()*2+1;
+    s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*5}s;animation-duration:${Math.random()*4+3}s;opacity:${Math.random()*.6+.2}`;
+    c.appendChild(s);
+  }
+})();
 
 // ── LOADING BAR ──
-let loadPct=0;
-const loadInt=setInterval(()=>{
-  loadPct+=Math.random()*18+5;if(loadPct>92)loadPct=92;
-  const f=G("loadFill");if(f)f.style.width=loadPct+"%";
-},200);
+let loadPct = 0;
+const loadInt = setInterval(() => {
+  loadPct += Math.random()*18+5; if(loadPct>92) loadPct=92;
+  const f = G("loadFill"); if(f) f.style.width = loadPct + "%";
+}, 200);
 
 // ── EMOJI DATA ──
-const emojiSets=[
+const emojiSets = [
   ["😀","😂","🤣","😍","🥰","😎","🤔","😤","😢","😭","😱","🥹","🙏","👍","👎","❤️","🔥","✨","💯","🎉"],
   ["📚","📖","✍️","🎯","🧠","💡","📝","🔬","📐","🖊️","📏","🔭","💻","📊","📈","🏆","⭐","🌟","💪","🎓"],
   ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","💝","💘","💖","💗","💓","💞","💕","✨","🌸","🌺","🌻","🌹"],
   ["🎉","🎊","🎈","🎁","🎀","🏅","🥇","🎖️","🏆","🌟","⭐","💫","✨","🎯","🎪","🎠","🎡","🎢","🎭","🎨"]
 ];
-function renderEpGrid(){
-  const grid=G("epGrid");if(!grid)return;
-  grid.innerHTML=emojiSets[epTabIdx].map(e=>`<span class="ep-emoji" onclick="insertEmoji('${e}')">${e}</span>`).join("");
+function renderEpGrid() {
+  const grid = G("epGrid"); if(!grid) return;
+  grid.innerHTML = emojiSets[epTabIdx].map(e=>`<span class="ep-emoji" onclick="insertEmoji('${e}')">${e}</span>`).join("");
 }
-window.setEpTab=function(i){epTabIdx=i;document.querySelectorAll(".ep-tab").forEach((t,j)=>t.classList.toggle("on",j===i));renderEpGrid();};
+window.setEpTab = function(i) {
+  epTabIdx = i;
+  document.querySelectorAll(".ep-tab").forEach((t,j) => t.classList.toggle("on", j===i));
+  renderEpGrid();
+};
 
 // ── AUDIO ENGINE ──
-let _actx=null,audioUnlocked=false;
-function getACtx(){if(!_actx){try{_actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}}return _actx;}
-function unlockAudio(){if(audioUnlocked)return;const ctx=getACtx();if(!ctx)return;const b=ctx.createBuffer(1,1,22050);const s=ctx.createBufferSource();s.buffer=b;s.connect(ctx.destination);s.start(0);ctx.resume().then(()=>{audioUnlocked=true;}).catch(()=>{audioUnlocked=true;});}
-["touchstart","mousedown","click"].forEach(ev=>document.addEventListener(ev,unlockAudio,{passive:true,once:false}));
-function playSound(type){const ctx=getACtx();if(!ctx)return;ctx.resume().then(()=>_play(ctx,type)).catch(()=>_play(ctx,type));}
-function _play(ctx,type){
-  const now=ctx.currentTime,mg=ctx.createGain();mg.gain.setValueAtTime(0,now);mg.gain.linearRampToValueAtTime(.6,now+.01);mg.connect(ctx.destination);const snd=cfg.soundType||"chime";
+let _actx=null, audioUnlocked=false;
+function getACtx() { if(!_actx){try{_actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}} return _actx; }
+function unlockAudio() { if(audioUnlocked) return; const ctx=getACtx(); if(!ctx) return; const b=ctx.createBuffer(1,1,22050); const s=ctx.createBufferSource(); s.buffer=b; s.connect(ctx.destination); s.start(0); ctx.resume().then(()=>{audioUnlocked=true;}).catch(()=>{audioUnlocked=true;}); }
+["touchstart","mousedown","click"].forEach(ev => document.addEventListener(ev, unlockAudio, {passive:true, once:false}));
+function playSound(type) { const ctx=getACtx(); if(!ctx) return; ctx.resume().then(()=>_play(ctx,type)).catch(()=>_play(ctx,type)); }
+function _play(ctx, type) {
+  const now=ctx.currentTime, mg=ctx.createGain(); mg.gain.setValueAtTime(0,now); mg.gain.linearRampToValueAtTime(.6,now+.01); mg.connect(ctx.destination);
+  const snd = cfg.soundType||"chime";
   if(type==="ping"){
     if(snd==="chime"){[[523.25,0,.22],[659.25,.18,.22],[783.99,.36,.38]].forEach(([f,s,d])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0,now+s);g.gain.linearRampToValueAtTime(1,now+s+.012);g.gain.exponentialRampToValueAtTime(.001,now+s+d);o.connect(g);g.connect(mg);o.start(now+s);o.stop(now+s+d+.05);});}
     else if(snd==="bell"){[[880,0,.6],[1100,.05,.5],[1320,.08,.4]].forEach(([f,s,d])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(0,now+s);g.gain.linearRampToValueAtTime(.7,now+s+.005);g.gain.exponentialRampToValueAtTime(.001,now+s+d);o.connect(g);g.connect(mg);o.start(now+s);o.stop(now+s+d+.02);});}
@@ -1174,254 +1236,371 @@ function _play(ctx,type){
   else if(type==="msg"){const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.setValueAtTime(880,now);o.frequency.exponentialRampToValueAtTime(440,now+.1);g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(.3,now+.01);g.gain.exponentialRampToValueAtTime(.001,now+.14);o.connect(g);g.connect(mg);o.start(now);o.stop(now+.18);}
   else if(type==="send"){const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.setValueAtTime(600,now);o.frequency.exponentialRampToValueAtTime(900,now+.08);g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(.25,now+.01);g.gain.exponentialRampToValueAtTime(.001,now+.12);o.connect(g);g.connect(mg);o.start(now);o.stop(now+.15);}
 }
-function doVibrate(p){if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}}}
-
-// ── HELPERS ──
-window.G=id=>document.getElementById(id);
-const val=id=>G(id)?.value?.trim()||"";
-const init=n=>n?n.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2):"?";
-const cap=s=>s?s[0].toUpperCase()+s.slice(1):"";
-const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>");
-function rc(){return Math.random().toString(36).slice(2,8).toUpperCase();}
-function ago(d){const s=Math.floor((Date.now()-d)/1e3);if(s<5)return"just now";if(s<60)return s+"s ago";if(s<3600)return~~(s/60)+"m ago";if(s<86400)return~~(s/3600)+"h ago";return~~(s/86400)+"d ago";}
-function ferr(c){const m={"auth/user-not-found":"No account found.","auth/wrong-password":"Incorrect password.","auth/email-already-in-use":"Email already registered.","auth/weak-password":"Min 6 chars.","auth/invalid-email":"Invalid email.","auth/invalid-credential":"Email or password incorrect.","auth/too-many-requests":"Too many attempts.","auth/network-request-failed":"Network error."};return m[c]||"Error ("+c+").";}
-function toast(m,d=2800){const t=G("toastEl");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),d);}
-function showScr(id){["authScreen","pairScreen","mainApp"].forEach(s=>{const el=G(s);if(el)el.classList.add("hide");});const el=G(id);if(el)el.classList.remove("hide");}
-function hideLoader(){clearInterval(loadInt);const f=G("loadFill");if(f)f.style.width="100%";setTimeout(()=>{const l=G("loadingScreen");l.classList.add("fade");setTimeout(()=>l.style.display="none",600);},300);}
-function autoTA(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,120)+"px";}
-function setLoading(btnId,loading,def){const btn=G(btnId);if(!btn)return;btn.disabled=loading;btn.innerHTML=loading?'<span class="spin"></span>Please wait…':def;}
-function showRP(pct,label){const bar=G("regProgressBar"),fill=G("regProgressFill"),lbl=G("regProgressLabel");if(bar){bar.style.display="block";if(lbl)lbl.style.display="block";if(fill)fill.style.width=pct+"%";if(lbl)lbl.textContent=label;}}
-function hideRP(){const bar=G("regProgressBar"),lbl=G("regProgressLabel");if(bar)bar.style.display="none";if(lbl)lbl.style.display="none";}
-
-// ── NOTIFICATIONS ──
-async function requestNotifPerm(){
-  if(!("Notification"in window)){toast("Notifications not supported");return;}
-  if(Notification.permission==="granted"){toast("✓ Notifications enabled!");updateNotifUI();return;}
-  if(Notification.permission==="denied"){toast("⚠ Blocked — check browser settings",4000);return;}
-  const p=await Notification.requestPermission();updateNotifUI();
-  if(p==="granted"){toast("✓ Notifications enabled!");try{new Notification("StudySync 📚",{body:"Ping alerts are now active!",tag:"welcome"});}catch(e){}}
-  else toast("Notification permission denied");
-}
-window.requestNotifPerm=requestNotifPerm;
-function updateNotifUI(){
-  if(!("Notification"in window))return;
-  const status=G("notifPermStatus"),icon=G("notifPermIcon"),banner=G("notifBanner");
-  const granted=Notification.permission==="granted";
-  if(granted){if(status)status.textContent="✓ Enabled";if(icon)icon.textContent="✓";if(banner)banner.classList.add("hide");}
-  else if(Notification.permission==="denied"){if(status)status.textContent="⚠ Blocked";if(banner)banner.classList.add("hide");}
-  else{if(status)status.textContent="Tap to enable";if(banner&&uid)banner.classList.remove("hide");}
-}
-function sendWebNotif(title,body){
-  if(Notification.permission==="granted"&&document.hidden){try{new Notification(title,{body,tag:"studysync-ping",renotify:true});}catch(e){}}
-}
+function doVibrate(p) { if(navigator.vibrate){try{navigator.vibrate(p);}catch(e){}} }
 
 // ── AUTH ──
-onAuthStateChanged(auth,async user=>{
-  if(user){
-    uid=user.uid;email=user.email||"";uname=user.displayName||email.split("@")[0]||"User";
-    try{
-      const snap=await getDoc(doc(db,"users",uid));
-      if(snap.exists()){const d=snap.data();uname=d.name||uname;pid=d.partnerUID||"";if(d.cfg)Object.assign(cfg,d.cfg);if(d.stats)Object.assign(stats,d.stats);
-        await updateDoc(doc(db,"users",uid),{status:"online",tabOpen:true,lastActive:serverTimestamp()}).catch(()=>{});
-      }else{const code=rc();
-        await setDoc(doc(db,"users",uid),{name:uname,email,inviteCode:code,partnerUID:"",status:"online",tabOpen:true,lastActive:serverTimestamp(),cfg,typing:false,stats:{pings:0,mins:0,msgs:0,streak:1}});
-        await setDoc(doc(db,"inviteCodes",code),{uid});
+onAuthStateChanged(auth, async user => {
+  if(user) {
+    uid = user.uid; email = user.email||""; uname = user.displayName||email.split("@")[0]||"User";
+    try {
+      const snap = await getDoc(doc(db,"users",uid));
+      if(snap.exists()) {
+        const d = snap.data(); uname=d.name||uname; pid=d.partnerUID||"";
+        if(d.cfg) Object.assign(cfg, d.cfg);
+        if(d.stats) Object.assign(stats, d.stats);
+        await updateDoc(doc(db,"users",uid), {status:"online",tabOpen:true,lastActive:serverTimestamp()}).catch(()=>{});
+      } else {
+        const code = rc();
+        await setDoc(doc(db,"users",uid), {name:uname,email,inviteCode:code,partnerUID:"",status:"online",tabOpen:true,lastActive:serverTimestamp(),cfg,typing:false,stats});
+        await setDoc(doc(db,"inviteCodes",code), {uid});
       }
-    }catch(e){console.error(e);}
-    hideLoader();if(pid){enterApp();}else{showScr("pairScreen");loadMyCode();}updateNotifUI();buildStreakUI();
-  }else{uid="";pid="";killListeners();hideLoader();showScr("authScreen");}
+    } catch(e) { console.error(e); }
+    hideLoader();
+    if(pid) { enterApp(); } else { showScr("pairScreen"); loadMyCode(); }
+    updateNotifUI(); buildStreakUI();
+  } else {
+    uid=""; pid=""; killListeners(); hideLoader(); showScr("authScreen");
+  }
 });
 
 // Heartbeat
-setInterval(async()=>{if(uid)await updateDoc(doc(db,"users",uid),{lastActive:serverTimestamp()}).catch(()=>{});},30000);
+setInterval(async () => { if(uid) await updateDoc(doc(db,"users",uid), {lastActive:serverTimestamp()}).catch(()=>{}); }, 30000);
+
 // Tab visibility
-document.addEventListener("visibilitychange",async()=>{
-  if(!uid)return;
-  await updateDoc(doc(db,"users",uid),{status:document.hidden?"away":"online",tabOpen:!document.hidden,lastActive:serverTimestamp()}).catch(()=>{});
-  if(!document.hidden&&currentTab==="chat"){markAllRead();}
+document.addEventListener("visibilitychange", async () => {
+  if(!uid) return;
+  await updateDoc(doc(db,"users",uid), {status:document.hidden?"away":"online",tabOpen:!document.hidden,lastActive:serverTimestamp()}).catch(()=>{});
+  if(!document.hidden && currentTab==="chat") { markAllRead(); }
 });
-window.addEventListener("beforeunload",async()=>{if(uid)await updateDoc(doc(db,"users",uid),{status:"offline",tabOpen:false,typing:false}).catch(()=>{});});
+window.addEventListener("beforeunload", async () => {
+  if(uid) await updateDoc(doc(db,"users",uid), {status:"offline",tabOpen:false,typing:false}).catch(()=>{});
+});
 
-window.authTab=function(t){
-  const isL=t==="login";
-  document.querySelectorAll(".tab").forEach((el,i)=>el.classList.toggle("on",i===(isL?0:1)));
-  G("loginForm").classList.toggle("hide",!isL);G("regForm").classList.toggle("hide",isL);
-  G("lErr").textContent="";G("rErr").textContent="";
+// ── NOTIFICATIONS ──
+async function requestNotifPerm() {
+  if(!("Notification" in window)) { toast("Notifications not supported"); return; }
+  if(Notification.permission==="granted") { toast("✓ Notifications enabled!"); updateNotifUI(); return; }
+  if(Notification.permission==="denied") { toast("⚠ Blocked — check browser settings", 4000); return; }
+  const p = await Notification.requestPermission(); updateNotifUI();
+  if(p==="granted") { toast("✓ Notifications enabled!"); try{ new Notification("StudySync 📚",{body:"Ping alerts active!",tag:"welcome"}); }catch(e){} }
+  else toast("Notification permission denied");
+}
+window.requestNotifPerm = requestNotifPerm;
+function updateNotifUI() {
+  if(!("Notification" in window)) return;
+  const status=G("notifPermStatus"), icon=G("notifPermIcon"), banner=G("notifBanner");
+  const granted = Notification.permission==="granted";
+  if(granted) { if(status) status.textContent="✓ Enabled"; if(icon) icon.textContent="✓"; if(banner) banner.classList.add("hide"); }
+  else if(Notification.permission==="denied") { if(status) status.textContent="⚠ Blocked"; if(banner) banner.classList.add("hide"); }
+  else { if(status) status.textContent="Tap to enable"; if(banner&&uid) banner.classList.remove("hide"); }
+}
+function sendWebNotif(title, body) {
+  if(Notification.permission==="granted" && document.hidden) { try{ new Notification(title,{body,tag:"studysync-ping",renotify:true}); }catch(e){} }
+}
+
+// ── AUTH FLOW ──
+window.authTab = function(t) {
+  const isL = t==="login";
+  document.querySelectorAll(".tab").forEach((el,i) => el.classList.toggle("on", i===(isL?0:1)));
+  G("loginForm").classList.toggle("hide", !isL);
+  G("regForm").classList.toggle("hide", isL);
+  G("lErr").textContent=""; G("rErr").textContent="";
 };
-window.doLogin=async function(){const e=val("lEmail"),p=val("lPwd"),er=G("lErr");er.textContent="";if(!e||!p){er.textContent="Please fill in all fields.";return;}unlockAudio();setLoading("lBtn",true,"Sign In →");try{await signInWithEmailAndPassword(auth,e,p);}catch(x){er.textContent=ferr(x.code);setLoading("lBtn",false,"Sign In →");}};
-window.doRegister=async function(){const n=val("rName"),e=val("rEmail"),p=val("rPwd"),er=G("rErr");er.textContent="";if(!n||!e||!p){er.textContent="Please fill in all fields.";return;}if(p.length<6){er.textContent="Password must be at least 6 characters.";return;}unlockAudio();setLoading("rBtn",true,"Create Account →");showRP(20,"Creating account…");try{showRP(40,"Registering…");const cr=await createUserWithEmailAndPassword(auth,e,p);showRP(60,"Setting up profile…");await updateProfile(cr.user,{displayName:n});showRP(75,"Generating invite code…");const code=rc();showRP(88,"Saving…");await setDoc(doc(db,"users",cr.user.uid),{name:n,email:e,inviteCode:code,partnerUID:"",status:"online",tabOpen:true,lastActive:serverTimestamp(),cfg,typing:false,stats:{pings:0,mins:0,msgs:0,streak:1}});await setDoc(doc(db,"inviteCodes",code),{uid:cr.user.uid});showRP(100,"Welcome! 🎉");setTimeout(hideRP,1500);}catch(x){er.textContent=ferr(x.code);setLoading("rBtn",false,"Create Account →");hideRP();}};
-
-async function loadMyCode(){try{const s=await getDoc(doc(db,"users",uid));if(s.exists())G("myCode").textContent=s.data().inviteCode||"??????";}catch(e){}}
-window.copyCode=function(){const c=G("myCode").textContent;navigator.clipboard?.writeText(c).then(()=>toast("✓ Code copied!")).catch(()=>toast("Your code: "+c,5000))||toast("Your code: "+c,5000);};
-
-window.doPair=async function(){
-  const code=val("pCode").toUpperCase(),er=G("pErr");er.textContent="";
-  if(code.length!==6){er.textContent="Enter full 6-character code.";return;}
-  unlockAudio();setLoading("pBtn",true,"Connect →");
-  try{const snap=await getDoc(doc(db,"inviteCodes",code));if(!snap.exists()){er.textContent="Code not found.";setLoading("pBtn",false,"Connect →");return;}
-    const _pid=snap.data().uid;if(_pid===uid){er.textContent="Can't pair with yourself!";setLoading("pBtn",false,"Connect →");return;}
-    const ps=await getDoc(doc(db,"users",_pid));if(!ps.exists()){er.textContent="Partner not found.";setLoading("pBtn",false,"Connect →");return;}
-    pid=_pid;pname=ps.data().name||"Partner";
-    await updateDoc(doc(db,"users",uid),{partnerUID:_pid});await updateDoc(doc(db,"users",_pid),{partnerUID:uid});enterApp();
-  }catch(x){er.textContent="Error: "+x.message;setLoading("pBtn",false,"Connect →");}
+window.doLogin = async function() {
+  const e=val("lEmail"), p=val("lPwd"), er=G("lErr"); er.textContent="";
+  if(!e||!p) { er.textContent="Please fill in all fields."; return; }
+  unlockAudio(); setLoading("lBtn", true, "Sign In →");
+  try { await signInWithEmailAndPassword(auth, e, p); }
+  catch(x) { er.textContent=ferr(x.code); setLoading("lBtn", false, "Sign In →"); }
+};
+window.doRegister = async function() {
+  const n=val("rName"), e=val("rEmail"), p=val("rPwd"), er=G("rErr"); er.textContent="";
+  if(!n||!e||!p) { er.textContent="Please fill in all fields."; return; }
+  if(p.length<6) { er.textContent="Password must be at least 6 characters."; return; }
+  unlockAudio(); setLoading("rBtn", true, "Create Account →"); showRP(20,"Creating account…");
+  try {
+    showRP(40,"Registering…");
+    const cr = await createUserWithEmailAndPassword(auth, e, p);
+    showRP(60,"Setting up profile…");
+    await updateProfile(cr.user, {displayName:n});
+    showRP(75,"Generating invite code…");
+    const code = rc();
+    showRP(88,"Saving…");
+    await setDoc(doc(db,"users",cr.user.uid), {name:n,email:e,inviteCode:code,partnerUID:"",status:"online",tabOpen:true,lastActive:serverTimestamp(),cfg,typing:false,stats});
+    await setDoc(doc(db,"inviteCodes",code), {uid:cr.user.uid});
+    showRP(100,"Welcome! 🎉"); setTimeout(hideRP, 1500);
+  } catch(x) { er.textContent=ferr(x.code); setLoading("rBtn", false, "Create Account →"); hideRP(); }
 };
 
-function pairId(){return[uid,pid].sort().join("_");}
-
-async function enterApp(){
-  if(!pid){showScr("pairScreen");loadMyCode();return;}
-  try{const ps=await getDoc(doc(db,"users",pid));if(ps.exists())pname=ps.data().name||"Partner";}catch(e){}
-  showScr("mainApp");applyCfgUI();updateMyProfile();updateStatsUI();buildStreakUI();
-  renderedMsgIds=new Set();resetMsgBox();startListeners();goTab("home");updateNotifUI();
-  applyChatBubble(cfg.chatBubble||"violet");renderEpGrid();
-  startPresenceInterval();
+async function loadMyCode() {
+  try { const s=await getDoc(doc(db,"users",uid)); if(s.exists()) G("myCode").textContent=s.data().inviteCode||"??????"; }
+  catch(e) {}
 }
-function resetMsgBox(){
-  const box=G("msgBox");if(!box)return;
-  box.innerHTML='<div class="chat-date-sep">Private chat · Auto-delete: <span id="adStatus">'+(cfg.ad?"on":"off")+"</span></div>";
-  renderedMsgIds=new Set();
-}
-function killListeners(){Object.values(unsubs).forEach(u=>u&&u());Object.keys(unsubs).forEach(k=>unsubs[k]=null);isTyping=false;clearTimeout(typTimer);clearInterval(presenceInterval);}
+window.copyCode = function() {
+  const c = G("myCode").textContent;
+  navigator.clipboard?.writeText(c).then(() => toast("✓ Code copied!")).catch(() => toast("Your code: "+c, 5000)) || toast("Your code: "+c, 5000);
+};
 
-function startPresenceInterval(){
-  clearInterval(presenceInterval);
-  presenceInterval=setInterval(()=>{updatePartnerPresenceUI();},15000);
+window.doPair = async function() {
+  const code=val("pCode").toUpperCase(), er=G("pErr"); er.textContent="";
+  if(code.length!==6) { er.textContent="Enter full 6-character code."; return; }
+  unlockAudio(); setLoading("pBtn", true, "Connect →");
+  try {
+    const snap = await getDoc(doc(db,"inviteCodes",code));
+    if(!snap.exists()) { er.textContent="Code not found."; setLoading("pBtn",false,"Connect →"); return; }
+    const _pid = snap.data().uid;
+    if(_pid===uid) { er.textContent="Can't pair with yourself!"; setLoading("pBtn",false,"Connect →"); return; }
+    const ps = await getDoc(doc(db,"users",_pid));
+    if(!ps.exists()) { er.textContent="Partner not found."; setLoading("pBtn",false,"Connect →"); return; }
+    pid=_pid; pname=ps.data().name||"Partner";
+    await updateDoc(doc(db,"users",uid), {partnerUID:_pid});
+    await updateDoc(doc(db,"users",_pid), {partnerUID:uid});
+    enterApp();
+  } catch(x) { er.textContent="Error: "+x.message; setLoading("pBtn",false,"Connect →"); }
+};
+
+function pairId() { return [uid,pid].sort().join("_"); }
+
+async function enterApp() {
+  if(!pid) { showScr("pairScreen"); loadMyCode(); return; }
+  try { const ps=await getDoc(doc(db,"users",pid)); if(ps.exists()) pname=ps.data().name||"Partner"; }
+  catch(e) {}
+  showScr("mainApp"); applyCfgUI(); updateMyProfile(); updateStatsUI(); buildStreakUI();
+  renderedMsgIds=new Set(); allMessages=[]; resetMsgBox();
+  startListeners(); goTab("home"); updateNotifUI();
+  applyChatBubble(cfg.chatBubble||"violet"); renderEpGrid();
+  startTsRefresh();
 }
 
-function startListeners(){
+function resetMsgBox() {
+  const box = G("msgBox"); if(!box) return;
+  box.innerHTML = `<div class="chat-date-sep">Private chat · Auto-delete: <span id="adStatus">${cfg.ad?"on":"off"}</span></div>`;
+  renderedMsgIds = new Set(); allMessages = [];
+}
+
+function killListeners() {
+  Object.values(unsubs).forEach(u => u&&u());
+  Object.keys(unsubs).forEach(k => unsubs[k]=null);
+  isTyping=false; clearTimeout(typTimer);
+  clearInterval(tsRefreshInterval);
+}
+
+// ── LIVE TIMESTAMP REFRESH ──
+function startTsRefresh() {
+  clearInterval(tsRefreshInterval);
+  tsRefreshInterval = setInterval(() => {
+    document.querySelectorAll(".mtime[data-ts]").forEach(el => {
+      const ts = parseInt(el.dataset.ts||"0");
+      if(ts) el.textContent = ago(new Date(ts));
+    });
+    // Also refresh partner last seen
+    if(allMessages.length) {} // no-op, just timestamp refresh
+  }, 30000);
+}
+
+function startListeners() {
   killListeners();
-  unsubs.partner=onSnapshot(doc(db,"users",pid),snap=>{
-    if(!snap.exists())return;const d=snap.data();pTabOpen=!!d.tabOpen;renderPartner(d);
-    updateTabStatusBar(d);
-    if(d.typing){const ti=G("typInit");if(ti)ti.textContent=init(pname);const tr=G("typRow");if(tr){tr.classList.remove("hide");const box=G("msgBox");if(box)box.scrollTop=box.scrollHeight;}}
-    else{const tr=G("typRow");if(tr)tr.classList.add("hide");}
-    // Update tick marks for unread msgs
-    if(d.lastRead&&currentTab==="chat"){updateTicksWithReadTime(d.lastRead.toMillis?d.lastRead.toMillis():d.lastRead);}
+  // Partner listener
+  unsubs.partner = onSnapshot(doc(db,"users",pid), snap => {
+    if(!snap.exists()) return;
+    const d = snap.data(); pTabOpen=!!d.tabOpen;
+    renderPartner(d); updateTabStatusBar(d);
+    // Typing indicator
+    const tr = G("typRow");
+    if(d.typing) {
+      const ti = G("typInit"); if(ti) ti.textContent=init(pname);
+      if(tr) { tr.classList.remove("hide"); const box=G("msgBox"); if(box) box.scrollTop=box.scrollHeight; }
+    } else { if(tr) tr.classList.add("hide"); }
+    // Update ticks with partner's read time
+    if(d.lastRead) {
+      const readMs = d.lastRead.toMillis ? d.lastRead.toMillis() : (d.lastRead.seconds ? d.lastRead.seconds*1000 : 0);
+      if(readMs) updateTicksWithReadTime(readMs);
+    }
   });
-  const q=query(collection(db,"messages",pairId(),"msgs"),orderBy("ts","asc"),limit(200));
-  unsubs.msgs=onSnapshot(q,snap=>{
-    const msgs=[];snap.forEach(d=>msgs.push({id:d.id,...d.data()}));renderMsgs(msgs);
-    if(cfg.ad)pruneOld(snap);
+
+  // Messages listener
+  const q = query(collection(db,"messages",pairId(),"msgs"), orderBy("ts","asc"), limit(300));
+  unsubs.msgs = onSnapshot(q, snap => {
+    const msgs = []; snap.forEach(d => msgs.push({id:d.id,...d.data()}));
+    allMessages = msgs;
+    renderMsgs(msgs);
+    if(cfg.ad) schedulePrune(msgs);
   });
-  const pq=query(collection(db,"pings"),where("to","==",uid),where("seen","==",false));
-  unsubs.pings=onSnapshot(pq,snap=>{
-    snap.docChanges().forEach(async ch=>{
-      if(ch.type==="added"){showPingAlert(ch.doc.data());await updateDoc(doc(db,"pings",ch.doc.id),{seen:true}).catch(()=>{});}
+
+  // Pings listener
+  const pq = query(collection(db,"pings"), where("to","==",uid), where("seen","==",false));
+  unsubs.pings = onSnapshot(pq, snap => {
+    snap.docChanges().forEach(async ch => {
+      if(ch.type==="added") {
+        showPingAlert(ch.doc.data());
+        await updateDoc(doc(db,"pings",ch.doc.id), {seen:true}).catch(()=>{});
+      }
     });
   });
 }
 
-function updateTabStatusBar(d){
-  const bar=G("tabStatusBar"),txt=G("tabStatusText");if(!bar||!txt)return;
-  if(!d.tabOpen||d.status==="offline"){
-    bar.className="";bar.id="tabStatusBar";bar.classList.add("offline-bar");
-    const la=d.lastActive?.toDate?ago(d.lastActive.toDate()):"a while ago";
-    txt.textContent=pname+" is offline · Last seen "+la;
-  }else if(d.status==="away"){
-    bar.className="";bar.id="tabStatusBar";bar.classList.add("away-bar");
-    txt.textContent=pname+" has the tab open but is away";
-  }else{
-    bar.className="";bar.id="tabStatusBar";
-    const s={free:"Free now",busy:"Busy",studying:"Studying 📖",wait:"Available in 5 min",urgent:"🚨 Urgent!",dnd:"Do Not Disturb",online:"Online"};
-    txt.textContent=pname+" is "+(s[d.status]||"online");
+// ── PARTNER RENDER ──
+const statusMap = {
+  free:["sp-free","🟢 Free"], busy:["sp-busy","🔴 Busy"], wait:["sp-wait","⏳ Wait 5"],
+  urgent:["sp-urgent","🚨 Urgent"], online:["sp-online","🟢 Online"], away:["sp-away","💤 Away"],
+  offline:["sp-offline","⚫ Offline"], dnd:["sp-dnd","🔕 DND"], studying:["sp-studying","📖 Studying"]
+};
+function renderPartner(d) {
+  pname=d.name||"Partner"; pStatus=d.status||"offline"; pTabOpen=!!d.tabOpen;
+  const inits = init(pname);
+  ["pInit","cInit","typInit"].forEach(id => { const el=G(id); if(el) el.textContent=inits; });
+  const nm=G("pName"), cn=G("cName"); if(nm) nm.textContent=pname; if(cn) cn.textContent=pname;
+  const [cls,lbl] = statusMap[pStatus]||["sp-offline","⚫ Offline"];
+  const sl = G("pStat"); if(sl) { sl.className="status-pill "+cls; sl.textContent=lbl; }
+  const ringClass = pStatus==="offline"?"":pStatus==="busy"||pStatus==="urgent"?"busy":pStatus==="studying"?"studying":pStatus==="away"?"away":"online";
+  [G("pStatusRing"),G("cRing")].forEach(r => { if(r) r.className="status-ring "+ringClass; });
+  const sm = {offline:"Offline",away:"Away",free:"Free now 🟢",busy:"Busy 🔴",wait:"Wait 5 ⏳",urgent:"🚨 Urgent!",online:"Online",dnd:"Do Not Disturb",studying:"Studying 📖"};
+  const cs = G("cStat"); if(cs) cs.textContent=sm[pStatus]||cap(pStatus);
+  if(d.lastActive?.toDate) { const t=ago(d.lastActive.toDate()); const pls=G("pLastSeen"); if(pls) pls.textContent=t; }
+  if(d.mood) { const pm=G("pMoodDisp"); if(pm) pm.textContent=d.mood+(d.moodLabel?" "+d.moodLabel.slice(0,6):""); }
+  if(d.customStatus) { const pc=G("pCustomStatusDisp"); if(pc) pc.textContent=d.customStatus.slice(0,36); }
+  // Timer sync from partner
+  if(d.timerActive && d.timerSecs!=null) {
+    const pf=G("partnerFocusDisp"), pfb=G("partnerFocusFill");
+    if(pf) pf.textContent=fmt(d.timerSecs||0);
+    const pct = d.timerTotal>0 ? Math.round((1-d.timerSecs/d.timerTotal)*100) : 0;
+    if(pfb) pfb.style.width=pct+"%";
+  } else {
+    const pf=G("partnerFocusDisp"); if(pf) pf.textContent=pStatus==="studying"?"Active":"—";
+    const pfb=G("partnerFocusFill"); if(pfb) pfb.style.width="0%";
+  }
+  const tb = G("pTabBadge"); if(tb) tb.textContent=pTabOpen?"":"📴 Tab closed";
+  buildPresenceDots(d);
+  const ct = G("pCurrentTask");
+  if(ct) ct.textContent=(d.customStatus?d.customStatus.slice(0,12):(sm[pStatus]||cap(pStatus)).slice(0,12));
+  if(currentTab==="chat"&&!document.hidden) { markAllRead(); }
+}
+
+function buildPresenceDots(d) {
+  const el = G("presenceDots"); if(!el) return;
+  const isOnline = d.tabOpen && d.status!=="offline";
+  let html="";
+  for(let i=0; i<5; i++) {
+    const lit = isOnline && i < Math.min(3, d.status==="studying"?4:d.status==="busy"?1:3);
+    html += `<div class="pdot${lit?" lit":""}" title="${isOnline?'Online':'Offline'}"></div>`;
+  }
+  el.innerHTML = html;
+}
+
+function updateTabStatusBar(d) {
+  const bar=G("tabStatusBar"), txt=G("tabStatusText"); if(!bar||!txt) return;
+  if(!d.tabOpen||d.status==="offline") {
+    bar.className="offline-bar"; bar.id="tabStatusBar";
+    const la = d.lastActive?.toDate ? ago(d.lastActive.toDate()) : "a while ago";
+    txt.textContent = pname+" is offline · Last seen "+la;
+  } else if(d.status==="away") {
+    bar.className="away-bar"; bar.id="tabStatusBar";
+    txt.textContent = pname+" has the tab open but is away";
+  } else {
+    bar.className=""; bar.id="tabStatusBar";
+    const s = {free:"Free now",busy:"Busy",studying:"Studying 📖",wait:"Available in 5 min",urgent:"🚨 Urgent!",dnd:"Do Not Disturb",online:"Online"};
+    txt.textContent = pname+" is "+(s[d.status]||"online");
   }
 }
-function updatePartnerPresenceUI(){if(!pid)return;}
 
-// Tick mark system
-function getTickHTML(m){
-  if(m.sender!==uid||!cfg.read)return"";
-  if(m.readAt){return'<span class="mtick read">✓✓</span>';}
-  if(m.deliveredAt){return'<span class="mtick delivered">✓✓</span>';}
-  return'<span class="mtick sent">✓</span>';
+// ── TICK SYSTEM ──
+function getTickHTML(m) {
+  if(m.sender!==uid || !cfg.read) return "";
+  if(m.readAt) return '<span class="mtick read">✓✓</span>';
+  if(m.deliveredAt) return '<span class="mtick delivered">✓✓</span>';
+  return '<span class="mtick sent">✓</span>';
 }
-function updateTicksWithReadTime(readMs){
-  document.querySelectorAll(".mrow.mine .mtick").forEach(el=>{
-    const row=el.closest(".mrow");if(!row)return;
-    const tsEl=row.querySelector("[data-ts]");
-    if(!tsEl)return;
-    const msgMs=parseInt(tsEl.dataset.ts||"0");
-    if(msgMs<=readMs){el.className="mtick read";el.textContent="✓✓";}
-    else if(el.textContent==="✓"){el.className="mtick delivered";el.textContent="✓✓";}
+function updateTicksWithReadTime(readMs) {
+  const box=G("msgBox"); if(!box) return;
+  box.querySelectorAll(".mrow.mine").forEach(row => {
+    const tsEl = row.querySelector(".mtime[data-ts]");
+    if(!tsEl) return;
+    const msgMs = parseInt(tsEl.dataset.ts||"0");
+    const tick = row.querySelector(".mtick");
+    if(!tick) return;
+    if(msgMs>0 && msgMs<=readMs) { tick.className="mtick read"; tick.textContent="✓✓"; }
+    else if(tick.classList.contains("sent")) { tick.className="mtick delivered"; tick.textContent="✓✓"; }
   });
 }
-async function markAllRead(){
-  if(!uid||!pid)return;
-  await updateDoc(doc(db,"users",uid),{lastRead:serverTimestamp()}).catch(()=>{});
-  await updateDoc(doc(db,"users",uid),{lastReadBy:uid}).catch(()=>{});
+async function markAllRead() {
+  if(!uid||!pid) return;
+  await updateDoc(doc(db,"users",uid), {lastRead:serverTimestamp()}).catch(()=>{});
 }
-
-const statusMap={free:["sp-free","🟢 Free"],busy:["sp-busy","🔴 Busy"],wait:["sp-wait","⏳ Wait 5"],urgent:["sp-urgent","🚨 Urgent"],online:["sp-online","🟢 Online"],away:["sp-away","💤 Away"],offline:["sp-offline","⚫ Offline"],dnd:["sp-dnd","🔕 DND"],studying:["sp-studying","📖 Studying"]};
-
-function renderPartner(d){
-  pname=d.name||"Partner";pStatus=d.status||"offline";pTabOpen=!!d.tabOpen;
-  const inits=init(pname);
-  ["pInit","cInit","typInit"].forEach(id=>{const el=G(id);if(el)el.textContent=inits;});
-  const nm=G("pName"),cn=G("cName");if(nm)nm.textContent=pname;if(cn)cn.textContent=pname;
-  const[cls,lbl]=statusMap[pStatus]||["sp-offline","⚫ Offline"];
-  const sl=G("pStat");if(sl){sl.className="status-pill "+cls;sl.textContent=lbl;}
-  // Status ring
-  const ringClass=pStatus==="offline"?"":pStatus==="busy"||pStatus==="urgent"?"busy":pStatus==="studying"?"studying":pStatus==="away"?"away":"online";
-  [G("pStatusRing"),G("cRing")].forEach(r=>{if(r)r.className="status-ring "+ringClass;});
-  // Status info in chat
-  const sm={offline:"Offline",away:"Away",free:"Free now 🟢",busy:"Busy 🔴",wait:"Wait 5 ⏳",urgent:"🚨 Urgent!",online:"Online",dnd:"Do Not Disturb",studying:"Studying 📖"};
-  const cs=G("cStat");if(cs)cs.textContent=sm[pStatus]||cap(pStatus);
-  if(d.lastActive?.toDate){const t=ago(d.lastActive.toDate());const pls=G("pLastSeen");if(pls)pls.textContent=t;}
-  if(d.mood){const pm=G("pMoodDisp");if(pm)pm.textContent=d.mood+(d.moodLabel?" "+d.moodLabel.slice(0,6):"");}
-  if(d.customStatus){const pc=G("pCustomStatusDisp");if(pc)pc.textContent=d.customStatus.slice(0,36);}
-  if(d.timerActive&&d.timerSecs!=null){const pf=G("partnerFocusDisp"),pfb=G("partnerFocusFill");if(pf)pf.textContent=fmt(d.timerSecs||0);const pct=d.timerTotal>0?Math.round((1-d.timerSecs/d.timerTotal)*100):0;if(pfb)pfb.style.width=pct+"%";}else{const pf=G("partnerFocusDisp");if(pf)pf.textContent=pStatus==="studying"?"Active":"—";}
-  // Tab badge
-  const tb=G("pTabBadge");if(tb)tb.textContent=pTabOpen?"":"📴 Tab closed";
-  updateTabStatusBar(d);buildPresenceDots(d);
-  // Mark incoming msgs as read if chat is open
-  if(currentTab==="chat"&&!document.hidden){markAllRead();}
-  // Update partner "doing" (custom status as task)
-  const ct=G("pCurrentTask");if(ct)ct.textContent=d.customStatus?d.customStatus.slice(0,12):(sm[pStatus]||cap(pStatus)).slice(0,12);
-}
-
-function buildPresenceDots(d){
-  const el=G("presenceDots");if(!el)return;
-  const dots=[];for(let i=0;i<5;i++){const on=i===0&&d.tabOpen&&d.status!=="offline";dots.push(`<div class="pdot${on?" lit":""}" title="${on?"Tab open":"Tab closed"}"></div>`);}el.innerHTML=dots.join("");}
 
 // ── MESSAGES ──
-function renderMsgs(msgs){
-  const box=G("msgBox");if(!box)return;
-  const atBot=box.scrollHeight-box.scrollTop-box.clientHeight<160;
-  let added=false,newU=0;
-  msgs.forEach(m=>{
-    if(!renderedMsgIds.has(m.id)){renderedMsgIds.add(m.id);appendMsg(m,box);added=true;if(m.sender!==uid)newU++;}
-    else{
-      // Update tick for existing messages
-      const el=box.querySelector(`[data-msg-id="${m.id}"]`);
-      if(el&&m.sender===uid){const tick=el.querySelector(".mtick");if(tick){if(m.readAt){tick.className="mtick read";tick.textContent="✓✓";}else if(m.deliveredAt){tick.className="mtick delivered";tick.textContent="✓✓";}}}
-      // Update reactions
-      if(m.reactions&&m.sender!==uid||m.reactions){const rEl=box.querySelector(`.msg-reactions[data-msg-id="${m.id}"]`);if(rEl)renderReactions(m.id,m.reactions||{},rEl);}
+function renderMsgs(msgs) {
+  const box = G("msgBox"); if(!box) return;
+  const atBot = box.scrollHeight - box.scrollTop - box.clientHeight < 180;
+  let added=false, newU=0;
+
+  msgs.forEach(m => {
+    if(!renderedMsgIds.has(m.id)) {
+      renderedMsgIds.add(m.id); appendMsg(m, box); added=true;
+      if(m.sender!==uid) newU++;
+    } else {
+      // Update existing message: ticks + reactions
+      const row = box.querySelector(`.mrow[data-msg-id="${m.id}"]`);
+      if(row) {
+        if(m.sender===uid) {
+          const tick = row.querySelector(".mtick");
+          if(tick) {
+            if(m.readAt) { tick.className="mtick read"; tick.textContent="✓✓"; }
+            else if(m.deliveredAt) { tick.className="mtick delivered"; tick.textContent="✓✓"; }
+          }
+        }
+        const rEl = row.querySelector(`.msg-reactions`);
+        if(rEl) renderReactions(m.id, m.reactions||{}, rEl);
+      }
     }
   });
-  if(added){if(currentTab!=="chat"){unread+=newU;updBadge();}if(atBot||msgs.length<=3)requestAnimationFrame(()=>{box.scrollTop=box.scrollHeight;});if(newU>0&&currentTab!=="chat"){if(cfg.snd)playSound("msg");if(cfg.vib)doVibrate([60,30,60]);sendWebNotif(pname+" 💬","New message");}}
-  // Mark as delivered
-  msgs.forEach(async m=>{if(m.sender!==uid&&!m.deliveredAt){await updateDoc(doc(db,"messages",pairId(),"msgs",m.id),{deliveredAt:serverTimestamp()}).catch(()=>{});}});
-  if(currentTab==="chat"&&!document.hidden){
-    msgs.forEach(async m=>{if(m.sender!==uid&&!m.readAt){await updateDoc(doc(db,"messages",pairId(),"msgs",m.id),{readAt:serverTimestamp()}).catch(()=>{});}});
-    markAllRead();
+
+  if(added) {
+    if(currentTab!=="chat") { unread+=newU; updBadge(); }
+    if(atBot || msgs.length<=3) requestAnimationFrame(() => { box.scrollTop=box.scrollHeight; });
+    if(newU>0 && currentTab!=="chat") {
+      if(cfg.snd) playSound("msg"); if(cfg.vib) doVibrate([60,30,60]);
+      sendWebNotif(pname+" 💬", "New message");
+    }
   }
+  updateScrollBtn();
+
+  // Mark incoming as delivered/read
+  msgs.forEach(async m => {
+    if(m.sender!==uid && !m.deliveredAt) {
+      await updateDoc(doc(db,"messages",pairId(),"msgs",m.id), {deliveredAt:serverTimestamp()}).catch(()=>{});
+    }
+    if(m.sender!==uid && !m.readAt && currentTab==="chat" && !document.hidden) {
+      await updateDoc(doc(db,"messages",pairId(),"msgs",m.id), {readAt:serverTimestamp()}).catch(()=>{});
+    }
+  });
+  if(currentTab==="chat" && !document.hidden) markAllRead();
 }
 
-function appendMsg(m,box){
-  const mine=m.sender===uid;
-  const ts=m.ts?.toDate?m.ts.toDate().getTime():Date.now();
-  const timeStr=m.ts?.toDate?ago(m.ts.toDate()):"just now";
-  const row=document.createElement("div");row.className="mrow"+(mine?" mine":"");row.dataset.msgId=m.id;
-  let replyHtml="";
-  if(m.replyTo&&m.replyText){replyHtml=`<div class="reply-preview" style="${mine?"text-align:right":""};margin-bottom:4px"><div class="reply-sender">${esc(m.replySender||"Partner")}</div>${esc(m.replyText.slice(0,60)+(m.replyText.length>60?"…":""))}</div>`;}
-  const tick=getTickHTML(m);
-  row.innerHTML=`
+function appendMsg(m, box) {
+  const mine = m.sender===uid;
+  const ts = m.ts?.toMillis ? m.ts.toMillis() : (m.ts?.seconds ? m.ts.seconds*1000 : Date.now());
+  const timeStr = ago(new Date(ts));
+  const row = document.createElement("div");
+  row.className = "mrow" + (mine?" mine":"");
+  row.dataset.msgId = m.id;
+
+  let replyHtml = "";
+  if(m.replyTo && m.replyText) {
+    const rText = m.replyText.length>60 ? m.replyText.slice(0,60)+"…" : m.replyText;
+    replyHtml = `<div class="reply-preview" style="${mine?"text-align:right":""};margin-bottom:4px"><div class="reply-sender">${esc(m.replySender||"Partner")}</div>${esc(rText)}</div>`;
+  }
+
+  const tick = getTickHTML(m);
+  // Safe text encoding for data attributes
+  const safeText = (m.text||"").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+
+  row.innerHTML = `
     <div class="mavatar">${init(mine?uname:pname)}</div>
     <div class="mbubble-wrap">
       ${replyHtml}
-      <div class="mbubble" data-msg-id="${m.id}" data-ts="${ts}" data-text="${encodeURIComponent(m.text||"")}" data-mine="${mine}"
-        oncontextmenu="ctxOpen(event,'${m.id}',\`${(m.text||"").replace(/`/g,"'")}\`,${mine})"
-        ontouchstart="ctxTouchStart(event,'${m.id}',\`${(m.text||"").replace(/`/g,"'")}\`,${mine})"
+      <div class="mbubble" data-msg-id="${m.id}" data-mine="${mine}"
+        oncontextmenu="ctxOpenAt(event,'${m.id}',${mine})"
+        ontouchstart="ctxTouchStart(event,'${m.id}',${mine})"
         ontouchend="ctxTouchEnd()" ontouchmove="ctxTouchCancel()"
       >${esc(m.text||"")}</div>
       <div class="msg-meta">
@@ -1430,243 +1609,628 @@ function appendMsg(m,box){
       </div>
       <div class="msg-reactions" data-msg-id="${m.id}"></div>
     </div>`;
-  const tr=G("typRow");
-  if(tr&&box.contains(tr))box.insertBefore(row,tr);else box.appendChild(row);
-  // Render any existing reactions
-  if(m.reactions){const rEl=row.querySelector(`.msg-reactions[data-msg-id="${m.id}"]`);if(rEl)renderReactions(m.id,m.reactions,rEl);}
+
+  // Store text on the element directly (not in attribute) to avoid injection
+  row._msgText = m.text||"";
+
+  const tr = G("typRow");
+  if(tr && box.contains(tr)) box.insertBefore(row, tr);
+  else box.appendChild(row);
+
+  if(m.reactions) {
+    const rEl = row.querySelector(".msg-reactions");
+    if(rEl) renderReactions(m.id, m.reactions, rEl);
+  }
 }
 
-function renderReactions(msgId,reactions,el){
-  if(!reactions||Object.keys(reactions).length===0){el.innerHTML="";return;}
-  const agg={};Object.entries(reactions).forEach(([user,emoji])=>{agg[emoji]=(agg[emoji]||[]);agg[emoji].push(user);});
-  el.innerHTML=Object.entries(agg).map(([emoji,users])=>`<span class="reaction-chip${users.includes(uid)?" mine":""}" onclick="addReactionToMsg('${msgId}','${emoji}')">${emoji}<span class="reaction-count">${users.length}</span></span>`).join("");
+function renderReactions(msgId, reactions, el) {
+  if(!reactions || Object.keys(reactions).length===0) { el.innerHTML=""; return; }
+  const agg={};
+  Object.entries(reactions).forEach(([user,emoji]) => { agg[emoji]=agg[emoji]||[]; agg[emoji].push(user); });
+  el.innerHTML = Object.entries(agg).map(([emoji,users]) =>
+    `<span class="reaction-chip${users.includes(uid)?" mine":""}" onclick="addReactionToMsg('${msgId}','${emoji}')">${emoji}<span class="reaction-count">${users.length}</span></span>`
+  ).join("");
 }
 
-async function pruneOld(snap){const cut=Date.now()-864e5;const batch=[];snap.forEach(d=>{if(d.data().ts?.toMillis&&d.data().ts.toMillis()<cut)batch.push(deleteDoc(doc(db,"messages",pairId(),"msgs",d.id)));});await Promise.all(batch).catch(()=>{});}
+// Auto-delete: only prune once per snapshot, debounced
+let pruneTimer=null;
+function schedulePrune(msgs) {
+  clearTimeout(pruneTimer);
+  pruneTimer = setTimeout(async () => {
+    const cut = Date.now() - 864e5;
+    await Promise.all(msgs.filter(m => {
+      const ts = m.ts?.toMillis ? m.ts.toMillis() : (m.ts?.seconds ? m.ts.seconds*1000 : 0);
+      return ts>0 && ts<cut;
+    }).map(m => deleteDoc(doc(db,"messages",pairId(),"msgs",m.id)))).catch(()=>{});
+  }, 5000);
+}
 
-// ── CONTEXT MENU (long press) ──
-let ctxTouchTimer=null,ctxTargetEv=null;
-window.ctxTouchStart=function(e,id,text,mine){ctxTargetEv=e;ctxTouchTimer=setTimeout(()=>{ctxOpen(ctxTargetEv,id,decodeURIComponent(text.replace(/\+/g," ")),mine);if(cfg.vib)doVibrate([40]);},500);};
-window.ctxTouchEnd=function(){clearTimeout(ctxTouchTimer);};
-window.ctxTouchCancel=function(){clearTimeout(ctxTouchTimer);};
-window.ctxOpen=function(e,id,text,mine){
-  e.preventDefault();e.stopPropagation();
-  ctxMsgId=id;ctxMsgText=text;ctxMine=mine;
-  const menu=G("ctxMenu");if(!menu)return;
-  const rb=G("ctxMenu");rb.classList.remove("hide");
-  const x=Math.min(e.clientX||e.touches?.[0]?.clientX||100,window.innerWidth-200);
-  const y=Math.min(e.clientY||e.touches?.[0]?.clientY||100,window.innerHeight-200);
-  rb.style.left=x+"px";rb.style.top=y+"px";
-  // Show/hide delete based on mine
-  const del=rb.querySelector(".ctx-item.danger");if(del)del.style.display=mine?"flex":"none";
-  setTimeout(()=>document.addEventListener("click",closeCtx,{once:true}),50);
+// ── SCROLL BUTTON ──
+function updateScrollBtn() {
+  const box=G("msgBox"); if(!box) return;
+  const distFromBot = box.scrollHeight - box.scrollTop - box.clientHeight;
+  const btn=G("scrollToBottom"); if(!btn) return;
+  if(distFromBot>200) {
+    btn.classList.add("visible");
+    const badge=G("sbotBadge");
+    if(badge) { if(unread>0&&currentTab!=="chat"){badge.classList.remove("hide");badge.textContent=unread;}else badge.classList.add("hide"); }
+  } else { btn.classList.remove("visible"); }
+}
+window.onMsgScroll = function() { updateScrollBtn(); };
+window.scrollToBot = function() {
+  const box=G("msgBox"); if(box) box.scrollTop=box.scrollHeight;
+  unread=0; updBadge(); updateScrollBtn();
 };
-function closeCtx(){const m=G("ctxMenu");if(m)m.classList.add("hide");}
-window.ctxReact=function(){closeCtx();if(!ctxMsgId)return;showReactionBar(ctxMsgId);};
-window.ctxReply=function(){
-  closeCtx();if(!ctxMsgId||!cfg.reply)return;
-  replyToId=ctxMsgId;replyToText=ctxMsgText;
-  replyToSender=ctxMine?uname:pname;
-  const banner=G("replyBanner"),bannerText=G("replyBannerText");
-  if(banner){banner.style.display="flex";}
-  if(bannerText)bannerText.textContent="↩️ "+replyToSender+": "+replyToText.slice(0,40);
+
+// ── MESSAGE SEARCH ──
+window.toggleMsgSearch = function() {
+  const bar=G("msgSearchBar");
+  if(bar.style.display==="none"||!bar.style.display) {
+    bar.style.display="flex"; G("msgSearchInp")?.focus();
+  } else { closeMsgSearch(); }
+};
+window.closeMsgSearch = function() {
+  const bar=G("msgSearchBar"); if(bar) bar.style.display="none";
+  const inp=G("msgSearchInp"); if(inp) inp.value="";
+  document.querySelectorAll(".mrow.search-highlight").forEach(r => r.classList.remove("search-highlight"));
+  G("msgSearchCount") && (G("msgSearchCount").textContent="");
+};
+window.searchMsgs = function() {
+  const q=(G("msgSearchInp")?.value||"").toLowerCase().trim();
+  document.querySelectorAll(".mrow.search-highlight").forEach(r => r.classList.remove("search-highlight"));
+  if(!q) { G("msgSearchCount") && (G("msgSearchCount").textContent=""); return; }
+  let count=0, firstMatch=null;
+  document.querySelectorAll(".mrow").forEach(row => {
+    const bubble = row.querySelector(".mbubble");
+    if(bubble && (row._msgText||bubble.textContent).toLowerCase().includes(q)) {
+      row.classList.add("search-highlight"); count++;
+      if(!firstMatch) firstMatch=row;
+    }
+  });
+  const c=G("msgSearchCount"); if(c) c.textContent=count>0?count+" found":"No results";
+  if(firstMatch) firstMatch.scrollIntoView({behavior:"smooth",block:"center"});
+};
+
+// ── CONTEXT MENU ──
+let ctxTouchTimer=null;
+window.ctxTouchStart = function(e, id, mine) {
+  const target=e.currentTarget;
+  target.classList.add("pressing");
+  ctxTouchTimer = setTimeout(() => {
+    target.classList.remove("pressing");
+    openCtxAtElement(target, id, mine);
+    if(cfg.vib) doVibrate([40]);
+  }, 500);
+};
+window.ctxTouchEnd = function() {
+  clearTimeout(ctxTouchTimer);
+  document.querySelectorAll(".mbubble.pressing").forEach(el => el.classList.remove("pressing"));
+};
+window.ctxTouchCancel = function() { window.ctxTouchEnd(); };
+
+window.ctxOpenAt = function(e, id, mine) {
+  e.preventDefault(); e.stopPropagation();
+  const target = e.currentTarget;
+  openCtxAtElement(target, id, mine, e.clientX, e.clientY);
+};
+function openCtxAtElement(target, id, mine, cx, cy) {
+  ctxMsgId = id; ctxMine = mine;
+  // Get text from the stored _msgText property (safe)
+  const row = target.closest ? target.closest(".mrow") : target.parentElement;
+  ctxMsgText = row?._msgText || target._msgText || "";
+  const menu=G("ctxMenu"); if(!menu) return;
+  // Show/hide delete
+  const del=G("ctxDeleteItem"); if(del) del.style.display=mine?"flex":"none";
+  menu.classList.remove("hide");
+  // Position
+  const x = cx || (target.getBoundingClientRect().right - 180);
+  const y = cy || target.getBoundingClientRect().bottom;
+  menu.style.left = Math.max(8, Math.min(x, window.innerWidth-200))+"px";
+  menu.style.top  = Math.max(8, Math.min(y, window.innerHeight-200))+"px";
+  setTimeout(() => document.addEventListener("click", closeCtx, {once:true}), 50);
+}
+function closeCtx() { const m=G("ctxMenu"); if(m) m.classList.add("hide"); }
+window.ctxReact = function() { closeCtx(); if(!ctxMsgId) return; showReactionBar(ctxMsgId); };
+window.ctxReply = function() {
+  closeCtx(); if(!ctxMsgId || !cfg.reply) return;
+  replyToId=ctxMsgId; replyToText=ctxMsgText;
+  const row = G("msgBox")?.querySelector(`.mrow[data-msg-id="${ctxMsgId}"]`);
+  replyToSender = ctxMine ? uname : pname;
+  const banner=G("replyBanner"), bannerText=G("replyBannerText");
+  if(banner) banner.style.display="flex";
+  if(bannerText) bannerText.textContent="↩️ "+replyToSender+": "+replyToText.slice(0,40);
   G("chatIn")?.focus();
 };
-window.ctxCopy=function(){closeCtx();if(!ctxMsgText)return;navigator.clipboard?.writeText(ctxMsgText).then(()=>toast("📋 Copied!")).catch(()=>toast("Copy failed"));};
-window.ctxDelete=async function(){closeCtx();if(!ctxMsgId||!ctxMine)return;if(!confirm("Delete this message?"))return;await deleteDoc(doc(db,"messages",pairId(),"msgs",ctxMsgId)).catch(()=>{});const row=document.querySelector(`.mrow[data-msg-id="${ctxMsgId}"]`);if(row)row.remove();renderedMsgIds.delete(ctxMsgId);toast("🗑️ Message deleted");};
-window.clearReply=function(){replyToId=null;replyToText="";replyToSender="";const b=G("replyBanner");if(b)b.style.display="none";};
-function showReactionBar(msgId){const rb=G("reactionBar");if(!rb)return;const bubble=document.querySelector(`.mbubble[data-msg-id="${msgId}"]`);if(!bubble)return;const rect=bubble.getBoundingClientRect();rb.style.left=Math.max(8,rect.left)+"px";rb.style.top=(rect.top-56)+"px";rb.classList.remove("hide");rb.dataset.msgId=msgId;setTimeout(()=>document.addEventListener("click",()=>rb.classList.add("hide"),{once:true}),50);}
-window.addReaction=function(emoji){const rb=G("reactionBar");const id=rb?.dataset.msgId;if(!id)return;rb.classList.add("hide");addReactionToMsg(id,emoji);};
-window.addReactionToMsg=async function(msgId,emoji){
-  const update={};update[`reactions.${uid}`]=emoji;
-  await updateDoc(doc(db,"messages",pairId(),"msgs",msgId),update).catch(()=>{});
+window.ctxCopy = function() {
+  closeCtx(); if(!ctxMsgText) return;
+  navigator.clipboard?.writeText(ctxMsgText).then(() => toast("📋 Copied!")).catch(() => toast("Copy failed"));
+};
+window.ctxDelete = async function() {
+  closeCtx(); if(!ctxMsgId || !ctxMine) return;
+  if(!confirm("Delete this message?")) return;
+  await deleteDoc(doc(db,"messages",pairId(),"msgs",ctxMsgId)).catch(()=>{});
+  const row=document.querySelector(`.mrow[data-msg-id="${ctxMsgId}"]`); if(row) row.remove();
+  renderedMsgIds.delete(ctxMsgId);
+  allMessages = allMessages.filter(m => m.id!==ctxMsgId);
+  toast("🗑️ Message deleted");
+};
+window.clearReply = function() {
+  replyToId=null; replyToText=""; replyToSender="";
+  const b=G("replyBanner"); if(b) b.style.display="none";
+};
+
+function showReactionBar(msgId) {
+  const rb=G("reactionBar"); if(!rb) return;
+  const bubble=document.querySelector(`.mbubble[data-msg-id="${msgId}"]`); if(!bubble) return;
+  const rect=bubble.getBoundingClientRect();
+  rb.style.left=Math.max(8,rect.left)+"px"; rb.style.top=(rect.top-56)+"px";
+  rb.classList.remove("hide"); rb.dataset.msgId=msgId;
+  setTimeout(() => document.addEventListener("click", () => rb.classList.add("hide"), {once:true}), 50);
+}
+window.addReaction = function(emoji) { const rb=G("reactionBar"); const id=rb?.dataset.msgId; if(!id) return; rb.classList.add("hide"); addReactionToMsg(id,emoji); };
+window.addReactionToMsg = async function(msgId, emoji) {
+  const update={}; update[`reactions.${uid}`]=emoji;
+  await updateDoc(doc(db,"messages",pairId(),"msgs",msgId), update).catch(()=>{});
   toast("Reacted: "+emoji);
 };
 
 // ── STATUS ──
-window.setStatus=async function(s){
-  document.querySelectorAll(".sbtn").forEach(b=>b.classList.remove("active-s"));
-  const m={free:"bFree",busy:"bBusy",wait:"bWait",urgent:"bUrgent",offline:"bOffline",dnd:"bDnd",studying:"bStudy"};
-  if(m[s]&&G(m[s]))G(m[s]).classList.add("active-s");
-  await updateDoc(doc(db,"users",uid),{status:s,lastActive:serverTimestamp()}).catch(()=>{});
+window.setStatus = async function(s) {
+  document.querySelectorAll(".sbtn").forEach(b => b.classList.remove("active-s"));
+  const map={free:"bFree",busy:"bBusy",wait:"bWait",urgent:"bUrgent",offline:"bOffline",dnd:"bDnd",studying:"bStudy"};
+  if(map[s] && G(map[s])) G(map[s]).classList.add("active-s");
+  await updateDoc(doc(db,"users",uid), {status:s,lastActive:serverTimestamp()}).catch(()=>{});
   const lbl={free:"🟢 Free",busy:"🔴 Busy",wait:"⏳ Wait 5",urgent:"🚨 Urgent",offline:"⚫ Offline",dnd:"🔕 DND",studying:"📖 Studying"};
-  toast(lbl[s]||cap(s));addActivity((lbl[s]||cap(s))+" status set");
-  if(s==="studying"){const f=G("myFocusDisp");if(f)f.textContent="Active";}
+  toast(lbl[s]||cap(s)); addActivity((lbl[s]||cap(s))+" status set");
+  if(s==="studying") { const f=G("myFocusDisp"); if(f) f.textContent="Active"; }
 };
-window.setCustomStatus=async function(){const text=val("customStatusInput");if(!text)return;await updateDoc(doc(db,"users",uid),{customStatus:text,lastActive:serverTimestamp()}).catch(()=>{});toast("✏️ "+text.slice(0,30));G("customStatusInput").value="";addActivity("✏️ Status: "+text.slice(0,20));};
+window.setCustomStatus = async function() {
+  const text=val("customStatusInput"); if(!text) return;
+  await updateDoc(doc(db,"users",uid), {customStatus:text,lastActive:serverTimestamp()}).catch(()=>{});
+  toast("✏️ "+text.slice(0,30)); G("customStatusInput").value=""; addActivity("✏️ Status: "+text.slice(0,20));
+};
 
 // ── PING ──
-window.sendPing=async function(){
-  if(!pid){toast("No partner connected.");return;}
+window.sendPing = async function() {
+  if(!pid) { toast("No partner connected."); return; }
   unlockAudio();
   const title=cfg.ste?cfg.steText:"📡 "+uname+" is pinging you!";
   const body=cfg.ste?"Reminder updated.":"Your study partner needs your attention!";
-  try{
-    await addDoc(collection(db,"pings"),{from:uid,to:pid,title,body,seen:false,ts:serverTimestamp()});
-    stats.pings++;updateStatsUI();await saveStats();addActivity("📡 Ping sent to "+pname);toast("📡 Pinged "+pname+"!");
-    if(cfg.vib)doVibrate([80,40,160,40,80]);if(cfg.snd)playSound("ping");
-    // Ping ripple animation
-    const btn=G("pingMainBtn");if(btn){const r=document.createElement("div");r.className="ping-ripple";btn.appendChild(r);setTimeout(()=>r.remove(),600);}
-  }catch(e){toast("Failed to send ping.");}
+  try {
+    await addDoc(collection(db,"pings"), {from:uid,to:pid,title,body,seen:false,ts:serverTimestamp()});
+    stats.pings++; updateStatsUI(); await saveStats(); addActivity("📡 Ping sent to "+pname); toast("📡 Pinged "+pname+"!");
+    if(cfg.vib) doVibrate([80,40,160,40,80]); if(cfg.snd) playSound("ping");
+    const btn=G("pingMainBtn"); if(btn) { const r=document.createElement("div"); r.className="ping-ripple"; btn.appendChild(r); setTimeout(()=>r.remove(),600); }
+  } catch(e) { toast("Failed to send ping."); }
 };
-window.sendQuickPing=async function(text){if(!pid)return;await sendPingWithMsg(text);};
-async function sendPingWithMsg(preText){await window.sendPing();if(preText){setTimeout(()=>{const inp=G("chatIn");if(inp){inp.value=preText;window.sendMsg();}},400);}}
-function showPingAlert(d){
-  if(G("aTitle"))G("aTitle").textContent=d.title||"📡 Partner Pinged!";
-  if(G("aBody"))G("aBody").textContent=d.body||"Your partner just pinged you!";
+window.sendQuickMsg = async function(text) {
+  if(!pid) return;
+  window.sendPing();
+  setTimeout(() => { const inp=G("chatIn"); if(inp) { inp.value=text; window.sendMsg(); } }, 400);
+};
+function showPingAlert(d) {
+  if(G("aTitle")) G("aTitle").textContent=d.title||"📡 Partner Pinged!";
+  if(G("aBody")) G("aBody").textContent=d.body||"Your partner just pinged you!";
   G("alertOv").classList.remove("hide");
-  const ctx=getACtx();if(ctx&&cfg.snd)ctx.resume().then(()=>_play(ctx,"ping")).catch(()=>{});
-  if(cfg.vib)doVibrate([200,80,200,80,400,80,200]);
-  sendWebNotif(d.title||"StudySync 📡",d.body||"Your partner pinged you!");
+  const ctx=getACtx(); if(ctx&&cfg.snd) ctx.resume().then(()=>_play(ctx,"ping")).catch(()=>{});
+  if(cfg.vib) doVibrate([200,80,200,80,400,80,200]);
+  sendWebNotif(d.title||"StudySync 📡", d.body||"Your partner pinged you!");
   addActivity("📡 Ping from "+pname);
 }
-window.dismissAlert=()=>{G("alertOv").classList.add("hide");};
-window.sendPingReply=async function(text){G("alertOv").classList.add("hide");if(!pid)return;try{await addDoc(collection(db,"messages",pairId(),"msgs"),{sender:uid,text,ts:serverTimestamp()});stats.msgs++;updateStatsUI();await saveStats();}catch(e){}goTab("chat");};
+window.dismissAlert = () => G("alertOv").classList.add("hide");
+window.sendPingReply = async function(text) {
+  G("alertOv").classList.add("hide"); if(!pid) return;
+  try { await addDoc(collection(db,"messages",pairId(),"msgs"), {sender:uid,text,ts:serverTimestamp()}); stats.msgs++; updateStatsUI(); await saveStats(); }
+  catch(e) {}
+  goTab("chat");
+};
 
 // ── SEND MSG ──
-window.sendMsg=async function(){
-  const inp=G("chatIn");const text=inp.value.trim();if(!text||!pid)return;
-  unlockAudio();inp.value="";autoTA(inp);clearTyp();closeEmojiPicker();
-  if(cfg.snd)playSound("send");
-  const msgData={sender:uid,text,ts:serverTimestamp()};
-  if(replyToId){msgData.replyTo=replyToId;msgData.replyText=replyToText;msgData.replySender=replyToSender;}
+window.sendMsg = async function() {
+  const inp=G("chatIn"); const text=inp.value.trim(); if(!text||!pid) return;
+  unlockAudio(); inp.value=""; autoTA(inp); clearTyp(); closeEmojiPicker();
+  if(cfg.snd) playSound("send");
+  const msgData = {sender:uid,text,ts:serverTimestamp()};
+  if(replyToId) { msgData.replyTo=replyToId; msgData.replyText=replyToText; msgData.replySender=replyToSender; }
   clearReply();
-  try{
-    const ref=await addDoc(collection(db,"messages",pairId(),"msgs"),msgData);
-    stats.msgs++;updateStatsUI();await saveStats();
-    // If partner has tab open, mark as delivered immediately
-    if(pTabOpen){setTimeout(async()=>await updateDoc(doc(db,"messages",pairId(),"msgs",ref.id),{deliveredAt:serverTimestamp()}).catch(()=>{}),500);}
-  }catch(e){toast("Message failed.");inp.value=text;}
+  try {
+    const ref = await addDoc(collection(db,"messages",pairId(),"msgs"), msgData);
+    stats.msgs++; updateStatsUI(); await saveStats();
+    if(pTabOpen) { setTimeout(async () => await updateDoc(doc(db,"messages",pairId(),"msgs",ref.id), {deliveredAt:serverTimestamp()}).catch(()=>{}), 800); }
+  } catch(e) { toast("Message failed."); inp.value=text; }
 };
-window.ckd=function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();window.sendMsg();}};
-window.onType=async function(){const inp=G("chatIn");autoTA(inp);if(!isTyping){isTyping=true;await updateDoc(doc(db,"users",uid),{typing:true}).catch(()=>{});}clearTimeout(typTimer);typTimer=setTimeout(clearTyp,2500);};
-async function clearTyp(){if(!isTyping)return;isTyping=false;clearTimeout(typTimer);await updateDoc(doc(db,"users",uid),{typing:false}).catch(()=>{});}
-window.sendQR=function(text){const inp=G("chatIn");inp.value=text;window.sendMsg();};
-window.clearChat=async function(){if(!confirm("Clear all messages in this chat?"))return;const q2=query(collection(db,"messages",pairId(),"msgs"),limit(200));const snap=await getDocs(q2).catch(()=>null);if(!snap)return;await Promise.all(snap.docs.map(d=>deleteDoc(doc(db,"messages",pairId(),"msgs",d.id)))).catch(()=>{});resetMsgBox();toast("🗑️ Chat cleared");};
+window.ckd = function(e) { if(e.key==="Enter"&&!e.shiftKey) { e.preventDefault(); window.sendMsg(); } };
+window.onType = async function() {
+  const inp=G("chatIn"); autoTA(inp);
+  if(!isTyping) { isTyping=true; await updateDoc(doc(db,"users",uid), {typing:true}).catch(()=>{}); }
+  clearTimeout(typTimer); typTimer=setTimeout(clearTyp, 2500);
+};
+async function clearTyp() {
+  if(!isTyping) return; isTyping=false; clearTimeout(typTimer);
+  await updateDoc(doc(db,"users",uid), {typing:false}).catch(()=>{});
+}
+window.sendQR = function(text) { const inp=G("chatIn"); inp.value=text; window.sendMsg(); };
+window.clearChat = async function() {
+  if(!confirm("Clear all messages in this chat?")) return;
+  const q2=query(collection(db,"messages",pairId(),"msgs"),limit(300));
+  const snap=await getDocs(q2).catch(()=>null); if(!snap) return;
+  await Promise.all(snap.docs.map(d=>deleteDoc(doc(db,"messages",pairId(),"msgs",d.id)))).catch(()=>{});
+  resetMsgBox(); toast("🗑️ Chat cleared");
+};
 
 // ── EMOJI PICKER ──
-window.openEmojiPicker=function(){emojiOpen=!emojiOpen;const ep=G("emojiPicker");ep.style.display=emojiOpen?"block":"none";if(emojiOpen)renderEpGrid();};
-window.closeEmojiPicker=function(){emojiOpen=false;const ep=G("emojiPicker");if(ep)ep.style.display="none";};
-window.insertEmoji=function(e){const inp=G("chatIn");inp.value+=e;inp.focus();autoTA(inp);};
-document.addEventListener("click",function(ev){const ep=G("emojiPicker");const mb=document.querySelector(".media-btn");if(ep&&emojiOpen&&!ep.contains(ev.target)&&ev.target!==mb)closeEmojiPicker();const ctx=G("ctxMenu");if(ctx&&!ctx.contains(ev.target))ctx.classList.add("hide");});
+window.openEmojiPicker = function() {
+  emojiOpen=!emojiOpen; const ep=G("emojiPicker"); ep.style.display=emojiOpen?"block":"none";
+  if(emojiOpen) renderEpGrid();
+};
+window.closeEmojiPicker = function() { emojiOpen=false; const ep=G("emojiPicker"); if(ep) ep.style.display="none"; };
+window.insertEmoji = function(e) { const inp=G("chatIn"); inp.value+=e; inp.focus(); autoTA(inp); };
+
+document.addEventListener("click", function(ev) {
+  const ep=G("emojiPicker"); const mb=document.querySelector(".media-btn");
+  if(ep && emojiOpen && !ep.contains(ev.target) && ev.target!==mb) closeEmojiPicker();
+  const ctx=G("ctxMenu"); if(ctx && !ctx.contains(ev.target)) ctx.classList.add("hide");
+});
 
 // ── CHAT CUSTOMIZE ──
-window.toggleChatCustomize=function(){const p=G("chatCustomPanel");if(p)p.style.display=p.style.display==="none"||!p.style.display?"flex":"none";};
-window.setChatBg=function(theme){
-  const chat=G("chatScreen");if(!chat)return;
-  chat.className=chat.className.replace(/chat-bg-\w+/g,"").trim()+" chat-bg-"+theme;
-  cfg.chatBg=theme;saveCfg();
-  document.querySelectorAll(".tswatch").forEach(s=>s.classList.toggle("on",s.dataset.theme===theme));
+window.toggleChatCustomize = function() {
+  const p=G("chatCustomPanel"); if(p) p.style.display=p.style.display==="none"||!p.style.display?"flex":"none";
+};
+window.setChatBg = function(theme) {
+  const chat=G("chatScreen"); if(!chat) return;
+  // Apply background style directly
+  const bgMap = {default:"",cosmos:"linear-gradient(170deg,#08041a,#0c0d22)",ocean:"linear-gradient(170deg,#020d18,#060f20)",forest:"linear-gradient(170deg,#030e08,#060e0c)",ember:"linear-gradient(170deg,#140602,#0e0610)",glass:"linear-gradient(170deg,#06090f,#0b0e18)"};
+  const msgBox=G("msgBox"); if(msgBox) msgBox.style.background=bgMap[theme]||"";
+  cfg.chatBg=theme; saveCfg();
+  document.querySelectorAll(".tswatch").forEach(s => s.classList.toggle("on", s.dataset.theme===theme));
   toast("🎨 Theme: "+cap(theme));
 };
-window.setChatBubble=function(color){cfg.chatBubble=color;saveCfg();applyChatBubble(color);document.querySelectorAll(".bswatch").forEach(s=>s.classList.toggle("on",s.dataset.bubble===color));toast("🎨 Bubble: "+cap(color));};
-function applyChatBubble(color){
-  const map={violet:"linear-gradient(135deg,var(--violet2),var(--violet))",cyan:"linear-gradient(135deg,var(--neon2),var(--neon))",emerald:"linear-gradient(135deg,#059669,var(--emerald))",rose:"linear-gradient(135deg,var(--rose2),var(--rose))",amber:"linear-gradient(135deg,#b45309,var(--amber))",sky:"linear-gradient(135deg,var(--blue2),var(--blue))"};
-  const sm={violet:"rgba(168,85,247,.3)",cyan:"rgba(0,245,212,.25)",emerald:"rgba(16,185,129,.3)",rose:"rgba(244,63,94,.3)",amber:"rgba(251,191,36,.25)",sky:"rgba(77,159,255,.3)"};
+window.setChatBubble = function(color) {
+  cfg.chatBubble=color; saveCfg(); applyChatBubble(color);
+  document.querySelectorAll(".bswatch").forEach(s => s.classList.toggle("on", s.dataset.bubble===color));
+  toast("🎨 Bubble: "+cap(color));
+};
+function applyChatBubble(color) {
+  const map={
+    violet:"linear-gradient(135deg,#7c3aed,#a855f7)",cyan:"linear-gradient(135deg,#00c4aa,#00f5d4)",
+    emerald:"linear-gradient(135deg,#059669,#10b981)",rose:"linear-gradient(135deg,#be123c,#f43f5e)",
+    amber:"linear-gradient(135deg,#b45309,#fbbf24)",sky:"linear-gradient(135deg,#2277dd,#4d9fff)"
+  };
+  const shadows={violet:"rgba(168,85,247,.3)",cyan:"rgba(0,245,212,.25)",emerald:"rgba(16,185,129,.3)",rose:"rgba(244,63,94,.3)",amber:"rgba(251,191,36,.25)",sky:"rgba(77,159,255,.3)"};
   const tc={cyan:"#001a14",emerald:"#001a10",amber:"#1a0d00"};
-  let style=G("bubbleStyle")||document.createElement("style");style.id="bubbleStyle";
-  style.textContent=`.mrow.mine .mbubble{background:${map[color]||map.violet}!important;box-shadow:0 4px 20px ${sm[color]||sm.violet}!important;color:${tc[color]||"#fff"}!important}`;
+  let style=G("bubbleStyle")||document.createElement("style"); style.id="bubbleStyle";
+  style.textContent=`.mrow.mine .mbubble{background:${map[color]||map.violet}!important;box-shadow:0 4px 20px ${shadows[color]||shadows.violet}!important;color:${tc[color]||"#fff"}!important}`;
   document.head.appendChild(style);
 }
 
 // ── TOGGLES / SETTINGS ──
-window.togS=function(k){cfg[k]=!cfg[k];const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD",react:"tReact",read:"tRead",reply:"tReply"};if(m[k]&&G(m[k]))G(m[k]).classList.toggle("on",cfg[k]);saveCfg();const l={vib:"Vibration",snd:"Sound",ste:"Stealth mode",ad:"Auto-delete",react:"Reactions",read:"Read receipts",reply:"Reply feature"};toast((l[k]||k)+(cfg[k]?" on":" off"));const a=G("adStatus");if(a)a.textContent=cfg.ad?"on":"off";};
-window.toggleAutoDelete=function(){cfg.ad=!cfg.ad;const t=G("tAD");if(t)t.classList.toggle("on",cfg.ad);saveCfg();const a=G("adStatus");if(a)a.textContent=cfg.ad?"on":"off";toast("Auto-delete "+(cfg.ad?"on":"off"));};
-window.saveSte=function(){cfg.steText=val("steText")||"Reminder updated.";saveCfg();toast("✓ Saved!");};
-window.selectSound=function(type){cfg.soundType=type;saveCfg();document.querySelectorAll(".sopt").forEach(el=>el.classList.remove("active"));const el=G("sopt-"+type);if(el)el.classList.add("active");unlockAudio();const ctx=getACtx();if(ctx&&cfg.snd)ctx.resume().then(()=>_play(ctx,"ping")).catch(()=>{});toast("🎵 Sound: "+cap(type));};
-window.saveTimerSettings=function(){const f=parseInt(val("focusDur"))||25,b=parseInt(val("breakDur"))||5,lb=parseInt(val("longBreakDur"))||15;cfg.focusMin=Math.max(1,Math.min(180,f));cfg.breakMin=Math.max(1,Math.min(60,b));cfg.longBreakMin=Math.max(5,Math.min(60,lb));saveCfg();if(!timerRunning){timerSecs=timerMode==="focus"?cfg.focusMin*60:timerMode==="short"?cfg.breakMin*60:cfg.longBreakMin*60;timerTotalSecs=timerSecs;updateTimerDisplay();}toast("⏱ Timer saved");};
-async function saveCfg(){if(!uid)return;await updateDoc(doc(db,"users",uid),{cfg}).catch(()=>{});}
-async function saveStats(){if(!uid)return;await updateDoc(doc(db,"users",uid),{stats}).catch(()=>{});}
-function applyCfgUI(){const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD",react:"tReact",read:"tRead",reply:"tReply"};Object.keys(m).forEach(k=>{if(G(m[k]))G(m[k]).classList.toggle("on",!!cfg[k]);});if(G("steText"))G("steText").value=cfg.steText||"Reminder updated.";if(G("focusDur"))G("focusDur").value=cfg.focusMin||25;if(G("breakDur"))G("breakDur").value=cfg.breakMin||5;if(G("longBreakDur"))G("longBreakDur").value=cfg.longBreakMin||15;document.querySelectorAll(".sopt").forEach(el=>el.classList.remove("active"));const so=G("sopt-"+(cfg.soundType||"chime"));if(so)so.classList.add("active");timerSecs=(cfg.focusMin||25)*60;timerTotalSecs=timerSecs;updateTimerDisplay();}
-function updateMyProfile(){if(G("myAv"))G("myAv").textContent=init(uname);if(G("myNm"))G("myNm").textContent=uname;if(G("myEm"))G("myEm").textContent=email;}
-function updateStatsUI(){if(G("statPings"))G("statPings").textContent=stats.pings||0;if(G("statMins"))G("statMins").textContent=stats.mins||0;if(G("statStreak"))G("statStreak").textContent=stats.streak||1;if(G("streakNum"))G("streakNum").textContent=stats.streak||1;}
+window.togS = function(k) {
+  cfg[k]=!cfg[k];
+  const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD",react:"tReact",read:"tRead",reply:"tReply"};
+  if(m[k]&&G(m[k])) G(m[k]).classList.toggle("on",cfg[k]);
+  saveCfg();
+  const l={vib:"Vibration",snd:"Sound",ste:"Stealth mode",ad:"Auto-delete",react:"Reactions",read:"Read receipts",reply:"Reply feature"};
+  toast((l[k]||k)+(cfg[k]?" on":" off"));
+  const a=G("adStatus"); if(a) a.textContent=cfg.ad?"on":"off";
+};
+window.toggleAutoDelete = function() {
+  cfg.ad=!cfg.ad; const t=G("tAD"); if(t) t.classList.toggle("on",cfg.ad); saveCfg();
+  const a=G("adStatus"); if(a) a.textContent=cfg.ad?"on":"off";
+  toast("Auto-delete "+(cfg.ad?"on":"off"));
+};
+window.saveSte = function() { cfg.steText=val("steText")||"Reminder updated."; saveCfg(); toast("✓ Saved!"); };
+window.selectSound = function(type) {
+  cfg.soundType=type; saveCfg();
+  document.querySelectorAll(".sopt").forEach(el => el.classList.remove("active"));
+  const el=G("sopt-"+type); if(el) el.classList.add("active");
+  unlockAudio(); const ctx=getACtx(); if(ctx&&cfg.snd) ctx.resume().then(()=>_play(ctx,"ping")).catch(()=>{});
+  toast("🎵 Sound: "+cap(type));
+};
+window.saveTimerSettings = function() {
+  const f=parseInt(val("focusDur"))||25, b=parseInt(val("breakDur"))||5, lb=parseInt(val("longBreakDur"))||15;
+  cfg.focusMin=Math.max(1,Math.min(180,f)); cfg.breakMin=Math.max(1,Math.min(60,b)); cfg.longBreakMin=Math.max(5,Math.min(60,lb));
+  saveCfg();
+  if(!timerRunning) { timerSecs=timerMode==="focus"?cfg.focusMin*60:timerMode==="short"?cfg.breakMin*60:cfg.longBreakMin*60; timerTotalSecs=timerSecs; updateTimerDisplay(); }
+  toast("⏱ Timer saved");
+};
+async function saveCfg() { if(!uid) return; await updateDoc(doc(db,"users",uid), {cfg}).catch(()=>{}); }
+async function saveStats() { if(!uid) return; await updateDoc(doc(db,"users",uid), {stats}).catch(()=>{}); }
+function applyCfgUI() {
+  const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD",react:"tReact",read:"tRead",reply:"tReply"};
+  Object.keys(m).forEach(k => { if(G(m[k])) G(m[k]).classList.toggle("on",!!cfg[k]); });
+  if(G("steText")) G("steText").value=cfg.steText||"Reminder updated.";
+  if(G("focusDur")) G("focusDur").value=cfg.focusMin||25;
+  if(G("breakDur")) G("breakDur").value=cfg.breakMin||5;
+  if(G("longBreakDur")) G("longBreakDur").value=cfg.longBreakMin||15;
+  document.querySelectorAll(".sopt").forEach(el => el.classList.remove("active"));
+  const so=G("sopt-"+(cfg.soundType||"chime")); if(so) so.classList.add("active");
+  timerSecs=(cfg.focusMin||25)*60; timerTotalSecs=timerSecs; updateTimerDisplay();
+  applyChatBubble(cfg.chatBubble||"violet");
+}
+function updateMyProfile() {
+  if(G("myAv")) G("myAv").textContent=init(uname);
+  if(G("myNm")) G("myNm").textContent=uname;
+  if(G("myEm")) G("myEm").textContent=email;
+}
+function updateStatsUI() {
+  if(G("statPings")) G("statPings").textContent=stats.pings||0;
+  if(G("statMins")) G("statMins").textContent=stats.mins||0;
+  if(G("statStreak")) G("statStreak").textContent=stats.streak||1;
+  if(G("streakNum")) G("streakNum").textContent=stats.streak||1;
+}
 
 // ── MOOD ──
-window.setMood=function(emoji,label){
-  document.querySelectorAll(".mood-btn").forEach(b=>b.classList.remove("selected"));
-  document.querySelectorAll(".mood-btn").forEach(b=>{if(b.textContent.includes(emoji))b.classList.add("selected");});
-  if(G("moodLabel"))G("moodLabel").textContent="Feeling "+label+" today "+emoji;
-  if(uid)updateDoc(doc(db,"users",uid),{mood:emoji,moodLabel:label}).catch(()=>{});
-  toast("Mood: "+emoji+" "+label);addActivity("😊 Mood: "+label+" "+emoji);
+window.setMood = function(emoji, label) {
+  document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("selected"));
+  document.querySelectorAll(".mood-btn").forEach(b => { if(b.textContent.includes(emoji)) b.classList.add("selected"); });
+  if(G("moodLabel")) G("moodLabel").textContent="Feeling "+label+" today "+emoji;
+  if(uid) updateDoc(doc(db,"users",uid), {mood:emoji,moodLabel:label}).catch(()=>{});
+  toast("Mood: "+emoji+" "+label); addActivity("😊 Mood: "+label+" "+emoji);
 };
 
-// ── STREAK ──
-function buildStreakUI(){
-  const days=["M","T","W","T","F","S","S"];const today=new Date().getDay();const adj=(today+6)%7;
-  const html=days.map((d,i)=>{const isDone=i<adj;const isToday=i===adj;return`<div class="sday${isDone?" done":""}${isToday?" today":""}">${d}<div class="sday-dot"></div></div>`;}).join("");
-  const el=G("streakDays");if(el)el.innerHTML=html;
+// ── STREAK (with localStorage backup) ──
+function buildStreakUI() {
+  // Check streak from localStorage
+  const today = new Date().toDateString();
+  const stored = JSON.parse(localStorage.getItem("ssStreak")||"{}");
+  if(stored.lastDay !== today) {
+    const yesterday = new Date(Date.now()-864e5).toDateString();
+    if(stored.lastDay===yesterday) { stored.count=(stored.count||1)+1; }
+    else if(!stored.lastDay) { stored.count=1; }
+    else { stored.count=1; } // broken streak
+    stored.lastDay=today;
+    localStorage.setItem("ssStreak", JSON.stringify(stored));
+    stats.streak=stored.count; updateStatsUI();
+  } else { stats.streak=stored.count||1; updateStatsUI(); }
+
+  const days=["M","T","W","T","F","S","S"]; const today2=new Date().getDay(); const adj=(today2+6)%7;
+  const html=days.map((d,i) => { const isDone=i<adj; const isToday=i===adj; return `<div class="sday${isDone?" done":""}${isToday?" today":""}">${d}<div class="sday-dot"></div></div>`; }).join("");
+  const el=G("streakDays"); if(el) el.innerHTML=html;
 }
 
-// ── TIMER ──
-const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
-function buildRounds(){const el=G("timerRounds");if(!el)return;el.innerHTML=Array.from({length:timerTotalRounds},(_,i)=>`<div class="tround${i<timerRound-1?" done":i===timerRound-1&&timerRunning?" curr":""}"></div>`).join("");}
-function updateTimerDisplay(){
-  const d=G("timerDisp");if(d)d.textContent=fmt(timerSecs);
-  const cl=G("timerCenterLbl");if(cl)cl.textContent=timerMode==="focus"?"Focus":timerMode==="short"?"Break":"Long Break";
-  const circle=G("timerCircle");
-  if(circle){const r=55,circ=2*Math.PI*r,pct=timerTotalSecs>0?timerSecs/timerTotalSecs:1;circle.style.strokeDashoffset=circ*(1-pct);circle.style.strokeDasharray=circ;}
-  const si=G("timerSessionInfo");if(si)si.textContent="Session "+timerRound+" of "+timerTotalRounds;
-  const nl=G("timerNextLbl");if(nl){if(timerMode==="focus")nl.textContent="→ "+(timerRound%4===0?"Long break":"Short break")+" next";else if(timerMode==="short")nl.textContent="→ Focus session next";else nl.textContent="→ New focus round next";}
-  buildRounds();
-  // Sync timer to Firestore for partner to see
-  if(uid&&timerRunning)updateDoc(doc(db,"users",uid),{timerSecs,timerTotal:timerTotalSecs,timerActive:timerRunning,timerMode}).catch(()=>{});
-  const mf=G("myFocusDisp"),mfb=G("myFocusFill");if(mf)mf.textContent=timerMode==="focus"&&timerRunning?fmt(timerSecs):"—";const pct2=timerTotalSecs>0?Math.round((1-timerSecs/timerTotalSecs)*100):0;if(mfb)mfb.style.width=(timerMode==="focus"?pct2:0)+"%";
+// ── POMODORO TIMER ──
+const fmt = s => String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+function buildRounds() {
+  const el=G("timerRounds"); if(!el) return;
+  el.innerHTML=Array.from({length:timerTotalRounds},(_,i) =>
+    `<div class="tround${i<timerRound-1?" done":i===timerRound-1&&timerRunning?" curr":""}"></div>`
+  ).join("");
 }
-function timerTick(){
-  timerSecs--;updateTimerDisplay();
-  if(timerSecs<=0){
-    clearInterval(timerInterval);timerInterval=null;timerRunning=false;
-    const b=G("timerStartBtn");if(b){b.textContent="▶ Start";b.className="tbtn go";}
-    if(cfg.snd)playSound("timer");if(cfg.vib)doVibrate([300,100,300,100,600]);
-    if(timerMode==="focus"){stats.mins+=(cfg.focusMin||25);updateStatsUI();saveStats();addActivity("🎯 Focus done! +"+( cfg.focusMin||25)+" mins");toast("🎉 Session complete! Great work!",4000);}
-    else{toast(timerMode==="long"?"🌙 Long break over! Back to study 📚":"☕ Break over! Let's focus! 📚",3500);}
-    sendWebNotif("StudySync ⏱",timerMode==="focus"?"Study session complete! 🎉":"Break finished!");
-    if(timerMode==="focus"){timerRound=Math.min(timerRound+1,timerTotalRounds+1);if(timerRound>timerTotalRounds){timerRound=1;}timerMode=timerRound%4===0?"long":"short";}else{timerMode="focus";}
-    timerSecs=timerMode==="focus"?(cfg.focusMin||25)*60:timerMode==="short"?(cfg.breakMin||5)*60:(cfg.longBreakMin||15)*60;timerTotalSecs=timerSecs;
+function updateTimerDisplay() {
+  const d=G("timerDisp"); if(d) d.textContent=fmt(timerSecs);
+  const cl=G("timerCenterLbl"); if(cl) cl.textContent=timerMode==="focus"?"Focus":timerMode==="short"?"Break":"Long Break";
+  const circle=G("timerCircle");
+  if(circle) {
+    const r=55, circ=2*Math.PI*r, pct=timerTotalSecs>0?timerSecs/timerTotalSecs:1;
+    circle.style.strokeDashoffset=circ*(1-pct); circle.style.strokeDasharray=circ;
+  }
+  const si=G("timerSessionInfo"); if(si) si.textContent="Session "+timerRound+" of "+timerTotalRounds;
+  const nl=G("timerNextLbl"); if(nl) { if(timerMode==="focus") nl.textContent="→ "+(timerRound%4===0?"Long break":"Short break")+" next"; else nl.textContent="→ Focus session next"; }
+  buildRounds();
+  // Sync to Firestore (debounced to avoid excessive writes)
+  if(uid && timerRunning) {
+    clearTimeout(timerSyncDebounce);
+    timerSyncDebounce = setTimeout(() => {
+      updateDoc(doc(db,"users",uid), {timerSecs,timerTotal:timerTotalSecs,timerActive:true,timerMode}).catch(()=>{});
+    }, 5000); // sync every 5 seconds max
+  }
+  const mf=G("myFocusDisp"), mfb=G("myFocusFill");
+  if(mf) mf.textContent=timerMode==="focus"&&timerRunning?fmt(timerSecs):"—";
+  const pct2 = timerTotalSecs>0 ? Math.round((1-timerSecs/timerTotalSecs)*100) : 0;
+  if(mfb) mfb.style.width=(timerMode==="focus"?pct2:0)+"%";
+}
+function timerTick() {
+  timerSecs--; updateTimerDisplay();
+  if(timerSecs<=0) {
+    clearInterval(timerInterval); timerInterval=null; timerRunning=false;
+    const b=G("timerStartBtn"); if(b){b.textContent="▶ Start";b.className="tbtn go";}
+    if(cfg.snd) playSound("timer"); if(cfg.vib) doVibrate([300,100,300,100,600]);
+    if(timerMode==="focus") { stats.mins+=(cfg.focusMin||25); updateStatsUI(); saveStats(); addActivity("🎯 Focus done! +"+(cfg.focusMin||25)+" mins"); toast("🎉 Session complete! Great work!", 4000); }
+    else toast(timerMode==="long"?"🌙 Long break over! Back to study 📚":"☕ Break over! Focus time! 📚", 3500);
+    sendWebNotif("StudySync ⏱", timerMode==="focus"?"Study session complete! 🎉":"Break finished!");
+    if(timerMode==="focus") { timerRound=Math.min(timerRound+1,timerTotalRounds+1); if(timerRound>timerTotalRounds) timerRound=1; timerMode=timerRound%4===0?"long":"short"; }
+    else timerMode="focus";
+    timerSecs=timerMode==="focus"?(cfg.focusMin||25)*60:timerMode==="short"?(cfg.breakMin||5)*60:(cfg.longBreakMin||15)*60;
+    timerTotalSecs=timerSecs;
     updateTimerDisplay();
-    document.querySelectorAll(".tmode").forEach(t=>t.classList.toggle("on",t.id==="tm-"+timerMode.replace("short","short").replace("long","long")));
-    if(uid)updateDoc(doc(db,"users",uid),{timerSecs:0,timerActive:false}).catch(()=>{});
+    document.querySelectorAll(".tmode").forEach(t => t.classList.toggle("on", t.id==="tm-"+timerMode));
+    if(uid) updateDoc(doc(db,"users",uid), {timerSecs:0,timerActive:false}).catch(()=>{});
   }
 }
-window.timerToggle=function(){
+window.timerToggle = function() {
   unlockAudio();
-  if(timerRunning){clearInterval(timerInterval);timerInterval=null;timerRunning=false;const b=G("timerStartBtn");if(b){b.textContent="▶ Start";b.className="tbtn go";}toast("Timer paused ⏸");if(uid)updateDoc(doc(db,"users",uid),{timerActive:false}).catch(()=>{});}
-  else{timerRunning=true;timerInterval=setInterval(timerTick,1000);const b=G("timerStartBtn");if(b){b.textContent="⏸ Pause";b.className="tbtn pause";}toast(timerMode==="focus"?"📚 Focus session started!":"☕ Break started!");addActivity(timerMode==="focus"?"📚 Study session started":"☕ Break started");}
+  if(timerRunning) {
+    clearInterval(timerInterval); timerInterval=null; timerRunning=false;
+    const b=G("timerStartBtn"); if(b){b.textContent="▶ Start";b.className="tbtn go";}
+    toast("Timer paused ⏸");
+    if(uid) updateDoc(doc(db,"users",uid), {timerActive:false}).catch(()=>{});
+  } else {
+    timerRunning=true; timerInterval=setInterval(timerTick,1000);
+    const b=G("timerStartBtn"); if(b){b.textContent="⏸ Pause";b.className="tbtn pause";}
+    toast(timerMode==="focus"?"📚 Focus session started!":"☕ Break started!");
+    addActivity(timerMode==="focus"?"📚 Study session started":"☕ Break started");
+  }
 };
-window.timerReset=function(){clearInterval(timerInterval);timerInterval=null;timerRunning=false;timerSecs=timerMode==="focus"?(cfg.focusMin||25)*60:timerMode==="short"?(cfg.breakMin||5)*60:(cfg.longBreakMin||15)*60;timerTotalSecs=timerSecs;updateTimerDisplay();const b=G("timerStartBtn");if(b){b.textContent="▶ Start";b.className="tbtn go";}toast("Timer reset ↺");if(uid)updateDoc(doc(db,"users",uid),{timerActive:false}).catch(()=>{});};
-window.setTimerMode=function(mode){timerMode=mode;document.querySelectorAll(".tmode").forEach(t=>t.classList.remove("on"));const el=G("tm-"+mode);if(el)el.classList.add("on");if(!timerRunning){timerSecs=mode==="focus"?(cfg.focusMin||25)*60:mode==="short"?(cfg.breakMin||5)*60:(cfg.longBreakMin||15)*60;timerTotalSecs=timerSecs;updateTimerDisplay();}toast(mode==="focus"?"📚 Focus mode":"☕ Break mode");};
-window.timerCustom=function(){G("timerModal").classList.remove("hide");};
-window.closeTimerModal=function(){G("timerModal").classList.add("hide");};
-window.applyCustomTimer=function(){const f=parseInt(val("modalFocus"))||25,b=parseInt(val("modalBreak"))||5;cfg.focusMin=Math.max(1,Math.min(180,f));cfg.breakMin=Math.max(1,Math.min(60,b));saveCfg();if(!timerRunning){timerSecs=timerMode==="focus"?cfg.focusMin*60:cfg.breakMin*60;timerTotalSecs=timerSecs;updateTimerDisplay();}G("timerModal").classList.add("hide");toast("⏱ "+cfg.focusMin+"m / "+cfg.breakMin+"m");};
+window.timerReset = function() {
+  clearInterval(timerInterval); timerInterval=null; timerRunning=false;
+  timerSecs=timerMode==="focus"?(cfg.focusMin||25)*60:timerMode==="short"?(cfg.breakMin||5)*60:(cfg.longBreakMin||15)*60;
+  timerTotalSecs=timerSecs; updateTimerDisplay();
+  const b=G("timerStartBtn"); if(b){b.textContent="▶ Start";b.className="tbtn go";}
+  toast("Timer reset ↺");
+  if(uid) updateDoc(doc(db,"users",uid), {timerActive:false}).catch(()=>{});
+};
+window.setTimerMode = function(mode) {
+  timerMode=mode; document.querySelectorAll(".tmode").forEach(t => t.classList.remove("on"));
+  const el=G("tm-"+mode); if(el) el.classList.add("on");
+  if(!timerRunning) { timerSecs=mode==="focus"?(cfg.focusMin||25)*60:mode==="short"?(cfg.breakMin||5)*60:(cfg.longBreakMin||15)*60; timerTotalSecs=timerSecs; updateTimerDisplay(); }
+  toast(mode==="focus"?"📚 Focus mode":"☕ Break mode");
+};
+window.timerCustom = () => G("timerModal").classList.remove("hide");
+window.closeTimerModal = () => G("timerModal").classList.add("hide");
+window.applyCustomTimer = function() {
+  const f=parseInt(val("modalFocus"))||25, b=parseInt(val("modalBreak"))||5;
+  cfg.focusMin=Math.max(1,Math.min(180,f)); cfg.breakMin=Math.max(1,Math.min(60,b)); saveCfg();
+  if(!timerRunning) { timerSecs=timerMode==="focus"?cfg.focusMin*60:cfg.breakMin*60; timerTotalSecs=timerSecs; updateTimerDisplay(); }
+  G("timerModal").classList.add("hide"); toast("⏱ "+cfg.focusMin+"m / "+cfg.breakMin+"m");
+};
+
+// ── AI ASSISTANT ──
+window.aiQuickAsk = function(text) {
+  const inp=G("aiIn"); if(inp) inp.value=text;
+  sendAiMsg();
+};
+window.aiKd = function(e) { if(e.key==="Enter"&&!e.shiftKey) { e.preventDefault(); sendAiMsg(); } };
+
+window.sendAiMsg = async function() {
+  const inp=G("aiIn"); const text=inp?.value?.trim(); if(!text||aiLoading) return;
+  inp.value=""; autoTA(inp); aiLoading=true;
+  const msgs=G("aiMsgs"); if(!msgs) { aiLoading=false; return; }
+
+  // Add user bubble
+  const userBubble=document.createElement("div"); userBubble.className="ai-bubble-wrap user";
+  userBubble.innerHTML=`<div class="ai-bubble">${esc(text)}</div><div class="ai-avatar" style="background:linear-gradient(135deg,var(--violet2),var(--violet))">😊</div>`;
+  msgs.appendChild(userBubble); msgs.scrollTop=msgs.scrollHeight;
+
+  // Add typing indicator
+  const typBubble=document.createElement("div"); typBubble.className="ai-bubble-wrap";
+  typBubble.innerHTML=`<div class="ai-avatar">🤖</div><div class="ai-typing"><div class="ai-typing-dot"></div><div class="ai-typing-dot"></div><div class="ai-typing-dot"></div></div>`;
+  msgs.appendChild(typBubble); msgs.scrollTop=msgs.scrollHeight;
+
+  // Build history
+  aiHistory.push({role:"user",content:text});
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",
+        max_tokens:1000,
+        system:"You are a friendly and knowledgeable AI Study Buddy for students. Help them understand academic concepts, quiz them, explain things simply, motivate them, and give study tips. Keep responses concise but helpful. Use emojis sparingly. You are embedded in StudySync, a study companion app. The student's name is: "+uname,
+        messages:aiHistory
+      })
+    });
+    const data = await response.json();
+    const reply = data.content?.map(i=>i.text||"").filter(Boolean).join("\n") || "Sorry, I couldn't think of a response right now.";
+    aiHistory.push({role:"assistant",content:reply});
+
+    // Remove typing, add reply
+    typBubble.remove();
+    const replyBubble=document.createElement("div"); replyBubble.className="ai-bubble-wrap";
+    replyBubble.innerHTML=`<div class="ai-avatar">🤖</div><div class="ai-bubble">${esc(reply)}</div>`;
+    msgs.appendChild(replyBubble); msgs.scrollTop=msgs.scrollHeight;
+    // Keep history bounded
+    if(aiHistory.length>40) aiHistory=aiHistory.slice(-30);
+  } catch(e) {
+    typBubble.remove();
+    const errBubble=document.createElement("div"); errBubble.className="ai-bubble-wrap";
+    errBubble.innerHTML=`<div class="ai-avatar">🤖</div><div class="ai-bubble" style="border-color:rgba(244,63,94,.3);color:var(--rose)">Oops, couldn't reach the AI right now. Try again!</div>`;
+    msgs.appendChild(errBubble); msgs.scrollTop=msgs.scrollHeight;
+    aiHistory.pop(); // remove failed user message
+  }
+  aiLoading=false;
+};
+
+window.clearAiChat = function() {
+  if(!confirm("Clear AI chat history?")) return;
+  aiHistory=[];
+  const msgs=G("aiMsgs"); if(!msgs) return;
+  msgs.innerHTML=`<div class="ai-welcome">
+    <div style="font-size:48px;margin-bottom:12px;animation:floatY 3s ease-in-out infinite">🤖</div>
+    <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px">AI Study Buddy</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.7">Chat cleared! Ask me anything about your studies.</div>
+    <div class="ai-chips">
+      <div class="ai-chip" onclick="aiQuickAsk('Explain photosynthesis in simple terms')">🌿 Photosynthesis</div>
+      <div class="ai-chip" onclick="aiQuickAsk('Help me understand quadratic equations')">📐 Quadratics</div>
+      <div class="ai-chip" onclick="aiQuickAsk('Quiz me on World War 2 basics')">📜 History Quiz</div>
+      <div class="ai-chip" onclick="aiQuickAsk('Give me tips to study better')">💡 Study Tips</div>
+    </div>
+  </div>`;
+  toast("🗑️ AI chat cleared");
+};
 
 // ── LOGOUT / ACCOUNT ──
-window.logout=async function(){if(!confirm("Sign out of StudySync?"))return;clearInterval(timerInterval);killListeners();if(uid)await updateDoc(doc(db,"users",uid),{status:"offline",tabOpen:false,lastActive:serverTimestamp(),typing:false}).catch(()=>{});uid="";pid="";renderedMsgIds=new Set();unread=0;try{await signOut(auth);}catch(e){}};
-window.unpair=async function(){if(!confirm("Disconnect from your study partner?"))return;if(pid)await updateDoc(doc(db,"users",pid),{partnerUID:""}).catch(()=>{});await updateDoc(doc(db,"users",uid),{partnerUID:""}).catch(()=>{});pid="";killListeners();renderedMsgIds=new Set();showScr("pairScreen");loadMyCode();};
-window.showMyCode=async function(){try{const s=await getDoc(doc(db,"users",uid));const code=s.data()?.inviteCode||"???";toast("Your code: "+code,5000);}catch(e){}};
-window.editProfile=function(){const n=prompt("Enter new display name:",uname);if(!n||!n.trim())return;const nm=n.trim();updateProfile(auth.currentUser,{displayName:nm}).then(async()=>{uname=nm;updateMyProfile();await updateDoc(doc(db,"users",uid),{name:nm}).catch(()=>{});toast("✓ Name updated!");}).catch(()=>toast("Failed to update"));};
-
-// ── NAV TABS ──
-window.goTab=function(tab){
-  currentTab=tab;G("homeScreen").classList.toggle("hide",tab!=="home");G("chatScreen").classList.toggle("hide",tab!=="chat");G("settingsScreen").classList.toggle("hide",tab!=="settings");
-  ["nHome","nChat","nSets"].forEach((id,i)=>{if(G(id))G(id).classList.toggle("on",["home","chat","settings"][i]===tab);});
-  if(tab==="chat"){unread=0;updBadge();const b=G("msgBox");requestAnimationFrame(()=>{if(b)b.scrollTop=b.scrollHeight;});G("chatIn")?.focus();markAllRead();}
+window.logout = async function() {
+  if(!confirm("Sign out of StudySync?")) return;
+  clearInterval(timerInterval); killListeners();
+  if(uid) await updateDoc(doc(db,"users",uid), {status:"offline",tabOpen:false,lastActive:serverTimestamp(),typing:false}).catch(()=>{});
+  uid=""; pid=""; renderedMsgIds=new Set(); allMessages=[]; unread=0; aiHistory=[];
+  try { await signOut(auth); } catch(e) {}
 };
-function updBadge(){const b=G("cBadge");if(!b)return;if(unread>0){b.classList.remove("hide");b.textContent=unread>99?"99+":unread;}else b.classList.add("hide");}
+window.unpair = async function() {
+  if(!confirm("Disconnect from your study partner?")) return;
+  if(pid) await updateDoc(doc(db,"users",pid), {partnerUID:""}).catch(()=>{});
+  await updateDoc(doc(db,"users",uid), {partnerUID:""}).catch(()=>{});
+  pid=""; killListeners(); renderedMsgIds=new Set(); allMessages=[];
+  showScr("pairScreen"); loadMyCode();
+};
+window.showMyCode = async function() {
+  try { const s=await getDoc(doc(db,"users",uid)); const code=s.data()?.inviteCode||"???"; toast("Your code: "+code, 5000); }
+  catch(e) {}
+};
+window.editProfile = function() {
+  const n=prompt("Enter new display name:", uname); if(!n||!n.trim()) return;
+  const nm=n.trim();
+  updateProfile(auth.currentUser,{displayName:nm}).then(async () => {
+    uname=nm; updateMyProfile();
+    await updateDoc(doc(db,"users",uid),{name:nm}).catch(()=>{});
+    toast("✓ Name updated!");
+  }).catch(() => toast("Failed to update"));
+};
 
-window.logoTap=function(){secretN++;clearTimeout(secretTimer);if(secretN>=5){secretN=0;toast("🔓 Secret shortcut!");goTab("chat");}else secretTimer=setTimeout(()=>secretN=0,2000);};
-window.showEdu=function(){const eo=G("eduOverlay");eo.classList.remove("hide");G("mainApp").classList.add("hide");setTimeout(()=>eo.querySelectorAll(".eprogf").forEach(el=>el.style.width=el.dataset.w+"%"),200);};
-window.hideEdu=function(){G("eduOverlay").classList.add("hide");G("mainApp").classList.remove("hide");};
-
-function addActivity(text){
-  const box=G("activityBox");const empty=G("actEmpty");if(empty)empty.remove();
-  const el=document.createElement("div");el.className="af-item";
-  const now=new Date();const ts=now.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-  el.innerHTML=`<div class="af-dot"></div><span class="af-text">${esc(text)}</span><span class="af-time">${ts}</span>`;
-  box.insertBefore(el,box.querySelector(".af-header").nextSibling||box.firstChild);
-  const items=box.querySelectorAll(".af-item");if(items.length>15)items[items.length-1].remove();
+// ── NAV ──
+window.goTab = function(tab) {
+  currentTab=tab;
+  const screens={home:"homeScreen",chat:"chatScreen",ai:"aiScreen",settings:"settingsScreen"};
+  Object.entries(screens).forEach(([t,id]) => {
+    const el=G(id); if(el) el.classList.toggle("hide", t!==tab);
+  });
+  ["nHome","nChat","nAi","nSets"].forEach((id,i) => {
+    if(G(id)) G(id).classList.toggle("on", ["home","chat","ai","settings"][i]===tab);
+  });
+  if(tab==="chat") {
+    unread=0; updBadge();
+    const b=G("msgBox"); requestAnimationFrame(() => { if(b) b.scrollTop=b.scrollHeight; });
+    G("chatIn")?.focus(); markAllRead();
+  }
+};
+function updBadge() {
+  const b=G("cBadge"); if(!b) return;
+  if(unread>0) { b.classList.remove("hide"); b.textContent=unread>99?"99+":unread; }
+  else b.classList.add("hide");
 }
 
-window.testSoundVib=function(){unlockAudio();const ctx=getACtx();if(!ctx){toast("⚠ Audio not supported");return;}ctx.resume().then(()=>{_play(ctx,"ping");if(cfg.vib)doVibrate([200,80,200]);toast("🔊 "+cap(cfg.soundType||"chime")+" — sound test!");audioUnlocked=true;}).catch(()=>toast("⚠ Tap screen first",3000));};
+let secretN=0, secretTimer=null;
+window.logoTap = function() {
+  secretN++; clearTimeout(secretTimer);
+  if(secretN>=5) { secretN=0; toast("🔓 Secret shortcut!"); goTab("chat"); }
+  else secretTimer=setTimeout(() => secretN=0, 2000);
+};
+
+window.showEdu = function() {
+  const eo=G("eduOverlay"); eo.classList.remove("hide");
+  G("mainApp").classList.add("hide");
+  setTimeout(() => eo.querySelectorAll(".eprogf").forEach(el => el.style.width=el.dataset.w+"%"), 200);
+};
+window.hideEdu = function() { G("eduOverlay").classList.add("hide"); G("mainApp").classList.remove("hide"); };
+
+function addActivity(text) {
+  const box=G("activityBox"); const empty=G("actEmpty"); if(empty) empty.remove();
+  const el=document.createElement("div"); el.className="af-item";
+  const now=new Date(); const ts=now.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  el.innerHTML=`<div class="af-dot"></div><span class="af-text">${esc(text)}</span><span class="af-time">${ts}</span>`;
+  const header=box.querySelector(".af-header");
+  box.insertBefore(el, header?header.nextSibling:box.firstChild);
+  const items=box.querySelectorAll(".af-item"); if(items.length>15) items[items.length-1].remove();
+}
+
+window.testSoundVib = function() {
+  unlockAudio(); const ctx=getACtx();
+  if(!ctx) { toast("⚠ Audio not supported"); return; }
+  ctx.resume().then(() => { _play(ctx,"ping"); if(cfg.vib) doVibrate([200,80,200]); toast("🔊 "+cap(cfg.soundType||"chime")+" — test!"); audioUnlocked=true; }).catch(() => toast("⚠ Tap screen first", 3000));
+};
+
+startTsRefresh();
 </script>
 </body>
 </html>
