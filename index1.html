@@ -2,242 +2,790 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>StudySync</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0c10;--bg2:#111318;--bg3:#181b22;--card:#1c2028;--card2:#222630;--border:#2a2f3a;--border2:#353b48;--text:#e8eaf0;--text2:#9aa0b0;--text3:#5a6070;--green:#22c55e;--green2:#16a34a;--gdim:#0f3022;--blue:#3b82f6;--blue2:#2563eb;--bdim:#0d1f3c;--amber:#f59e0b;--adim:#2d1f06;--red:#ef4444;--rdim:#2d0f0f;--purple:#8b5cf6;--pdim:#1e1230;--r:14px;--r2:10px}
+:root{
+  --bg:#07090f;--bg2:#0d1017;--bg3:#12161f;--card:#151922;--card2:#1a1f2b;
+  --border:#1e2535;--border2:#272f42;--text:#dde3f0;--text2:#8892a8;--text3:#3d4a5f;
+  --green:#00e896;--green2:#00b87a;--gdim:rgba(0,232,150,.08);
+  --blue:#4f8fff;--blue2:#2d6fe8;--bdim:rgba(79,143,255,.08);
+  --amber:#ffb930;--adim:rgba(255,185,48,.08);
+  --red:#ff4d6a;--rdim:rgba(255,77,106,.08);
+  --purple:#b06eff;--pdim:rgba(176,110,255,.08);
+  --r:16px;--r2:12px;--r3:8px;
+  --shadow:0 8px 32px rgba(0,0,0,.45);
+  --glow-blue:0 0 30px rgba(79,143,255,.2);
+  --glow-green:0 0 30px rgba(0,232,150,.2);
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
-button,input,textarea{font-family:'DM Sans',sans-serif;outline:none;border:none}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font-family:'Space Grotesk',sans-serif;outline:none;border:none}
 .hide{display:none!important}
-.screen{min-height:100vh;display:flex;flex-direction:column;animation:fadeIn .25s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.screen{min-height:100vh;display:flex;flex-direction:column}
 
-/* AUTH */
-#authScreen{background:radial-gradient(ellipse at 20% 20%,#1a2340,var(--bg) 60%);align-items:center;justify-content:center;padding:24px}
-.auth-logo{display:flex;align-items:center;gap:12px;margin-bottom:36px}
-.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.auth-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:32px;width:100%;max-width:400px}
-.tabs{display:flex;gap:4px;background:var(--bg3);border-radius:10px;padding:4px;margin-bottom:28px}
-.tab{flex:1;padding:10px;text-align:center;font-size:14px;font-weight:500;border-radius:8px;color:var(--text2);cursor:pointer;transition:all .2s}
-.tab.on{background:var(--card);color:var(--text)}
-.lbl{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:8px;display:block;text-transform:uppercase;letter-spacing:.06em}
-input.fi,textarea.fi{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:12px 16px;font-size:15px;color:var(--text);transition:border .2s}
-input.fi:focus,textarea.fi:focus{border-color:var(--blue)}
-input.fi::placeholder,textarea.fi::placeholder{color:var(--text3)}
-.fg{margin-bottom:18px}
-.btn-p{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue),#8b5cf6);border-radius:var(--r2);font-size:15px;font-weight:600;color:#fff;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:8px}
+/* ── GRAIN OVERLAY ── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.4;pointer-events:none;z-index:1000}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes bounceIn{0%{transform:scale(.6) translateY(20px);opacity:0}60%{transform:scale(1.05);opacity:1}100%{transform:scale(1)}}
+@keyframes tdot{0%,80%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-8px) scale(1.2)}}
+@keyframes ringPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,232,150,.4)}50%{box-shadow:0 0 0 6px rgba(0,232,150,0)}}
+@keyframes glow{0%,100%{opacity:.7}50%{opacity:1}}
+
+.anim-up{animation:fadeUp .3s cubic-bezier(.16,1,.3,1) both}
+.anim-pop{animation:popIn .35s cubic-bezier(.34,1.56,.64,1) both}
+
+/* ── AUTH ── */
+#authScreen{
+  background:var(--bg);
+  align-items:center;justify-content:center;padding:24px;
+  min-height:100vh;
+  position:relative;overflow:hidden;
+}
+#authScreen::after{
+  content:'';position:absolute;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(79,143,255,.06) 0%,transparent 70%);
+  top:-100px;left:-100px;pointer-events:none;
+}
+#authScreen::before{
+  content:'';position:absolute;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(176,110,255,.05) 0%,transparent 70%);
+  bottom:-100px;right:-100px;pointer-events:none;z-index:0;
+}
+
+.auth-wrap{position:relative;z-index:2;width:100%;max-width:400px}
+
+.auth-logo{display:flex;align-items:center;gap:14px;margin-bottom:40px;justify-content:center}
+.logo-mark{
+  width:54px;height:54px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  box-shadow:0 8px 24px rgba(79,143,255,.35);
+  position:relative;
+}
+.logo-mark::after{
+  content:'';position:absolute;inset:-1px;border-radius:17px;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+  pointer-events:none;
+}
+.logo-text{font-size:26px;font-weight:700;letter-spacing:-.5px}
+.logo-sub{font-size:11px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-top:2px}
+
+.auth-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px 24px;
+  box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.auth-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(79,143,255,.5),transparent);
+}
+
+.tabs{display:flex;gap:3px;background:var(--bg3);border-radius:10px;padding:3px;margin-bottom:26px}
+.tab{
+  flex:1;padding:10px;text-align:center;
+  font-size:13px;font-weight:600;border-radius:8px;
+  color:var(--text3);cursor:pointer;transition:all .25s;
+  letter-spacing:.02em;
+}
+.tab.on{background:var(--card2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+.fg{margin-bottom:16px}
+.lbl{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:7px;display:block;text-transform:uppercase;letter-spacing:.07em}
+.fi-wrap{position:relative}
+.fi-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;z-index:1}
+input.fi{
+  width:100%;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--r3);
+  padding:12px 14px 12px 40px;
+  font-size:14px;color:var(--text);
+  transition:border-color .2s,box-shadow .2s;
+  letter-spacing:.01em;
+}
+input.fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,143,255,.12)}
+input.fi::placeholder{color:var(--text3)}
+input.fi.no-icon{padding-left:14px}
+
+.btn-p{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,var(--blue2),var(--purple));
+  border-radius:var(--r2);
+  font-size:14px;font-weight:700;color:#fff;
+  cursor:pointer;
+  transition:opacity .2s,transform .15s,box-shadow .2s;
+  margin-top:6px;
+  letter-spacing:.03em;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 20px rgba(79,143,255,.3);
+}
+.btn-p::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.1),transparent);
+  pointer-events:none;
+}
+.btn-p:hover{box-shadow:0 6px 28px rgba(79,143,255,.45);transform:translateY(-1px)}
 .btn-p:active{transform:scale(.98);opacity:.9}
-.btn-p:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-s{width:100%;padding:12px;background:transparent;border:1px solid var(--border2);border-radius:var(--r2);font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;margin-top:8px}
-.btn-s:hover{border-color:var(--blue);color:var(--text)}
-.err{color:var(--red);font-size:13px;margin-top:10px;text-align:center;min-height:20px}
-.divider{text-align:center;font-size:12px;color:var(--text3);margin:18px 0;position:relative}
-.divider::before,.divider::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:var(--border)}
+.btn-p:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+.btn-s{
+  width:100%;padding:12px;
+  background:transparent;
+  border:1px solid var(--border2);
+  border-radius:var(--r2);
+  font-size:13px;font-weight:600;color:var(--text2);
+  cursor:pointer;transition:all .2s;margin-top:8px;
+  letter-spacing:.02em;
+}
+.btn-s:hover{border-color:var(--blue);color:var(--text);background:var(--bdim)}
+.btn-s:active{transform:scale(.98)}
+
+.err{
+  color:var(--red);font-size:12px;
+  margin-top:10px;text-align:center;min-height:18px;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.err:not(:empty)::before{content:'⚠';font-size:13px}
+
+.divider{text-align:center;font-size:11px;color:var(--text3);margin:18px 0;position:relative;letter-spacing:.08em;text-transform:uppercase}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border)}
 .divider::before{left:0}.divider::after{right:0}
-.pair-code{font-size:32px;font-weight:700;letter-spacing:.3em;color:var(--blue);margin:12px 0;font-family:monospace;text-align:center}
 
-/* TOPBAR */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50}
-.tbl{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:600}
-.ti{width:34px;height:34px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.icon-btn{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;position:relative}
+/* ── PAIR ── */
+#pairScreen{
+  background:var(--bg);
+  align-items:center;justify-content:center;padding:24px;
+  position:relative;overflow:hidden;
+}
+#pairScreen::before{
+  content:'';position:absolute;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(176,110,255,.06) 0%,transparent 70%);
+  top:-100px;right:-100px;pointer-events:none;
+}
 
-/* BOTTOM NAV */
-.bnav{display:flex;background:var(--bg2);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:50}
-.ni{flex:1;display:flex;flex-direction:column;align-items:center;padding:11px 0 9px;font-size:11px;color:var(--text3);cursor:pointer;gap:4px;transition:color .2s}
+.pcardw{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:30px 24px;
+  width:100%;max-width:420px;
+  box-shadow:var(--shadow);
+  position:relative;z-index:2;
+}
+.pcardw::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(176,110,255,.5),transparent);
+}
+
+.pair-code-box{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:var(--r2);padding:20px;text-align:center;margin-bottom:4px;
+}
+.pair-code{
+  font-size:34px;font-weight:700;
+  letter-spacing:.35em;
+  color:var(--blue);
+  font-family:'JetBrains Mono',monospace;
+  margin:8px 0;
+  text-shadow:var(--glow-blue);
+}
+
+/* ── MAIN APP ── */
+#mainApp{min-height:100vh;position:relative}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 16px;
+  background:rgba(13,16,23,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;
+}
+.topbar-logo{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;letter-spacing:-.3px}
+.topbar-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--blue),var(--purple));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.icon-btn{
+  width:36px;height:36px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;
+  transition:all .2s;
+}
+.icon-btn:hover{border-color:var(--border2);background:var(--card2)}
+.icon-btn:active{transform:scale(.92)}
+
+/* ── BOTTOM NAV ── */
+.bnav{
+  display:flex;
+  background:rgba(13,16,23,.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  position:fixed;bottom:0;left:0;right:0;z-index:50;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.ni{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:10px 0 8px;font-size:10px;font-weight:600;
+  color:var(--text3);cursor:pointer;gap:4px;
+  transition:color .2s;letter-spacing:.05em;text-transform:uppercase;
+  position:relative;
+}
 .ni.on{color:var(--blue)}
-.ni-icon{font-size:21px;line-height:1}
-.nbadge{position:absolute;top:-4px;right:-8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;border:1.5px solid var(--bg2)}
+.ni.on::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:30px;height:2px;background:var(--blue);border-radius:0 0 4px 4px;
+}
+.ni-icon{font-size:20px;line-height:1;transition:transform .2s}
+.ni.on .ni-icon{transform:scale(1.1)}
+.nbadge{
+  position:absolute;top:4px;right:calc(50% - 22px);
+  background:var(--red);color:#fff;
+  font-size:9px;font-weight:700;
+  padding:1px 5px;border-radius:10px;min-width:16px;text-align:center;
+  border:2px solid var(--bg2);
+  font-family:'JetBrains Mono',monospace;
+}
 
-/* HOME */
-#homeScreen .content{padding:18px 18px 90px}
-.partner-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:18px;position:relative;overflow:hidden}
-.partner-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),#8b5cf6)}
-.ptop{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;position:relative;flex-shrink:0}
-.ring{position:absolute;bottom:1px;right:1px;width:13px;height:13px;border-radius:50%;border:2.5px solid var(--card);background:var(--text3)}
-.ring.online{background:var(--green)}
+/* ── HOME ── */
+#homeScreen .content{padding:16px 16px 90px}
+
+.partner-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+  box-shadow:var(--shadow);
+  animation:fadeUp .3s ease both;
+}
+.partner-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--purple),var(--green));
+}
+
+.ptop{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.avatar{
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;
+  position:relative;flex-shrink:0;
+  box-shadow:0 4px 16px rgba(79,143,255,.3);
+}
+.ring{
+  position:absolute;bottom:0;right:0;
+  width:14px;height:14px;border-radius:50%;
+  border:2.5px solid var(--card);
+  background:var(--text3);
+  transition:background .3s;
+}
+.ring.online{background:var(--green);animation:ringPulse 2s ease infinite}
 .ring.busy{background:var(--red)}
 .ring.away{background:var(--amber)}
-.slbl{font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-block}
-.s-free{background:var(--gdim);color:var(--green)}.s-busy{background:var(--rdim);color:var(--red)}
-.s-wait{background:var(--adim);color:var(--amber)}.s-urgent{background:#3d1010;color:#f87171}
-.s-offline{background:var(--bg3);color:var(--text3)}.s-online{background:var(--gdim);color:var(--green)}
-.sec{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:12px}
-.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
-.sbtn{padding:16px 12px;border-radius:var(--r);border:1.5px solid var(--border);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;transition:all .2s;font-size:12px;font-weight:600;color:var(--text2)}
-.sbtn .se{font-size:26px;line-height:1}
-.sbtn:active{transform:scale(.96)}
-.sbtn.free{border-color:var(--green2);background:var(--gdim);color:var(--green)}
-.sbtn.busy{border-color:#b91c1c;background:var(--rdim);color:var(--red)}
-.sbtn.wait{border-color:#b45309;background:var(--adim);color:var(--amber)}
-.sbtn.urgent{border-color:#9f1239;background:#2d0a14;color:#fb7185}
+
+.slbl{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;letter-spacing:.05em;text-transform:uppercase}
+.s-free{background:var(--gdim);color:var(--green);border:1px solid rgba(0,232,150,.2)}
+.s-busy{background:var(--rdim);color:var(--red);border:1px solid rgba(255,77,106,.2)}
+.s-wait{background:var(--adim);color:var(--amber);border:1px solid rgba(255,185,48,.2)}
+.s-urgent{background:#3d0a14;color:#ff6b7a;border:1px solid rgba(255,77,106,.3)}
+.s-offline{background:rgba(255,255,255,.04);color:var(--text3);border:1px solid var(--border)}
+.s-online{background:var(--gdim);color:var(--green);border:1px solid rgba(0,232,150,.2)}
+.s-away{background:var(--adim);color:var(--amber);border:1px solid rgba(255,185,48,.2)}
+
+.sec{
+  font-size:10px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;
+}
+
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.sbtn{
+  padding:16px 12px;border-radius:var(--r2);
+  border:1.5px solid var(--border);background:var(--card);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  cursor:pointer;transition:all .2s;
+  font-size:11px;font-weight:700;color:var(--text2);
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.sbtn .se{font-size:24px;line-height:1;transition:transform .2s}
+.sbtn:active{transform:scale(.94)}
+.sbtn:active .se{transform:scale(.85)}
+.sbtn.free{border-color:rgba(0,232,150,.25);background:var(--gdim);color:var(--green)}
+.sbtn.busy{border-color:rgba(255,77,106,.25);background:var(--rdim);color:var(--red)}
+.sbtn.wait{border-color:rgba(255,185,48,.25);background:var(--adim);color:var(--amber)}
+.sbtn.urgent{border-color:rgba(255,107,122,.3);background:#1a0810;color:#ff6b7a}
 .sbtn.offline-btn{border-color:var(--border2);background:var(--bg3);color:var(--text3)}
-.sbtn.active-s{box-shadow:0 0 0 2px currentColor}
-.ping-btn{width:100%;padding:17px;background:linear-gradient(135deg,var(--green2),#059669);border-radius:var(--r);font-size:16px;font-weight:700;color:#fff;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(34,197,94,.25);margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:10px}
-.ping-btn:active{transform:scale(.98);opacity:.9}
+.sbtn.active-s{box-shadow:0 0 0 2px currentColor;transform:scale(.97)}
 
-/* CHAT */
-#chatScreen{display:flex;flex-direction:column}
-.msgs{flex:1;padding:18px;padding-bottom:80px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
-.mrow{display:flex;gap:8px;align-items:flex-end}
+.status-offline{
+  width:100%;flex-direction:row;justify-content:center;gap:10px;
+  margin-bottom:20px;padding:14px;
+}
+
+.ping-btn{
+  width:100%;padding:18px;
+  background:linear-gradient(135deg,var(--green2),#00a86b);
+  border-radius:var(--r);
+  font-size:15px;font-weight:800;color:#000;
+  cursor:pointer;transition:all .25s;
+  box-shadow:0 6px 28px rgba(0,232,150,.25);
+  margin-bottom:8px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  letter-spacing:.04em;text-transform:uppercase;
+  position:relative;overflow:hidden;
+}
+.ping-btn::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+}
+.ping-btn:hover{box-shadow:0 8px 36px rgba(0,232,150,.4);transform:translateY(-1px)}
+.ping-btn:active{transform:scale(.97);box-shadow:none}
+
+/* ── ACTIVITY ── */
+.activity-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;
+}
+.activity-item{
+  padding:11px 14px;border-bottom:1px solid var(--border);
+  font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  animation:slideIn .2s ease both;
+}
+.activity-item:last-child{border-bottom:none}
+.activity-time{color:var(--text3);font-size:10px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+
+/* ── CHAT ── */
+#chatScreen{display:flex;flex-direction:column;height:100vh}
+.msgs{
+  flex:1;padding:14px 14px 0;
+  overflow-y:auto;display:flex;flex-direction:column;gap:8px;
+  scroll-behavior:smooth;
+}
+.msgs::-webkit-scrollbar{width:3px}
+.msgs::-webkit-scrollbar-track{background:transparent}
+.msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+.mrow{display:flex;gap:8px;align-items:flex-end;animation:fadeUp .2s ease both}
 .mrow.mine{flex-direction:row-reverse}
-.mavatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,var(--blue));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
-.mbubble{max-width:72%;padding:10px 14px;border-radius:16px;font-size:14px;line-height:1.5;word-break:break-word}
-.mrow:not(.mine) .mbubble{background:var(--card2);border-bottom-left-radius:4px}
-.mrow.mine .mbubble{background:linear-gradient(135deg,var(--blue2),#8b5cf6);color:#fff;border-bottom-right-radius:4px}
-.mtime{font-size:10px;color:var(--text3);margin-top:3px;padding:0 3px}
+.mavatar{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--purple),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+.mrow.mine .mavatar{background:linear-gradient(135deg,var(--blue2),var(--blue))}
+.mbubble{
+  max-width:72%;padding:10px 14px;
+  border-radius:16px;font-size:14px;line-height:1.55;
+  word-break:break-word;
+}
+.mrow:not(.mine) .mbubble{
+  background:var(--card2);border:1px solid var(--border);
+  border-bottom-left-radius:4px;
+  color:var(--text);
+}
+.mrow.mine .mbubble{
+  background:linear-gradient(135deg,var(--blue2),#4060d0);
+  color:#fff;border-bottom-right-radius:4px;
+  box-shadow:0 3px 14px rgba(79,143,255,.3);
+}
+.mtime{font-size:10px;color:var(--text3);margin-top:3px;padding:0 2px;font-family:'JetBrains Mono',monospace}
 .mrow.mine .mtime{text-align:right}
-.typing-row{display:flex;gap:8px;align-items:flex-end;padding:0 18px 8px}
-.tdots{display:flex;gap:4px;align-items:center;padding:10px 13px;background:var(--card2);border-radius:16px;border-bottom-left-radius:4px}
-.td{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:tb 1.2s ease infinite}
-.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
-@keyframes tb{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
-.chat-ia{position:fixed;bottom:60px;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);padding:10px 14px;display:flex;gap:8px;align-items:flex-end;z-index:40}
-textarea.ci{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:9px 14px;font-size:14px;color:var(--text);max-height:110px;resize:none;line-height:1.4;transition:border .2s}
-textarea.ci:focus{border-color:var(--blue)}
-.send-btn{width:40px;height:40px;background:linear-gradient(135deg,var(--blue),#8b5cf6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;flex-shrink:0;transition:transform .1s}
-.send-btn:active{transform:scale(.9)}
 
-/* SETTINGS */
-#settingsScreen .content{padding:18px 18px 90px}
-.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:4px}
-.srow{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.typing-row{display:flex;gap:8px;align-items:flex-end;padding:4px 14px 8px}
+.tdots{
+  display:flex;gap:4px;align-items:center;
+  padding:10px 13px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:16px;border-bottom-left-radius:4px;
+}
+.td{width:5px;height:5px;background:var(--text3);border-radius:50%;animation:tdot 1.3s ease infinite}
+.td:nth-child(2){animation-delay:.18s}.td:nth-child(3){animation-delay:.36s}
+
+.chat-ia{
+  position:sticky;bottom:0;
+  background:rgba(13,16,23,.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  padding:10px 12px;padding-bottom:calc(10px + env(safe-area-inset-bottom));
+  display:flex;gap:8px;align-items:flex-end;
+  z-index:40;
+}
+textarea.ci{
+  flex:1;background:var(--bg3);border:1px solid var(--border);
+  border-radius:18px;padding:10px 14px;
+  font-size:14px;color:var(--text);
+  max-height:110px;resize:none;line-height:1.45;
+  transition:border-color .2s,box-shadow .2s;
+}
+textarea.ci:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(79,143,255,.1)}
+textarea.ci::placeholder{color:var(--text3)}
+.send-btn{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,var(--blue2),var(--purple));
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;flex-shrink:0;
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:0 4px 14px rgba(79,143,255,.35);
+}
+.send-btn:active{transform:scale(.87)}
+.chat-date-sep{
+  text-align:center;font-size:10px;color:var(--text3);
+  padding:8px 0;font-family:'JetBrains Mono',monospace;
+  letter-spacing:.05em;text-transform:uppercase;
+}
+
+/* ── SETTINGS ── */
+#settingsScreen .content{padding:16px 16px 90px}
+.scard{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);overflow:hidden;margin-bottom:4px;
+}
+.srow{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;border-bottom:1px solid var(--border);
+  transition:background .2s;cursor:default;
+}
 .srow:last-child{border-bottom:none}
+.srow:hover{background:var(--card2)}
 .srl{display:flex;align-items:center;gap:12px}
-.sic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.ib{background:var(--bdim)}.ig{background:var(--gdim)}.ip{background:var(--pdim)}.ia{background:var(--adim)}.ir{background:var(--rdim)}
-.toggle{width:44px;height:24px;background:var(--bg3);border:1.5px solid var(--border2);border-radius:20px;position:relative;cursor:pointer;transition:background .2s}
+.sic{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+}
+.ib{background:var(--bdim)}.ig{background:var(--gdim)}.ip{background:var(--pdim)}
+.ia{background:var(--adim)}.ir{background:var(--rdim)}
+
+.toggle{
+  width:44px;height:25px;
+  background:var(--bg3);border:1.5px solid var(--border2);
+  border-radius:20px;position:relative;cursor:pointer;transition:all .25s;
+}
 .toggle.on{background:var(--blue);border-color:var(--blue)}
-.toggle::after{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;left:2px;transition:transform .2s}
-.toggle.on::after{transform:translateX(20px)}
-.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:18px}
-.pavatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex-shrink:0}
-.danger-btn{width:100%;padding:13px;background:var(--rdim);border:1px solid #7f1d1d;border-radius:var(--r2);font-size:14px;font-weight:600;color:var(--red);cursor:pointer;margin-top:8px}
+.toggle::after{
+  content:'';position:absolute;
+  width:17px;height:17px;background:#fff;border-radius:50%;
+  top:2px;left:2px;transition:transform .25s;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+.toggle.on::after{transform:translateX(19px)}
 
-/* ALERT */
-.aoverlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;animation:ai .3s cubic-bezier(.34,1.56,.64,1)}
-@keyframes ai{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
-.abox{background:var(--card);border:2px solid var(--green);border-radius:20px;padding:30px 26px;width:100%;max-width:320px;text-align:center}
-.aemoji{font-size:52px;margin-bottom:14px;display:block;animation:pulse 1s ease infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-.atitle{font-size:20px;font-weight:700;margin-bottom:6px;color:var(--green)}
-.abody{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.5}
-.adismiss{padding:13px;background:linear-gradient(135deg,var(--green2),#059669);border-radius:12px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;width:100%}
+.pcard{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px;
+  display:flex;align-items:center;gap:14px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+}
+.pcard::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
+}
+.pavatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:700;flex-shrink:0;
+  box-shadow:0 4px 16px rgba(79,143,255,.3);
+}
 
-/* PAIR SCREEN */
-#pairScreen{align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse at 70% 80%,#1a1040,var(--bg) 60%)}
-.pcardw{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:30px 26px;width:100%;max-width:420px}
+.sec-label{
+  font-size:10px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.1em;
+  margin:0 0 8px 2px;
+}
+.danger-btn{
+  width:100%;padding:13px;
+  background:var(--rdim);border:1px solid rgba(255,77,106,.2);
+  border-radius:var(--r2);font-size:13px;font-weight:700;color:var(--red);
+  cursor:pointer;margin-top:10px;
+  transition:all .2s;letter-spacing:.04em;text-transform:uppercase;
+}
+.danger-btn:hover{background:rgba(255,77,106,.15);border-color:rgba(255,77,106,.35)}
+.danger-btn:active{transform:scale(.98)}
 
-/* EDU */
-#eduOverlay{background:linear-gradient(135deg,#0f172a,#1e1b4b);padding:26px 22px;min-height:100vh}
-.ecard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:18px;margin-bottom:14px}
-.eprog{height:5px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:12px;overflow:hidden}
-.eprogf{height:100%;background:linear-gradient(90deg,var(--blue),#8b5cf6);border-radius:3px}
+/* ── ALERT ── */
+.aoverlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.88);
+  backdrop-filter:blur(8px);
+  z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;
+  animation:fadeUp .2s ease both;
+}
+.abox{
+  background:var(--card);
+  border:1px solid rgba(0,232,150,.25);
+  border-radius:24px;padding:32px 26px;
+  width:100%;max-width:320px;text-align:center;
+  box-shadow:0 16px 60px rgba(0,0,0,.6),var(--glow-green);
+  animation:bounceIn .4s cubic-bezier(.34,1.56,.64,1) both;
+  position:relative;overflow:hidden;
+}
+.abox::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,232,150,.5),transparent);
+}
+.aemoji{font-size:54px;margin-bottom:14px;display:block;animation:pulse 1s ease infinite}
+.atitle{font-size:20px;font-weight:800;margin-bottom:6px;color:var(--green);letter-spacing:-.3px}
+.abody{font-size:14px;color:var(--text2);margin-bottom:22px;line-height:1.55}
+.adismiss{
+  padding:13px;
+  background:linear-gradient(135deg,var(--green2),#00a86b);
+  border-radius:12px;font-size:14px;font-weight:800;color:#000;
+  cursor:pointer;width:100%;
+  transition:opacity .2s,transform .15s;
+  letter-spacing:.04em;text-transform:uppercase;
+}
+.adismiss:active{transform:scale(.97)}
 
-/* TOAST */
-.toast{position:fixed;top:76px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--card2);border:1px solid var(--border2);border-radius:30px;padding:9px 18px;font-size:13px;font-weight:500;color:var(--text);z-index:998;opacity:0;transition:all .3s;white-space:nowrap;pointer-events:none}
+/* ── EDU OVERLAY ── */
+#eduOverlay{
+  background:var(--bg);
+  min-height:100vh;padding:24px 18px;
+  overflow-y:auto;
+}
+.edu-header{
+  display:flex;align-items:center;gap:14px;margin-bottom:28px;
+  padding-top:8px;
+}
+.ecard{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px;margin-bottom:12px;
+  transition:border-color .2s,transform .2s;
+  animation:fadeUp .3s ease both;
+}
+.ecard:nth-child(2){animation-delay:.05s}
+.ecard:nth-child(3){animation-delay:.1s}
+.ecard:nth-child(4){animation-delay:.15s}
+.ecard:nth-child(5){animation-delay:.2s}
+.ecard:hover{border-color:var(--border2);transform:translateY(-1px)}
+.eprog{height:4px;background:var(--border);border-radius:3px;margin-top:14px;overflow:hidden}
+.eprogf{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px;transition:width .6s ease}
+.eprog-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-top:6px;font-family:'JetBrains Mono',monospace}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;top:72px;left:50%;
+  transform:translateX(-50%) translateY(-20px);
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:30px;padding:9px 18px;
+  font-size:12px;font-weight:600;color:var(--text);
+  z-index:998;opacity:0;
+  transition:all .3s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;pointer-events:none;
+  box-shadow:var(--shadow);
+  letter-spacing:.02em;
+}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* SPINNER */
-.spin{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px}
-@keyframes sp{to{transform:rotate(360deg)}}
+/* ── SPINNER ── */
+.spin{
+  display:inline-block;width:15px;height:15px;
+  border:2px solid rgba(255,255,255,.25);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin .7s linear infinite;
+  vertical-align:middle;margin-right:6px;
+}
 
-@media(min-width:600px){.sgrid{grid-template-columns:repeat(4,1fr)}}
+/* ── LOADING SCREEN ── */
+#loadingScreen{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;
+  transition:opacity .4s ease;
+}
+#loadingScreen.fade{opacity:0;pointer-events:none}
+.loading-logo{
+  width:64px;height:64px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+  animation:pulse 1.5s ease infinite;
+  box-shadow:0 8px 32px rgba(79,143,255,.35);
+}
+
+/* ── ONLINE INDICATOR ── */
+.online-dot{
+  width:8px;height:8px;background:var(--green);border-radius:50%;
+  animation:pulse 2s ease infinite;display:inline-block;margin-right:6px;
+}
+
+@media(min-width:600px){
+  .sgrid{grid-template-columns:repeat(4,1fr)}
+  .auth-wrap,.pcardw{max-width:420px}
+}
 </style>
 </head>
 <body>
 
+<!-- LOADING -->
+<div id="loadingScreen">
+  <div class="loading-logo">📚</div>
+</div>
+
 <!-- AUTH -->
-<div id="authScreen" class="screen">
-  <div class="auth-logo">
-    <div class="logo-icon">📚</div>
-    <div>
-      <div style="font-size:22px;font-weight:600">StudySync</div>
-      <div style="font-size:11px;color:var(--text2)">Smart Learning Companion</div>
+<div id="authScreen" class="screen hide">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <div class="logo-mark">📚</div>
+      <div>
+        <div class="logo-text">StudySync</div>
+        <div class="logo-sub">Smart Learning Companion</div>
+      </div>
     </div>
-  </div>
-  <div class="auth-card">
-    <div class="tabs">
-      <div class="tab on" onclick="authTab('login')">Sign In</div>
-      <div class="tab" onclick="authTab('reg')">Create Account</div>
-    </div>
-    <div id="loginForm">
-      <div class="fg"><label class="lbl">Email</label><input class="fi" type="email" id="lEmail" placeholder="your@email.com" autocomplete="email"></div>
-      <div class="fg"><label class="lbl">Password</label><input class="fi" type="password" id="lPwd" placeholder="••••••••" autocomplete="current-password"></div>
-      <button class="btn-p" id="lBtn" onclick="doLogin()">Sign In to StudySync</button>
-      <div id="lErr" class="err"></div>
-    </div>
-    <div id="regForm" class="hide">
-      <div class="fg"><label class="lbl">Display Name</label><input class="fi" type="text" id="rName" placeholder="Your name" autocomplete="name"></div>
-      <div class="fg"><label class="lbl">Email</label><input class="fi" type="email" id="rEmail" placeholder="your@email.com" autocomplete="email"></div>
-      <div class="fg"><label class="lbl">Password</label><input class="fi" type="password" id="rPwd" placeholder="Min 6 characters" autocomplete="new-password"></div>
-      <button class="btn-p" id="rBtn" onclick="doRegister()">Create Account</button>
-      <div id="rErr" class="err"></div>
+    <div class="auth-card anim-up">
+      <div class="tabs">
+        <div class="tab on" onclick="authTab('login')">Sign In</div>
+        <div class="tab" onclick="authTab('reg')">New Account</div>
+      </div>
+
+      <!-- LOGIN -->
+      <div id="loginForm">
+        <div class="fg">
+          <label class="lbl">Email</label>
+          <div class="fi-wrap">
+            <span class="fi-icon">✉️</span>
+            <input class="fi" type="email" id="lEmail" placeholder="you@email.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="fg">
+          <label class="lbl">Password</label>
+          <div class="fi-wrap">
+            <span class="fi-icon">🔒</span>
+            <input class="fi" type="password" id="lPwd" placeholder="••••••••" autocomplete="current-password">
+          </div>
+        </div>
+        <button class="btn-p" id="lBtn" onclick="doLogin()">Sign In</button>
+        <div id="lErr" class="err"></div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="regForm" class="hide">
+        <div class="fg">
+          <label class="lbl">Display Name</label>
+          <div class="fi-wrap">
+            <span class="fi-icon">👤</span>
+            <input class="fi" type="text" id="rName" placeholder="Your name" autocomplete="name">
+          </div>
+        </div>
+        <div class="fg">
+          <label class="lbl">Email</label>
+          <div class="fi-wrap">
+            <span class="fi-icon">✉️</span>
+            <input class="fi" type="email" id="rEmail" placeholder="you@email.com" autocomplete="email">
+          </div>
+        </div>
+        <div class="fg">
+          <label class="lbl">Password</label>
+          <div class="fi-wrap">
+            <span class="fi-icon">🔒</span>
+            <input class="fi" type="password" id="rPwd" placeholder="Min 6 characters" autocomplete="new-password">
+          </div>
+        </div>
+        <button class="btn-p" id="rBtn" onclick="doRegister()">Create Account</button>
+        <div id="rErr" class="err"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- PAIR -->
 <div id="pairScreen" class="screen hide">
-  <div class="pcardw">
-    <div style="text-align:center;margin-bottom:24px">
-      <div style="font-size:36px;margin-bottom:10px">🔗</div>
-      <h2 style="font-size:20px;font-weight:700;margin-bottom:6px">Connect with Partner</h2>
-      <p style="font-size:13px;color:var(--text2);line-height:1.6">Share your invite code or enter your partner's code to pair.</p>
+  <div class="pcardw anim-pop">
+    <div style="text-align:center;margin-bottom:26px">
+      <div style="font-size:40px;margin-bottom:12px">🔗</div>
+      <h2 style="font-size:20px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px">Connect with Partner</h2>
+      <p style="font-size:13px;color:var(--text2);line-height:1.6">Share your code or enter your partner's code to pair.</p>
     </div>
-    <div class="fg" style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:18px;text-align:center;margin-bottom:4px">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:4px">Your invite code</div>
-      <div class="pair-code" id="myCode">------</div>
-      <button class="btn-s" onclick="copyCode()" style="margin-top:4px;width:auto;padding:8px 18px">📋 Copy</button>
+    <div class="pair-code-box">
+      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">Your Invite Code</div>
+      <div class="pair-code" id="myCode">······</div>
+      <button class="btn-s" onclick="copyCode()" style="margin-top:6px;width:auto;padding:8px 20px;font-size:12px">📋 Copy Code</button>
     </div>
-    <div class="divider">OR</div>
-    <div class="fg"><label class="lbl">Enter Partner's Code</label><input class="fi" type="text" id="pCode" placeholder="6-character code" maxlength="6" style="text-transform:uppercase;letter-spacing:.2em;font-size:18px;text-align:center"></div>
-    <button class="btn-p" id="pBtn" onclick="doPair()">🔗 Connect Partner</button>
+    <div class="divider">or enter partner's code</div>
+    <div class="fg">
+      <label class="lbl">Partner's Code</label>
+      <input class="fi no-icon" type="text" id="pCode" placeholder="· · · · · ·" maxlength="6" style="text-transform:uppercase;letter-spacing:.3em;font-size:20px;text-align:center;font-family:'JetBrains Mono',monospace">
+    </div>
+    <button class="btn-p" id="pBtn" onclick="doPair()">Connect Partner →</button>
     <div id="pErr" class="err"></div>
-    <button class="btn-s" onclick="logout()" style="margin-top:12px">← Sign Out</button>
+    <button class="btn-s" onclick="logout()">← Sign Out</button>
   </div>
 </div>
 
 <!-- MAIN APP -->
-<div id="mainApp" class="hide" style="min-height:100vh">
+<div id="mainApp" class="hide">
 
   <!-- HOME -->
   <div id="homeScreen" class="screen">
     <div class="topbar">
-      <div class="tbl"><div class="ti" onclick="logoTap()" style="cursor:pointer">📚</div>StudySync</div>
+      <div class="topbar-logo">
+        <div class="topbar-icon" onclick="logoTap()" style="cursor:pointer">📚</div>
+        StudySync
+      </div>
       <div style="display:flex;gap:8px">
-        <div class="icon-btn" onclick="showEdu()">🎓</div>
+        <div class="icon-btn" onclick="showEdu()" title="Study Progress">🎓</div>
         <div class="icon-btn" id="notifBtn">🔔</div>
       </div>
     </div>
     <div class="content">
+      <!-- Partner Card -->
       <div class="partner-card">
         <div class="ptop">
-          <div class="avatar"><span id="pInit">?</span><div class="ring" id="pRing"></div></div>
+          <div class="avatar">
+            <span id="pInit">?</span>
+            <div class="ring" id="pRing"></div>
+          </div>
           <div>
-            <div style="font-size:17px;font-weight:600;margin-bottom:4px" id="pName">Waiting for partner…</div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:5px;letter-spacing:-.2px" id="pName">No partner yet</div>
             <span class="slbl s-offline" id="pStat">Offline</span>
           </div>
         </div>
-        <div style="font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px" id="pLast">🕐 Last active: —</div>
+        <div style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace" id="pLast">
+          🕐 Last active: —
+        </div>
       </div>
+
+      <!-- My Status -->
       <p class="sec">My Status</p>
       <div class="sgrid">
-        <button class="sbtn free" id="bFree" onclick="setStatus('free')"><span class="se">🟢</span>FREE</button>
-        <button class="sbtn busy" id="bBusy" onclick="setStatus('busy')"><span class="se">🔴</span>BUSY</button>
-        <button class="sbtn wait" id="bWait" onclick="setStatus('wait')"><span class="se">⏳</span>WAIT 5</button>
-        <button class="sbtn urgent" id="bUrgent" onclick="setStatus('urgent')"><span class="se">🚨</span>URGENT</button>
+        <button class="sbtn free" id="bFree" onclick="setStatus('free')"><span class="se">🟢</span>Free</button>
+        <button class="sbtn busy" id="bBusy" onclick="setStatus('busy')"><span class="se">🔴</span>Busy</button>
+        <button class="sbtn wait" id="bWait" onclick="setStatus('wait')"><span class="se">⏳</span>Wait 5</button>
+        <button class="sbtn urgent" id="bUrgent" onclick="setStatus('urgent')"><span class="se">🚨</span>Urgent</button>
       </div>
-      <button class="sbtn offline-btn" id="bOffline" onclick="setStatus('offline')" style="width:100%;flex-direction:row;justify-content:center;gap:10px;margin-bottom:18px"><span class="se">⚫</span>SET OFFLINE</button>
+      <button class="sbtn offline-btn status-offline" id="bOffline" onclick="setStatus('offline')">
+        <span class="se">⚫</span>Set Offline
+      </button>
+
+      <!-- Ping -->
       <p class="sec">Quick Ping</p>
-      <button class="ping-btn" onclick="sendPing()">📡 SEND PING TO PARTNER</button>
-      <div style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:18px">Tap to instantly notify your partner</div>
+      <button class="ping-btn" onclick="sendPing()">
+        📡 Ping Partner
+      </button>
+      <div style="font-size:11px;color:var(--text3);text-align:center;margin-bottom:20px;letter-spacing:.02em">Instantly notify your study partner</div>
+
+      <!-- Activity -->
       <p class="sec">Recent Activity</p>
-      <div id="activityBox" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden">
-        <div id="actEmpty" style="padding:18px;text-align:center;color:var(--text3);font-size:13px">No recent activity</div>
+      <div class="activity-box" id="activityBox">
+        <div id="actEmpty" style="padding:20px;text-align:center;color:var(--text3);font-size:12px">No recent activity yet</div>
       </div>
     </div>
   </div>
@@ -246,16 +794,19 @@ textarea.ci:focus{border-color:var(--blue)}
   <div id="chatScreen" class="screen hide">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:10px">
-        <div class="avatar" style="width:36px;height:36px;font-size:14px"><span id="cInit">?</span><div class="ring" id="cRing"></div></div>
+        <div class="avatar" style="width:36px;height:36px;font-size:13px">
+          <span id="cInit">?</span>
+          <div class="ring" id="cRing"></div>
+        </div>
         <div>
-          <div style="font-size:14px;font-weight:600" id="cName">Partner</div>
-          <div style="font-size:12px;color:var(--text3)" id="cStat">Offline</div>
+          <div style="font-size:14px;font-weight:700;letter-spacing:-.2px" id="cName">Partner</div>
+          <div style="font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace" id="cStat">Offline</div>
         </div>
       </div>
       <div class="icon-btn" onclick="toggleAutoDelete()" id="adBtn" title="Auto-delete 24h">⏰</div>
     </div>
     <div class="msgs" id="msgBox">
-      <div style="text-align:center;color:var(--text3);font-size:12px;padding:14px">Messages are private. Auto-delete: <span id="adStatus">off</span></div>
+      <div class="chat-date-sep">Messages are end-to-end private · Auto-delete: <span id="adStatus">off</span></div>
     </div>
     <div id="typRow" class="typing-row hide">
       <div class="mavatar" id="typInit">?</div>
@@ -270,59 +821,117 @@ textarea.ci:focus{border-color:var(--blue)}
   <!-- SETTINGS -->
   <div id="settingsScreen" class="screen hide">
     <div class="topbar">
-      <div class="tbl">⚙️ Settings</div>
+      <div class="topbar-logo">⚙️ Settings</div>
       <div class="icon-btn" onclick="logout()">🚪</div>
     </div>
     <div class="content">
       <div class="pcard">
         <div class="pavatar" id="myAv">U</div>
         <div>
-          <div style="font-size:16px;font-weight:600" id="myNm">User</div>
-          <div style="font-size:12px;color:var(--text2)" id="myEm">user@email.com</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:3px">Paired ✓</div>
+          <div style="font-size:16px;font-weight:700;letter-spacing:-.2px" id="myNm">User</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px" id="myEm">user@email.com</div>
+          <div style="font-size:10px;color:var(--green);margin-top:4px;font-weight:600;letter-spacing:.04em">
+            <span class="online-dot"></span>PAIRED & CONNECTED
+          </div>
         </div>
       </div>
-      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Notifications</div>
-      <div class="scard" style="margin-bottom:16px">
-        <div class="srow"><div class="srl"><div class="sic ib">📳</div><div><div style="font-size:14px;font-weight:500">Vibration</div><div style="font-size:11px;color:var(--text3)">Vibrate on ping</div></div></div><div class="toggle on" id="tVib" onclick="togS('vib')"></div></div>
-        <div class="srow"><div class="srl"><div class="sic ig">🔊</div><div><div style="font-size:14px;font-weight:500">Sound</div><div style="font-size:11px;color:var(--text3)">Alert sound on ping</div></div></div><div class="toggle on" id="tSnd" onclick="togS('snd')"></div></div>
-        <div class="srow"><div class="srl"><div class="sic ip">🥷</div><div><div style="font-size:14px;font-weight:500">Stealth Mode</div><div style="font-size:11px;color:var(--text3)">Disguise notifications</div></div></div><div class="toggle" id="tSte" onclick="togS('ste')"></div></div>
+
+      <div class="sec-label" style="margin-top:4px">Notifications</div>
+      <div class="scard" style="margin-bottom:14px">
+        <div class="srow">
+          <div class="srl">
+            <div class="sic ib">📳</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">Vibration</div>
+              <div style="font-size:11px;color:var(--text3)">Vibrate on ping</div>
+            </div>
+          </div>
+          <div class="toggle on" id="tVib" onclick="togS('vib')"></div>
+        </div>
+        <div class="srow">
+          <div class="srl">
+            <div class="sic ig">🔊</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">Sound</div>
+              <div style="font-size:11px;color:var(--text3)">Alert sound on ping</div>
+            </div>
+          </div>
+          <div class="toggle on" id="tSnd" onclick="togS('snd')"></div>
+        </div>
+        <div class="srow">
+          <div class="srl">
+            <div class="sic ip">🥷</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">Stealth Mode</div>
+              <div style="font-size:11px;color:var(--text3)">Disguise notifications</div>
+            </div>
+          </div>
+          <div class="toggle" id="tSte" onclick="togS('ste')"></div>
+        </div>
       </div>
-      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Stealth Text</div>
-      <div class="scard" style="margin-bottom:16px">
+
+      <div class="sec-label">Stealth Text</div>
+      <div class="scard" style="margin-bottom:14px">
         <div class="srow" style="flex-direction:column;align-items:flex-start;gap:10px">
-          <div style="font-size:13px;color:var(--text2)">Custom fake notification title</div>
-          <input class="fi" id="steText" value="Reminder updated." placeholder="Fake title" style="width:100%">
-          <button class="btn-s" onclick="saveSte()" style="width:auto;padding:7px 16px;margin-top:0">Save</button>
+          <div style="font-size:13px;color:var(--text2)">Custom fake notification title shown in stealth mode</div>
+          <input class="fi no-icon" id="steText" value="Reminder updated." placeholder="Fake notification title" style="width:100%">
+          <button class="btn-s" onclick="saveSte()" style="width:auto;padding:8px 18px;margin-top:0;font-size:12px">Save ✓</button>
         </div>
       </div>
-      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Chat</div>
-      <div class="scard" style="margin-bottom:16px">
-        <div class="srow"><div class="srl"><div class="sic ia">🗑️</div><div><div style="font-size:14px;font-weight:500">Auto-Delete</div><div style="font-size:11px;color:var(--text3)">Delete messages after 24h</div></div></div><div class="toggle" id="tAD" onclick="togS('ad')"></div></div>
+
+      <div class="sec-label">Chat</div>
+      <div class="scard" style="margin-bottom:14px">
+        <div class="srow">
+          <div class="srl">
+            <div class="sic ia">🗑️</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">Auto-Delete Messages</div>
+              <div style="font-size:11px;color:var(--text3)">Erase messages after 24 hours</div>
+            </div>
+          </div>
+          <div class="toggle" id="tAD" onclick="togS('ad')"></div>
+        </div>
       </div>
-      <div style="font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px 2px">Account</div>
+
+      <div class="sec-label">Account</div>
       <div class="scard">
-        <div class="srow" onclick="unpair()" style="cursor:pointer"><div class="srl"><div class="sic ir">🔓</div><div><div style="font-size:14px;font-weight:500">Unpair Account</div><div style="font-size:11px;color:var(--text3)">Disconnect from partner</div></div></div><span style="color:var(--text3);font-size:18px">›</span></div>
+        <div class="srow" onclick="unpair()" style="cursor:pointer">
+          <div class="srl">
+            <div class="sic ir">🔓</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">Unpair Account</div>
+              <div style="font-size:11px;color:var(--text3)">Disconnect from current partner</div>
+            </div>
+          </div>
+          <span style="color:var(--text3);font-size:20px">›</span>
+        </div>
       </div>
-      <button class="danger-btn" onclick="logout()">Sign Out</button>
+      <button class="danger-btn" onclick="logout()">🚪 Sign Out</button>
     </div>
   </div>
 
   <!-- BOTTOM NAV -->
   <div class="bnav">
-    <div class="ni on" id="nHome" onclick="goTab('home')"><span class="ni-icon">🏠</span>Home</div>
-    <div class="ni" id="nChat" onclick="goTab('chat')" style="position:relative"><span class="ni-icon">💬</span>Messages<span class="nbadge hide" id="cBadge">0</span></div>
-    <div class="ni" id="nSets" onclick="goTab('settings')"><span class="ni-icon">⚙️</span>Settings</div>
+    <div class="ni on" id="nHome" onclick="goTab('home')">
+      <span class="ni-icon">🏠</span>Home
+    </div>
+    <div class="ni" id="nChat" onclick="goTab('chat')" style="position:relative">
+      <span class="ni-icon">💬</span>Chat
+      <span class="nbadge hide" id="cBadge">0</span>
+    </div>
+    <div class="ni" id="nSets" onclick="goTab('settings')">
+      <span class="ni-icon">⚙️</span>Settings
+    </div>
   </div>
 </div>
 
-<!-- ALERT -->
+<!-- PING ALERT -->
 <div class="aoverlay hide" id="alertOv">
   <div class="abox">
     <span class="aemoji" id="aEmoji">📡</span>
     <div class="atitle" id="aTitle">Partner Pinged!</div>
-    <div class="abody" id="aBody">Your partner just sent you a ping!</div>
-    <button class="adismiss" onclick="G('alertOv').classList.add('hide')">Got it! ✓</button>
+    <div class="abody" id="aBody">Your study partner just sent you a ping!</div>
+    <button class="adismiss" onclick="dismissAlert()">Got it! ✓</button>
   </div>
 </div>
 
@@ -331,15 +940,55 @@ textarea.ci:focus{border-color:var(--blue)}
 
 <!-- EDU OVERLAY -->
 <div id="eduOverlay" class="hide">
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-    <div style="font-size:28px">📚</div>
-    <div><div style="font-size:18px;font-weight:600">Study Progress</div><div style="font-size:12px;color:var(--text2)">Track your learning journey</div></div>
+  <div class="edu-header">
+    <div style="font-size:32px">📚</div>
+    <div>
+      <div style="font-size:18px;font-weight:800;letter-spacing:-.3px">Study Progress</div>
+      <div style="font-size:12px;color:var(--text2)">Track your learning journey</div>
+    </div>
   </div>
-  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">📖 Mathematics — Chapter 7</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Quadratic equations and applications. Next: Factoring polynomials.</div><div class="eprog"><div class="eprogf" style="width:68%"></div></div></div>
-  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">🧬 Biology — Unit 3</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Cell division and genetics. Next: Meiosis phases.</div><div class="eprog"><div class="eprogf" style="width:44%"></div></div></div>
-  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">📝 English Literature</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Shakespearean analysis — Hamlet. Next: Act IV symbolism.</div><div class="eprog"><div class="eprogf" style="width:82%"></div></div></div>
-  <div class="ecard"><div style="font-size:15px;font-weight:600;margin-bottom:6px">🔬 Physics — Mechanics</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Newton's laws and projectile motion. Review kinematics.</div><div class="eprog"><div class="eprogf" style="width:31%"></div></div></div>
-  <button onclick="hideEdu()" style="margin-top:20px;padding:13px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--r2);font-size:13px;font-weight:500;color:var(--text2);width:100%;cursor:pointer">← Back to Dashboard</button>
+
+  <div class="ecard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-size:15px;font-weight:700">📐 Mathematics — Ch.7</div>
+      <span class="slbl s-free">68%</span>
+    </div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6">Quadratic equations and applications. Next: Factoring polynomials.</div>
+    <div class="eprog"><div class="eprogf" style="width:68%"></div></div>
+    <div class="eprog-label"><span>Progress</span><span>68 / 100</span></div>
+  </div>
+
+  <div class="ecard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-size:15px;font-weight:700">🧬 Biology — Unit 3</div>
+      <span class="slbl s-wait">44%</span>
+    </div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6">Cell division and genetics. Next: Meiosis phases and chromosome structure.</div>
+    <div class="eprog"><div class="eprogf" style="width:44%"></div></div>
+    <div class="eprog-label"><span>Progress</span><span>44 / 100</span></div>
+  </div>
+
+  <div class="ecard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-size:15px;font-weight:700">📝 English Literature</div>
+      <span class="slbl s-free">82%</span>
+    </div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6">Shakespearean analysis — Hamlet. Next: Act IV symbolism and themes.</div>
+    <div class="eprog"><div class="eprogf" style="width:82%"></div></div>
+    <div class="eprog-label"><span>Progress</span><span>82 / 100</span></div>
+  </div>
+
+  <div class="ecard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <div style="font-size:15px;font-weight:700">🔬 Physics — Mechanics</div>
+      <span class="slbl s-busy">31%</span>
+    </div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.6">Newton's laws and projectile motion. Review kinematics equations.</div>
+    <div class="eprog"><div class="eprogf" style="width:31%"></div></div>
+    <div class="eprog-label"><span>Progress</span><span>31 / 100</span></div>
+  </div>
+
+  <button onclick="hideEdu()" style="margin-top:8px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);font-size:13px;font-weight:600;color:var(--text2);width:100%;cursor:pointer;transition:all .2s">← Back to Dashboard</button>
 </div>
 
 <script type="module">
@@ -347,24 +996,28 @@ import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-ap
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut,updateProfile}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import{getFirestore,doc,setDoc,getDoc,onSnapshot,collection,addDoc,query,orderBy,limit,serverTimestamp,updateDoc,deleteDoc,where,getDocs,Timestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC0usOnYDlA8X9GH_JDUZIqKkdwKIkoAko",
-  authDomain: "sumudevils.firebaseapp.com",
-  projectId: "sumudevils",
-  storageBucket: "sumudevils.firebasestorage.app",
-  messagingSenderId: "1090519412620",
-  appId: "1:1090519412620:web:221ec7ddd27b65cd1130a9",
-  measurementId: "G-76DYJ2YE9J"
+const firebaseConfig={
+  apiKey:"AIzaSyC0usOnYDlA8X9GH_JDUZIqKkdwKIkoAko",
+  authDomain:"sumudevils.firebaseapp.com",
+  projectId:"sumudevils",
+  storageBucket:"sumudevils.firebasestorage.app",
+  messagingSenderId:"1090519412620",
+  appId:"1:1090519412620:web:221ec7ddd27b65cd1130a9"
 };
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
 // ── STATE ──
 let uid="",email="",uname="",pid="",pname="",pStatus="offline";
 let cfg={vib:true,snd:true,ste:false,ad:false,steText:"Reminder updated."};
-let unread=0,secretN=0,secretTimer2=null;
+let unread=0,secretN=0,secretTimer=null;
 let unsubs={partner:null,msgs:null,pings:null};
 let typTimer=null,isTyping=false;
 let renderedMsgIds=new Set();
 let currentTab="home";
+let appReady=false;
 
 const pairId=()=>[uid,pid].sort().join("_");
 
@@ -373,38 +1026,52 @@ window.G=id=>document.getElementById(id);
 const val=id=>G(id)?.value?.trim()||"";
 const init=n=>n?n.split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2):"?";
 const cap=s=>s?s[0].toUpperCase()+s.slice(1):"";
-const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const rc=()=>Math.random().toString(36).slice(2,8).toUpperCase();
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>");
+
+function rc(){return Math.random().toString(36).slice(2,8).toUpperCase();}
 
 function ago(d){
   const s=Math.floor((Date.now()-d)/1e3);
-  if(s<60)return"Just now";
+  if(s<5)return"Just now";
+  if(s<60)return s+"s ago";
   if(s<3600)return~~(s/60)+"m ago";
   if(s<86400)return~~(s/3600)+"h ago";
   return~~(s/86400)+"d ago";
 }
 
 function ferr(c){
-  return({
-    "auth/user-not-found":"No account with this email.",
-    "auth/wrong-password":"Incorrect password.",
-    "auth/email-already-in-use":"Email already in use.",
-    "auth/weak-password":"Password must be 6+ characters.",
-    "auth/invalid-email":"Invalid email address.",
+  const m={
+    "auth/user-not-found":"No account found with this email.",
+    "auth/wrong-password":"Incorrect password. Please try again.",
+    "auth/email-already-in-use":"This email is already registered.",
+    "auth/weak-password":"Password must be at least 6 characters.",
+    "auth/invalid-email":"Please enter a valid email address.",
     "auth/invalid-credential":"Email or password is incorrect.",
     "auth/too-many-requests":"Too many attempts. Please wait and try again.",
     "auth/network-request-failed":"Network error. Check your connection.",
-  })[c]||"Something went wrong. Please try again.";
+    "auth/operation-not-allowed":"This sign-in method is not enabled.",
+  };
+  return m[c]||("Something went wrong ("+c+"). Try again.");
 }
 
 function toast(m,d=2500){
-  const t=G("toastEl");t.textContent=m;t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),d);
+  const t=G("toastEl");
+  t.textContent=m;t.classList.add("show");
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove("show"),d);
 }
 
 function showScr(id){
-  ["authScreen","pairScreen","mainApp","eduOverlay"].forEach(s=>G(s).classList.add("hide"));
-  G(id).classList.remove("hide");
+  ["authScreen","pairScreen","mainApp","eduOverlay"].forEach(s=>{
+    if(G(s))G(s).classList.add("hide");
+  });
+  if(G(id))G(id).classList.remove("hide");
+}
+
+function hideLoader(){
+  const l=G("loadingScreen");
+  l.classList.add("fade");
+  setTimeout(()=>l.style.display="none",400);
 }
 
 function autoTA(el){
@@ -412,88 +1079,76 @@ function autoTA(el){
   el.style.height=Math.min(el.scrollHeight,110)+"px";
 }
 
-function setLoading(btnId,loading,defaultText){
+function setLoading(btnId,loading,defaultHTML){
   const btn=G(btnId);if(!btn)return;
   btn.disabled=loading;
-  btn.innerHTML=loading?`<span class="spin"></span>Loading…`:defaultText;
+  btn.innerHTML=loading?`<span class="spin"></span>Please wait…`:defaultHTML;
 }
 
-// ── AUTH STATE ──
+// ── AUTH STATE LISTENER ──
 onAuthStateChanged(auth,async user=>{
   if(user){
     uid=user.uid;
-    email=user.email;
-    uname=user.displayName||email.split("@")[0];
+    email=user.email||"";
+    uname=user.displayName||email.split("@")[0]||"User";
 
-    // FIX: Use getDoc first, then setDoc if missing, then updateDoc
-    const snap=await getDoc(doc(db,"users",uid));
-    if(snap.exists()){
-      const d=snap.data();
-      uname=d.name||uname;
-      pid=d.partnerUID||"";
-      if(d.cfg)Object.assign(cfg,d.cfg);
-      // Update online status on existing doc
-      await updateDoc(doc(db,"users",uid),{
-        status:"online",
-        lastActive:serverTimestamp()
-      }).catch(()=>{});
-    } else {
-      // New user signed in but doc doesn't exist yet (edge case: doc creation failed during register)
-      // Create it now
-      const code=rc();
-      await setDoc(doc(db,"users",uid),{
-        name:uname,
-        email:email,
-        inviteCode:code,
-        partnerUID:"",
-        status:"online",
-        lastActive:serverTimestamp(),
-        cfg,
-        typing:false
-      });
-      await setDoc(doc(db,"inviteCodes",code),{uid});
+    try{
+      const snap=await getDoc(doc(db,"users",uid));
+      if(snap.exists()){
+        const d=snap.data();
+        uname=d.name||uname;
+        pid=d.partnerUID||"";
+        if(d.cfg)Object.assign(cfg,d.cfg);
+        // Update presence
+        await updateDoc(doc(db,"users",uid),{
+          status:"online",lastActive:serverTimestamp()
+        }).catch(()=>{});
+      } else {
+        // Doc missing — create it (edge case after failed registration)
+        const code=rc();
+        await setDoc(doc(db,"users",uid),{
+          name:uname,email:email,inviteCode:code,
+          partnerUID:"",status:"online",
+          lastActive:serverTimestamp(),cfg,typing:false
+        });
+        await setDoc(doc(db,"inviteCodes",code),{uid});
+      }
+    } catch(e){
+      console.error("Auth state user setup error:",e);
     }
 
+    hideLoader();
     if(pid){
       enterApp();
     } else {
-      showPair();
+      showScr("pairScreen");
       loadMyCode();
     }
   } else {
     uid="";pid="";
     killListeners();
+    hideLoader();
     showScr("authScreen");
   }
 });
 
 // ── PRESENCE ──
-setInterval(async()=>{
-  if(uid) await updateDoc(doc(db,"users",uid),{lastActive:serverTimestamp()}).catch(()=>{});
+let presInterval=setInterval(async()=>{
+  if(uid)await updateDoc(doc(db,"users",uid),{lastActive:serverTimestamp()}).catch(()=>{});
 },30000);
 
 document.addEventListener("visibilitychange",async()=>{
   if(!uid)return;
-  if(document.hidden){
-    await updateDoc(doc(db,"users",uid),{status:"away",lastActive:serverTimestamp()}).catch(()=>{});
-  } else {
-    await updateDoc(doc(db,"users",uid),{status:"online",lastActive:serverTimestamp()}).catch(()=>{});
-  }
-});
-
-window.addEventListener("beforeunload",()=>{
-  // Use sendBeacon for reliability on unload
-  if(!uid)return;
-  // Best-effort, can't await
-  updateDoc(doc(db,"users",uid),{status:"offline",lastActive:serverTimestamp()}).catch(()=>{});
+  const st=document.hidden?"away":"online";
+  await updateDoc(doc(db,"users",uid),{status:st,lastActive:serverTimestamp()}).catch(()=>{});
 });
 
 // ── AUTH ACTIONS ──
 window.authTab=function(t){
-  document.querySelectorAll(".tab").forEach((el,i)=>el.classList.toggle("on",i===(t==="login"?0:1)));
-  G("loginForm").classList.toggle("hide",t!=="login");
-  G("regForm").classList.toggle("hide",t!=="reg");
-  // Clear errors on tab switch
+  const isLogin=t==="login";
+  document.querySelectorAll(".tab").forEach((el,i)=>el.classList.toggle("on",i===(isLogin?0:1)));
+  G("loginForm").classList.toggle("hide",!isLogin);
+  G("regForm").classList.toggle("hide",isLogin);
   G("lErr").textContent="";
   G("rErr").textContent="";
 };
@@ -502,12 +1157,13 @@ window.doLogin=async function(){
   const e=val("lEmail"),p=val("lPwd"),er=G("lErr");
   er.textContent="";
   if(!e||!p){er.textContent="Please fill in all fields.";return;}
-  setLoading("lBtn",true,"Sign In to StudySync");
+  setLoading("lBtn",true,"Sign In");
   try{
     await signInWithEmailAndPassword(auth,e,p);
+    // onAuthStateChanged handles navigation
   } catch(x){
     er.textContent=ferr(x.code);
-    setLoading("lBtn",false,"Sign In to StudySync");
+    setLoading("lBtn",false,"Sign In");
   }
 };
 
@@ -518,111 +1174,113 @@ window.doRegister=async function(){
   if(p.length<6){er.textContent="Password must be at least 6 characters.";return;}
   setLoading("rBtn",true,"Create Account");
   try{
+    // 1. Create Firebase Auth user
     const cr=await createUserWithEmailAndPassword(auth,e,p);
+    // 2. Update display name
     await updateProfile(cr.user,{displayName:n});
+    // 3. Generate invite code
     const code=rc();
-    // FIX: Use setDoc (not updateDoc) — document doesn't exist yet
+    // 4. Create Firestore doc (critical: use setDoc, not updateDoc)
     await setDoc(doc(db,"users",cr.user.uid),{
-      name:n,
-      email:e,
-      inviteCode:code,
-      partnerUID:"",
-      status:"online",
-      lastActive:serverTimestamp(),
-      cfg,
-      typing:false
+      name:n,email:e,inviteCode:code,
+      partnerUID:"",status:"online",
+      lastActive:serverTimestamp(),cfg,typing:false
     });
+    // 5. Register invite code
     await setDoc(doc(db,"inviteCodes",code),{uid:cr.user.uid});
-    // onAuthStateChanged will fire and handle navigation
+    // onAuthStateChanged fires and handles navigation
   } catch(x){
+    console.error("Registration error:",x);
     G("rErr").textContent=ferr(x.code);
     setLoading("rBtn",false,"Create Account");
   }
 };
 
 // ── PAIR ──
-function showPair(){
-  showScr("pairScreen");
-  loadMyCode();
-}
-
 async function loadMyCode(){
-  const snap=await getDoc(doc(db,"users",uid));
-  if(snap.exists()){
-    G("myCode").textContent=snap.data().inviteCode||"------";
-  }
+  try{
+    const snap=await getDoc(doc(db,"users",uid));
+    if(snap.exists())G("myCode").textContent=snap.data().inviteCode||"??????";
+  }catch(e){console.error("loadMyCode:",e)}
 }
 
 window.copyCode=function(){
   const c=G("myCode").textContent;
-  navigator.clipboard?.writeText(c).then(()=>toast("Code copied!")).catch(()=>toast("Your code: "+c,4000));
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(c).then(()=>toast("✓ Code copied!")).catch(()=>toast("Your code: "+c,4000));
+  } else {
+    toast("Your code: "+c,4000);
+  }
 };
 
 window.doPair=async function(){
   const code=val("pCode").toUpperCase();
-  const er=G("pErr");
-  er.textContent="";
-  if(code.length!==6){er.textContent="Enter a 6-character code.";return;}
-  setLoading("pBtn",true,"🔗 Connect Partner");
+  const er=G("pErr");er.textContent="";
+  if(code.length!==6){er.textContent="Please enter the full 6-character code.";return;}
+  setLoading("pBtn",true,"Connect Partner →");
   try{
     const snap=await getDoc(doc(db,"inviteCodes",code));
-    if(!snap.exists()){er.textContent="Code not found. Check and try again.";setLoading("pBtn",false,"🔗 Connect Partner");return;}
+    if(!snap.exists()){er.textContent="Code not found. Double-check and try again.";setLoading("pBtn",false,"Connect Partner →");return;}
     const _pid=snap.data().uid;
-    if(_pid===uid){er.textContent="You cannot pair with yourself!";setLoading("pBtn",false,"🔗 Connect Partner");return;}
+    if(_pid===uid){er.textContent="You can't pair with yourself!";setLoading("pBtn",false,"Connect Partner →");return;}
     const ps=await getDoc(doc(db,"users",_pid));
-    if(!ps.exists()){er.textContent="Partner account not found.";setLoading("pBtn",false,"🔗 Connect Partner");return;}
+    if(!ps.exists()){er.textContent="Partner account not found.";setLoading("pBtn",false,"Connect Partner →");return;}
     pid=_pid;
     pname=ps.data().name||"Partner";
     await updateDoc(doc(db,"users",uid),{partnerUID:_pid});
     await updateDoc(doc(db,"users",_pid),{partnerUID:uid});
     enterApp();
   } catch(x){
-    er.textContent="Error: "+x.message;
-    setLoading("pBtn",false,"🔗 Connect Partner");
+    er.textContent="Error connecting: "+x.message;
+    setLoading("pBtn",false,"Connect Partner →");
   }
 };
 
 // ── ENTER APP ──
 async function enterApp(){
-  if(!pid){showPair();return;}
-  const ps=await getDoc(doc(db,"users",pid));
-  if(ps.exists()){
-    pname=ps.data().name||"Partner";
-  }
+  if(!pid){showScr("pairScreen");loadMyCode();return;}
+  try{
+    const ps=await getDoc(doc(db,"users",pid));
+    if(ps.exists())pname=ps.data().name||"Partner";
+  }catch(e){}
   showScr("mainApp");
   updateCfgUI();
   updateMyProfile();
-  // FIX: Reset message state before starting listeners
+  // Reset message rendering state
   renderedMsgIds=new Set();
-  G("msgBox").innerHTML=`<div style="text-align:center;color:var(--text3);font-size:12px;padding:14px">Messages are private. Auto-delete: <span id="adStatus">${cfg.ad?"on":"off"}</span></div>`;
+  resetMsgBox();
   startListeners();
   goTab("home");
+}
+
+function resetMsgBox(){
+  G("msgBox").innerHTML=`<div class="chat-date-sep">Messages are end-to-end private · Auto-delete: <span id="adStatus">${cfg.ad?"on":"off"}</span></div>`;
 }
 
 // ── LISTENERS ──
 function killListeners(){
   Object.values(unsubs).forEach(u=>u&&u());
   Object.keys(unsubs).forEach(k=>unsubs[k]=null);
-  isTyping=false;
-  clearTimeout(typTimer);
+  isTyping=false;clearTimeout(typTimer);
 }
 
 function startListeners(){
   killListeners();
 
-  // FIX: Single partner listener (was duplicated — one for partner render, one for typing)
+  // Partner listener (status + typing)
   unsubs.partner=onSnapshot(doc(db,"users",pid),snap=>{
-    if(snap.exists()){
-      const d=snap.data();
-      renderPartner(d);
-      // Typing indicator
-      const tr=G("typRow");
-      if(d.typing){
-        G("typInit").textContent=init(pname);
-        tr.classList.remove("hide");
-      } else {
-        tr.classList.add("hide");
-      }
+    if(!snap.exists())return;
+    const d=snap.data();
+    renderPartner(d);
+    // Typing indicator
+    const tr=G("typRow");
+    if(d.typing){
+      if(G("typInit"))G("typInit").textContent=init(pname);
+      tr.classList.remove("hide");
+      const b=G("msgBox");
+      b.scrollTop=b.scrollHeight;
+    } else {
+      tr.classList.add("hide");
     }
   });
 
@@ -630,16 +1288,16 @@ function startListeners(){
   const q=query(
     collection(db,"messages",pairId(),"msgs"),
     orderBy("ts","asc"),
-    limit(150)
+    limit(200)
   );
   unsubs.msgs=onSnapshot(q,snap=>{
     const msgs=[];
     snap.forEach(d=>msgs.push({id:d.id,...d.data()}));
     renderMsgs(msgs);
-    if(cfg.ad) pruneOld(snap);
+    if(cfg.ad)pruneOld(snap);
   });
 
-  // Pings — only unseen pings to me
+  // Incoming pings
   const pq=query(
     collection(db,"pings"),
     where("to","==",uid),
@@ -650,7 +1308,7 @@ function startListeners(){
       if(ch.type==="added"){
         const d=ch.doc.data();
         showPingAlert(d);
-        await updateDoc(doc(db,"pings",ch.doc.id),{seen:true});
+        await updateDoc(doc(db,"pings",ch.doc.id),{seen:true}).catch(()=>{});
       }
     });
   });
@@ -659,55 +1317,45 @@ function startListeners(){
 function renderPartner(d){
   pname=d.name||"Partner";
   pStatus=d.status||"offline";
-  G("pInit").textContent=init(pname);
-  G("cInit").textContent=init(pname);
-  G("pName").textContent=pname;
-  G("cName").textContent=pname;
+  ["pInit","cInit"].forEach(id=>{if(G(id))G(id).textContent=init(pname);});
+  ["pName","cName"].forEach(id=>{if(G(id))G(id).textContent=pname;});
+  if(G("typInit"))G("typInit").textContent=init(pname);
   const sm={
     free:["s-free","🟢 Free"],
     busy:["s-busy","🔴 Busy"],
     wait:["s-wait","⏳ Wait 5"],
     urgent:["s-urgent","🚨 Urgent"],
     online:["s-online","🟢 Online"],
-    away:["s-wait","💤 Away"],
+    away:["s-away","💤 Away"],
     offline:["s-offline","⚫ Offline"]
   };
   const[cls,lbl]=sm[pStatus]||["s-offline","⚫ Offline"];
-  const sl=G("pStat");sl.className="slbl "+cls;sl.textContent=lbl;
+  const sl=G("pStat");if(sl){sl.className="slbl "+cls;sl.textContent=lbl;}
   const ringCls=pStatus==="offline"?"":pStatus==="busy"||pStatus==="urgent"?"busy":"online";
-  G("pRing").className="ring "+ringCls;
-  G("cRing").className="ring "+ringCls;
-  G("cStat").textContent={
-    offline:"Offline",away:"Away",free:"Free now",
-    busy:"Busy",wait:"Wait 5 min",urgent:"Urgent!",online:"Online"
-  }[pStatus]||cap(pStatus);
-  if(d.lastActive?.toDate){
-    G("pLast").textContent="🕐 Last active: "+ago(d.lastActive.toDate());
+  ["pRing","cRing"].forEach(id=>{if(G(id))G(id).className="ring "+ringCls;});
+  const statMap={offline:"Offline",away:"Away",free:"Free now",busy:"Busy",wait:"Wait 5 min",urgent:"Urgent!",online:"Online"};
+  if(G("cStat"))G("cStat").textContent=statMap[pStatus]||cap(pStatus);
+  if(d.lastActive?.toDate&&G("pLast")){
+    G("pLast").innerHTML="🕐 Last active: "+ago(d.lastActive.toDate());
   }
 }
 
 function renderMsgs(msgs){
   const box=G("msgBox");
-  const atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<100;
-  let addedNew=false;
-  let newUnread=0;
-
+  const atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<120;
+  let addedNew=false,newUnread=0;
   msgs.forEach(m=>{
     if(!renderedMsgIds.has(m.id)){
       renderedMsgIds.add(m.id);
       appendMsg(m,box);
       addedNew=true;
-      if(m.sender!==uid) newUnread++;
+      if(m.sender!==uid)newUnread++;
     }
   });
-
   if(addedNew){
-    if(currentTab!=="chat"){
-      unread+=newUnread;
-      updBadge();
-    }
+    if(currentTab!=="chat"){unread+=newUnread;updBadge();}
     if(atBottom||msgs.length<=3){
-      box.scrollTop=box.scrollHeight;
+      requestAnimationFrame(()=>{box.scrollTop=box.scrollHeight;});
     }
   }
 }
@@ -717,10 +1365,15 @@ function appendMsg(m,box){
   const row=document.createElement("div");
   row.className="mrow"+(mine?" mine":"");
   row.dataset.id=m.id;
-  row.innerHTML=`<div class="mavatar">${init(mine?uname:pname)}</div><div style="display:flex;flex-direction:column;align-items:${mine?"flex-end":"flex-start"}"><div class="mbubble">${esc(m.text)}</div><div class="mtime">${m.ts?.toDate?ago(m.ts.toDate()):"now"}</div></div>`;
-  // Insert before typing row if it exists
+  const timeStr=m.ts?.toDate?ago(m.ts.toDate()):"just now";
+  row.innerHTML=`
+    <div class="mavatar">${init(mine?uname:pname)}</div>
+    <div style="display:flex;flex-direction:column;align-items:${mine?"flex-end":"flex-start"}">
+      <div class="mbubble">${esc(m.text)}</div>
+      <div class="mtime">${timeStr}</div>
+    </div>`;
   const typRow=G("typRow");
-  if(typRow&&box===typRow.parentNode){
+  if(typRow&&box.contains(typRow)){
     box.insertBefore(row,typRow);
   } else {
     box.appendChild(row);
@@ -729,20 +1382,23 @@ function appendMsg(m,box){
 
 async function pruneOld(snap){
   const cut=Date.now()-864e5;
-  snap.forEach(async d=>{
+  const batch=[];
+  snap.forEach(d=>{
     if(d.data().ts?.toMillis&&d.data().ts.toMillis()<cut){
-      await deleteDoc(doc(db,"messages",pairId(),"msgs",d.id)).catch(()=>{});
+      batch.push(deleteDoc(doc(db,"messages",pairId(),"msgs",d.id)));
     }
   });
+  await Promise.all(batch).catch(()=>{});
 }
 
 // ── STATUS ──
 window.setStatus=async function(s){
   document.querySelectorAll(".sbtn").forEach(b=>b.classList.remove("active-s"));
   const m={free:"bFree",busy:"bBusy",wait:"bWait",urgent:"bUrgent",offline:"bOffline"};
-  if(m[s])G(m[s]).classList.add("active-s");
+  if(m[s]&&G(m[s]))G(m[s]).classList.add("active-s");
   await updateDoc(doc(db,"users",uid),{status:s,lastActive:serverTimestamp()}).catch(()=>{});
-  toast("Status: "+cap(s));
+  const labels={free:"🟢 Free",busy:"🔴 Busy",wait:"⏳ Wait 5",urgent:"🚨 Urgent",offline:"⚫ Offline"};
+  toast(labels[s]||cap(s));
 };
 
 // ── PING ──
@@ -750,20 +1406,26 @@ window.sendPing=async function(){
   if(!pid){toast("No partner connected.");return;}
   const title=cfg.ste?cfg.steText:"📡 Partner Pinged!";
   const body=cfg.ste?"Reminder updated.":uname+" is free right now!";
-  await addDoc(collection(db,"pings"),{from:uid,to:pid,title,body,seen:false,ts:serverTimestamp()});
-  addActivity("📡 Ping sent to "+pname);
-  toast("Ping sent! 📡");
-  if(cfg.vib&&navigator.vibrate) navigator.vibrate([200,100,200]);
+  try{
+    await addDoc(collection(db,"pings"),{from:uid,to:pid,title,body,seen:false,ts:serverTimestamp()});
+    addActivity("📡 Ping sent to "+pname);
+    toast("Ping sent! 📡");
+    if(cfg.vib&&navigator.vibrate)navigator.vibrate([100,50,200]);
+  } catch(e){toast("Failed to send ping.");}
 };
 
 function showPingAlert(d){
-  G("aTitle").textContent=d.title||"📡 Partner Pinged!";
-  G("aBody").textContent=d.body||"Your partner just pinged you!";
-  G("alertOv").classList.remove("hide");
-  if(cfg.snd) playSound();
-  if(cfg.vib&&navigator.vibrate) navigator.vibrate([300,100,300,100,500]);
+  if(G("aTitle"))G("aTitle").textContent=d.title||"📡 Partner Pinged!";
+  if(G("aBody"))G("aBody").textContent=d.body||"Your partner just pinged you!";
+  if(G("alertOv"))G("alertOv").classList.remove("hide");
+  if(cfg.snd)playSound();
+  if(cfg.vib&&navigator.vibrate)navigator.vibrate([200,100,300,100,500]);
   addActivity("📡 Ping received from "+pname);
 }
+
+window.dismissAlert=function(){
+  G("alertOv").classList.add("hide");
+};
 
 // ── CHAT ──
 window.sendMsg=async function(){
@@ -772,8 +1434,12 @@ window.sendMsg=async function(){
   if(!text||!pid)return;
   inp.value="";
   autoTA(inp);
-  await addDoc(collection(db,"messages",pairId(),"msgs"),{sender:uid,text,ts:serverTimestamp()});
   clearTyp();
+  try{
+    await addDoc(collection(db,"messages",pairId(),"msgs"),{
+      sender:uid,text,ts:serverTimestamp()
+    });
+  } catch(e){toast("Message failed to send. Retry.");inp.value=text;}
 };
 
 window.ckd=function(e){
@@ -781,8 +1447,7 @@ window.ckd=function(e){
 };
 
 window.onType=async function(){
-  const inp=G("chatIn");
-  autoTA(inp);
+  const inp=G("chatIn");autoTA(inp);
   if(!isTyping){
     isTyping=true;
     await updateDoc(doc(db,"users",uid),{typing:true}).catch(()=>{});
@@ -793,8 +1458,7 @@ window.onType=async function(){
 
 async function clearTyp(){
   if(!isTyping)return;
-  isTyping=false;
-  clearTimeout(typTimer);
+  isTyping=false;clearTimeout(typTimer);
   await updateDoc(doc(db,"users",uid),{typing:false}).catch(()=>{});
 }
 
@@ -802,25 +1466,24 @@ async function clearTyp(){
 window.togS=function(k){
   cfg[k]=!cfg[k];
   const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD"};
-  if(m[k]) G(m[k]).classList.toggle("on",cfg[k]);
+  if(m[k]&&G(m[k]))G(m[k]).classList.toggle("on",cfg[k]);
   saveCfg();
-  const adEl=G("adStatus");if(adEl) adEl.textContent=cfg.ad?"on":"off";
+  const adEl=G("adStatus");if(adEl)adEl.textContent=cfg.ad?"on":"off";
   const labels={vib:"Vibration",snd:"Sound",ste:"Stealth mode",ad:"Auto-delete"};
   toast((labels[k]||"Setting")+(cfg[k]?" on":" off"));
 };
 
 window.toggleAutoDelete=function(){
   cfg.ad=!cfg.ad;
-  G("tAD")?.classList.toggle("on",cfg.ad);
+  const t=G("tAD");if(t)t.classList.toggle("on",cfg.ad);
   saveCfg();
-  const a=G("adStatus");if(a) a.textContent=cfg.ad?"on":"off";
+  const a=G("adStatus");if(a)a.textContent=cfg.ad?"on":"off";
   toast("Auto-delete "+(cfg.ad?"on":"off"));
 };
 
 window.saveSte=function(){
   cfg.steText=val("steText")||"Reminder updated.";
-  saveCfg();
-  toast("Saved!");
+  saveCfg();toast("✓ Saved!");
 };
 
 async function saveCfg(){
@@ -830,96 +1493,100 @@ async function saveCfg(){
 
 function updateCfgUI(){
   const m={vib:"tVib",snd:"tSnd",ste:"tSte",ad:"tAD"};
-  Object.keys(m).forEach(k=>{if(G(m[k])) G(m[k]).classList.toggle("on",!!cfg[k]);});
-  if(G("steText")) G("steText").value=cfg.steText||"Reminder updated.";
-  const a=G("adStatus");if(a) a.textContent=cfg.ad?"on":"off";
+  Object.keys(m).forEach(k=>{if(G(m[k]))G(m[k]).classList.toggle("on",!!cfg[k]);});
+  if(G("steText"))G("steText").value=cfg.steText||"Reminder updated.";
+  const a=G("adStatus");if(a)a.textContent=cfg.ad?"on":"off";
 }
 
 function updateMyProfile(){
-  G("myAv").textContent=init(uname);
-  G("myNm").textContent=uname;
-  G("myEm").textContent=email;
+  if(G("myAv"))G("myAv").textContent=init(uname);
+  if(G("myNm"))G("myNm").textContent=uname;
+  if(G("myEm"))G("myEm").textContent=email;
 }
 
 // ── LOGOUT / UNPAIR ──
 window.logout=async function(){
-  if(!confirm("Sign out?"))return;
+  if(!confirm("Sign out of StudySync?"))return;
+  killListeners();
   if(uid){
     await updateDoc(doc(db,"users",uid),{status:"offline",lastActive:serverTimestamp(),typing:false}).catch(()=>{});
   }
-  killListeners();
-  uid="";pid="";
-  renderedMsgIds=new Set();
-  unread=0;
-  await signOut(auth);
+  uid="";pid="";renderedMsgIds=new Set();unread=0;
+  try{await signOut(auth);}catch(e){}
 };
 
 window.unpair=async function(){
-  if(!confirm("Unpair from your partner?"))return;
-  if(pid) await updateDoc(doc(db,"users",pid),{partnerUID:""}).catch(()=>{});
+  if(!confirm("Disconnect from your study partner?"))return;
+  if(pid)await updateDoc(doc(db,"users",pid),{partnerUID:""}).catch(()=>{});
   await updateDoc(doc(db,"users",uid),{partnerUID:""}).catch(()=>{});
-  pid="";
-  killListeners();
-  renderedMsgIds=new Set();
-  showPair();
+  pid="";killListeners();renderedMsgIds=new Set();
+  showScr("pairScreen");loadMyCode();
 };
 
 // ── TABS ──
 window.goTab=function(tab){
   currentTab=tab;
-  // FIX: Use hide class consistently — no inline display:none conflict
   G("homeScreen").classList.toggle("hide",tab!=="home");
   G("chatScreen").classList.toggle("hide",tab!=="chat");
   G("settingsScreen").classList.toggle("hide",tab!=="settings");
-  ["nHome","nChat","nSets"].forEach((id,i)=>G(id).classList.toggle("on",["home","chat","settings"][i]===tab));
+  ["nHome","nChat","nSets"].forEach((id,i)=>{
+    if(G(id))G(id).classList.toggle("on",["home","chat","settings"][i]===tab);
+  });
   if(tab==="chat"){
-    unread=0;
-    updBadge();
+    unread=0;updBadge();
     const b=G("msgBox");
-    setTimeout(()=>b.scrollTop=b.scrollHeight,50);
+    requestAnimationFrame(()=>{b.scrollTop=b.scrollHeight;});
+    G("chatIn")?.focus();
   }
 };
 
 function updBadge(){
-  const b=G("cBadge");
+  const b=G("cBadge");if(!b)return;
   if(unread>0){b.classList.remove("hide");b.textContent=unread>99?"99+":unread;}
   else b.classList.add("hide");
 }
 
-// ── SECRET LOGO TAP (5x) ──
+// ── SECRET LOGO TAP (5×) ──
 window.logoTap=function(){
-  secretN++;
-  clearTimeout(secretTimer2);
-  if(secretN>=5){secretN=0;toast("🔓 Quick access");goTab("chat");}
-  else secretTimer2=setTimeout(()=>secretN=0,2000);
+  secretN++;clearTimeout(secretTimer);
+  if(secretN>=5){secretN=0;toast("🔓 Secret shortcut!");goTab("chat");}
+  else secretTimer=setTimeout(()=>secretN=0,2000);
 };
 
 // ── EDU ──
-window.showEdu=function(){G("eduOverlay").classList.remove("hide");G("mainApp").classList.add("hide");};
-window.hideEdu=function(){G("eduOverlay").classList.add("hide");G("mainApp").classList.remove("hide");};
+window.showEdu=function(){
+  G("eduOverlay").classList.remove("hide");
+  G("mainApp").classList.add("hide");
+};
+window.hideEdu=function(){
+  G("eduOverlay").classList.add("hide");
+  G("mainApp").classList.remove("hide");
+};
 
 // ── ACTIVITY LOG ──
 function addActivity(text){
   const box=G("activityBox");
-  const empty=G("actEmpty");if(empty) empty.remove();
+  const empty=G("actEmpty");if(empty)empty.remove();
   const el=document.createElement("div");
-  el.style.cssText="padding:11px 16px;border-bottom:1px solid var(--border);font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:10px";
-  el.innerHTML=`<span>${esc(text)}</span><span style="color:var(--text3);font-size:11px">${new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</span>`;
+  el.className="activity-item";
+  const now=new Date();
+  const timeStr=now.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  el.innerHTML=`<span>${esc(text)}</span><span class="activity-time">${timeStr}</span>`;
   box.insertBefore(el,box.firstChild);
-  const items=box.querySelectorAll("div");
-  if(items.length>6) items[items.length-1].remove();
+  const items=box.querySelectorAll(".activity-item");
+  if(items.length>8)items[items.length-1].remove();
 }
 
 // ── SOUND ──
 function playSound(){
   try{
     const ctx=new(window.AudioContext||window.webkitAudioContext)();
-    [[880,0,.15],[1100,.2,.15],[1320,.4,.3]].forEach(([f,s,d])=>{
+    [[880,0,.12],[1100,.15,.12],[1320,.3,.25]].forEach(([f,s,d])=>{
       const o=ctx.createOscillator(),g=ctx.createGain();
       o.connect(g);g.connect(ctx.destination);
       o.frequency.value=f;o.type="sine";
       g.gain.setValueAtTime(0,ctx.currentTime+s);
-      g.gain.linearRampToValueAtTime(.4,ctx.currentTime+s+.02);
+      g.gain.linearRampToValueAtTime(.35,ctx.currentTime+s+.02);
       g.gain.linearRampToValueAtTime(0,ctx.currentTime+s+d);
       o.start(ctx.currentTime+s);
       o.stop(ctx.currentTime+s+d+.05);
