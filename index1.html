@@ -856,7 +856,10 @@ textarea.ci::placeholder{color:var(--text3)}
               <div style="font-size:11px;color:var(--text3)">Alert sound on ping</div>
             </div>
           </div>
-          <div class="toggle on" id="tSnd" onclick="togS('snd')"></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button onclick="testSoundVib()" style="padding:5px 12px;background:var(--bdim);border:1px solid var(--border2);border-radius:8px;font-size:11px;font-weight:700;color:var(--blue);cursor:pointer;letter-spacing:.04em">TEST</button>
+            <div class="toggle on" id="tSnd" onclick="togS('snd')"></div>
+          </div>
         </div>
         <div class="srow">
           <div class="srl">
@@ -1410,7 +1413,8 @@ window.sendPing=async function(){
     await addDoc(collection(db,"pings"),{from:uid,to:pid,title,body,seen:false,ts:serverTimestamp()});
     addActivity("📡 Ping sent to "+pname);
     toast("Ping sent! 📡");
-    if(cfg.vib&&navigator.vibrate)navigator.vibrate([100,50,200]);
+    unlockAudio(); // ensure audio is ready for next incoming ping
+    if(cfg.vib)doVibrate([80,40,160,40,80]);
   } catch(e){toast("Failed to send ping.");}
 };
 
@@ -1419,7 +1423,7 @@ function showPingAlert(d){
   if(G("aBody"))G("aBody").textContent=d.body||"Your partner just pinged you!";
   if(G("alertOv"))G("alertOv").classList.remove("hide");
   if(cfg.snd)playSound();
-  if(cfg.vib&&navigator.vibrate)navigator.vibrate([200,100,300,100,500]);
+  if(cfg.vib)doVibrate([200,80,200,80,400,80,200]);
   addActivity("📡 Ping received from "+pname);
 }
 
@@ -1577,21 +1581,94 @@ function addActivity(text){
   if(items.length>8)items[items.length-1].remove();
 }
 
-// ── SOUND ──
+window.testSoundVib=function(){
+  unlockAudio();
+  playSound();
+  doVibrate([200,80,200,80,400]);
+  toast("🔊 Testing sound + vibration…");
+};
+
+
+// Single persistent AudioContext — created on first user gesture to satisfy browser autoplay policy
+let _actx=null;
+
+function getAudioCtx(){
+  if(!_actx){
+    try{
+      _actx=new(window.AudioContext||window.webkitAudioContext)();
+    } catch(e){return null;}
+  }
+  // Resume if suspended (Chrome suspends on page load)
+  if(_actx.state==="suspended"){
+    _actx.resume().catch(()=>{});
+  }
+  return _actx;
+}
+
+// Unlock audio on first ANY touch/click — called once from buttons the user taps
+function unlockAudio(){
+  const ctx=getAudioCtx();
+  if(!ctx)return;
+  // Play a silent buffer to fully unlock
+  const buf=ctx.createBuffer(1,1,22050);
+  const src=ctx.createBufferSource();
+  src.buffer=buf;src.connect(ctx.destination);
+  src.start(0);
+}
+
+// Attach unlock to the first user interactions on page
+["touchstart","mousedown","keydown"].forEach(ev=>{
+  document.addEventListener(ev,()=>unlockAudio(),{once:true,passive:true});
+});
+
 function playSound(){
-  try{
-    const ctx=new(window.AudioContext||window.webkitAudioContext)();
-    [[880,0,.12],[1100,.15,.12],[1320,.3,.25]].forEach(([f,s,d])=>{
-      const o=ctx.createOscillator(),g=ctx.createGain();
-      o.connect(g);g.connect(ctx.destination);
-      o.frequency.value=f;o.type="sine";
-      g.gain.setValueAtTime(0,ctx.currentTime+s);
-      g.gain.linearRampToValueAtTime(.35,ctx.currentTime+s+.02);
-      g.gain.linearRampToValueAtTime(0,ctx.currentTime+s+d);
-      o.start(ctx.currentTime+s);
-      o.stop(ctx.currentTime+s+d+.05);
-    });
-  } catch(e){}
+  const ctx=getAudioCtx();
+  if(!ctx)return;
+
+  const now=ctx.currentTime;
+  const master=ctx.createGain();
+  master.gain.setValueAtTime(0.6,now);
+  master.connect(ctx.destination);
+
+  // 3-note ascending ping: friendly, attention-grabbing
+  const notes=[
+    {freq:523.25, start:0,    dur:0.18, type:"sine"},    // C5
+    {freq:659.25, start:0.16, dur:0.18, type:"sine"},    // E5
+    {freq:783.99, start:0.32, dur:0.30, type:"sine"},    // G5
+  ];
+
+  notes.forEach(({freq,start,dur,type})=>{
+    const osc=ctx.createOscillator();
+    const env=ctx.createGain();
+    osc.connect(env);env.connect(master);
+    osc.type=type;
+    osc.frequency.setValueAtTime(freq,now+start);
+    // Sharp attack, smooth decay
+    env.gain.setValueAtTime(0,now+start);
+    env.gain.linearRampToValueAtTime(1,now+start+0.015);
+    env.gain.setValueAtTime(1,now+start+0.04);
+    env.gain.exponentialRampToValueAtTime(0.001,now+start+dur);
+    osc.start(now+start);
+    osc.stop(now+start+dur+0.05);
+  });
+
+  // Add a soft "thud" sub hit on the first beat for impact
+  const sub=ctx.createOscillator();
+  const subEnv=ctx.createGain();
+  sub.connect(subEnv);subEnv.connect(master);
+  sub.type="sine";
+  sub.frequency.setValueAtTime(120,now);
+  sub.frequency.exponentialRampToValueAtTime(60,now+0.08);
+  subEnv.gain.setValueAtTime(0.5,now);
+  subEnv.gain.exponentialRampToValueAtTime(0.001,now+0.1);
+  sub.start(now);sub.stop(now+0.12);
+}
+
+// ── VIBRATION ──
+function doVibrate(pattern){
+  if(navigator.vibrate){
+    try{navigator.vibrate(pattern);}catch(e){}
+  }
 }
 </script>
 </body>
